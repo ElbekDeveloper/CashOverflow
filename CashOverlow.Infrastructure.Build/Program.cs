@@ -9,7 +9,7 @@ using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks.SetupDotNetTaskV1s;
 
-namespace CashOverlow.Infrastructure.Build
+namespace CashOverflow.Infrastructure.Build
 {
     internal class Program
     {
