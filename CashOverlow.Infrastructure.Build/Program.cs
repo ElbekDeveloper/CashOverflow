@@ -3,9 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using ADotNet.Clients;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks;
@@ -45,7 +43,7 @@ namespace CashOverlow.Infrastructure.Build
                             new CheckoutTaskV2
                             {
                                 Name = "Checking out"
-                            }, 
+                            },
 
                             new SetupDotNetTaskV1
                             {
@@ -60,12 +58,12 @@ namespace CashOverlow.Infrastructure.Build
                             new RestoreTask
                             {
                                 Name = "Restoring packages"
-                            }, 
+                            },
 
                             new DotNetBuildTask
                             {
                                 Name = "Building project"
-                            }, 
+                            },
 
                             new TestTask
                             {
