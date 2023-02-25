@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using CashOverflow.Brokers.Storages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ namespace CashOverflow
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<StorageBroker>();
             services.AddControllers();
 
             services.AddSwaggerGen(config =>
