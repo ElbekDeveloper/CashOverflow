@@ -31,6 +31,8 @@ namespace CashOverflow
                     name: "v1",
                     info: new OpenApiInfo { Title = "CashOverflow", Version = "v1" });
             });
+
+            services.AddTransient<IStorageBroker, StorageBroker>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
