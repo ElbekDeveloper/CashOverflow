@@ -3,7 +3,6 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-
 namespace CashOverflow.Models.Jobs
 {
     public enum Level

@@ -3,7 +3,6 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-
 using System;
 
 namespace CashOverflow.Models.Jobs
