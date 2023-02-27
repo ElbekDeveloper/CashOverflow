@@ -20,4 +20,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Models\People\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\People\" />
+  </ItemGroup>
 </Project>
