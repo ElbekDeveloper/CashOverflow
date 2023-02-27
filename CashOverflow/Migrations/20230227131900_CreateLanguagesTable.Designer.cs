@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashOverflow.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20230227125223_CreateLanguagesTable")]
+    [Migration("20230227131900_CreateLanguagesTable")]
     partial class CreateLanguagesTable
     {
         /// <inheritdoc />
