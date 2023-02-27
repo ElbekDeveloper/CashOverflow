@@ -5,15 +5,11 @@
 
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
-using Microsoft.EntityFrameworkCore;
 
 namespace CashOverflow.Brokers.Storages
 {
-    public partial class StorageBroker
+    public partial interface IStorageBroker
     {
-        public DbSet<Location> Locations { get; set; }
-
-        public async ValueTask<Location> InsertLocationAsync(Location location) =>
-            await InsertAsync(location);
+        ValueTask<Location> InsertLocationAsync(Location location);
     }
 }
