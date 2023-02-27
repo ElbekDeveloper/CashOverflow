@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /CashOverflow/appsettings.Development.json
+/CashOverflow/Migrations/20230227125223_CreateLanguagesTable.cs
+/CashOverflow/Migrations/20230227125223_CreateLanguagesTable.cs
