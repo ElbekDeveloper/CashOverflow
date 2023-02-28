@@ -35,6 +35,14 @@ namespace CashOverflow.Brokers.Storages
 
             return await broker.FindAsync<T>(objectIds);
         }
+        public async ValueTask<T> DeleteAsync<T>(T @object)
+        {
+            var broker = new StorageBroker(this.configuration);
+            broker.Entry(@object).State = EntityState.Deleted;
+            await broker.SaveChangesAsync();
+
+            return @object;
+        }
        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
