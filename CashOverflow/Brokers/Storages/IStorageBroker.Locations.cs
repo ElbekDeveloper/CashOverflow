@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using CashOverflow.Models.Languages;
 using CashOverflow.Models.Locations;
 using System;
 using System.Linq;
