@@ -5,6 +5,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using CashOverflow.Models.Languages;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +45,16 @@ namespace CashOverflow.Brokers.Storages
             return broker.Set<T>();
         }
       
+        public async ValueTask<T> DeleteAsync<T>(T @object)
+        {
+            var broker = new StorageBroker(this.configuration);
+            broker.Entry(@object).State = EntityState.Deleted;
+            await broker.SaveChangesAsync();
+
+            return @object;
+        }
+
+       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectionString = this.configuration.GetConnectionString(name: "DefaultConnection");
