@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using EFxceptions;
@@ -36,6 +37,14 @@ namespace CashOverflow.Brokers.Storages
 
             return await broker.FindAsync<T>(objectIds);
         }
+
+        public  IQueryable<T> SelectAll<T>() where T : class
+        {
+            var broker = new StorageBroker(configuration);
+
+            return broker.Set<T>();
+        }
+      
         public async ValueTask<T> DeleteAsync<T>(T @object)
         {
             var broker = new StorageBroker(this.configuration);
