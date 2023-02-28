@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 
-using CashOverflow.Models.Locations;
 using System;
 
 namespace CashOverflow.Models.Salaries
