@@ -23,5 +23,4 @@ namespace CashOverflow.Brokers.Storages
         public async ValueTask<Language> DeleteLanguageAsync(Language language) =>
             await DeleteAsync<Language>(language);
     }
-
 }
