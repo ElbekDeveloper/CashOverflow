@@ -6,15 +6,11 @@
 using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
-using Microsoft.EntityFrameworkCore;
 
 namespace CashOverflow.Brokers.Storages
 {
-    public partial class StorageBroker
+    public partial interface IStorageBroker
     {
-        public DbSet<Language> Languages { get; set; }
-
-        public ValueTask<Language> SelectLanguageByIdAsync(Guid Id) =>
-            SelectAsync<Language>(Id);
+        ValueTask<Language> SelectLanguageByIdAsync(Guid Id);
     }
 }
