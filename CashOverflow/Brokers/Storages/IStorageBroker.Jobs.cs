@@ -7,10 +7,8 @@ using CashOverflow.Models.Jobs;
 
 namespace CashOverflow.Brokers.Storages
 {
-    public partial class StorageBroker
+    public partial interface IStorageBroker
     {
-        public DbSet<Job> Jobs { get; set; }
-        public async ValueTask<Job> InsertJobAsync(Job job) =>
-           await InsertAsync(Job);
+        ValueTask<Job> InsertJobAsync(Job job);
     }
 }
