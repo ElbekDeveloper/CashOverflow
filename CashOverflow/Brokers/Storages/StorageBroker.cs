@@ -29,6 +29,13 @@ namespace CashOverflow.Brokers.Storages
             return @object;
         }
 
+        public async ValueTask<T> SelectAsync<T>(params object[] objectIds) where T: class
+        {
+            var broker = new StorageBroker(this.configuration);
+
+            return await broker.FindAsync<T>(objectIds);
+        }
+       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectionString = this.configuration.GetConnectionString(name: "DefaultConnection");
