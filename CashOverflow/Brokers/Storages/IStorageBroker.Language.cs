@@ -11,5 +11,6 @@ namespace CashOverflow.Brokers.Storages
     public interface ISrorageBroker
     {
         ValueTask<Language> InsertLanguageAsync(Language language);
+        ValueTask<Language> UpdateLanguageAsync(Language language);        
     }
 }
