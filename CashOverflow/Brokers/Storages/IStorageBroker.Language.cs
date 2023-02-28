@@ -5,15 +5,11 @@
 
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
-using Microsoft.EntityFrameworkCore;
 
 namespace CashOverflow.Brokers.Storages
 {
-    public partial class StorageBroker
+    public interface ISrorageBroker
     {
-        public DbSet<Language> Languages { get; set; }
-
-        public async ValueTask<Language> InsertLanguageAsync(Language language) =>
-            await this.InsertAsync(language);
+        ValueTask<Language> InsertLanguageAsync(Language language);
     }
 }
