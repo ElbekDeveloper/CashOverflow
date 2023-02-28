@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using Microsoft.EntityFrameworkCore;
@@ -15,5 +16,8 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Location> InsertLocationAsync(Location location) =>
             await InsertAsync(location);
+
+        public async ValueTask<Location> SelectLocationByIdAsync(Guid id) =>
+           await SelectAsync<Location>(id);
     }
 }
