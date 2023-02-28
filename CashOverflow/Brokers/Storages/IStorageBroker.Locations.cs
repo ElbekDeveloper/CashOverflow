@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 
@@ -13,5 +14,7 @@ namespace CashOverflow.Brokers.Storages
     {
         ValueTask<Location> InsertLocationAsync(Location location);
         ValueTask<Location> SelectLocationByIdAsync(Guid Id);
+        IQueryable<Location> SelectAllLocations();
+        
     }
 }
