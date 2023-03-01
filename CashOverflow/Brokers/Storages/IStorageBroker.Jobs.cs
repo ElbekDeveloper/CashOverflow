@@ -16,5 +16,6 @@ namespace CashOverflow.Brokers.Storages
         IQueryable<Job> SelectAllJobs();
         ValueTask<Job> SelectJobByIdAsync(Guid jobId);
         ValueTask<Job> DeleteJobAsync(Job job);
+        ValueTask<Job> UpdateJobAsync(Job job);
     }
 }
