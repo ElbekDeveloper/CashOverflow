@@ -2,13 +2,11 @@
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
-using System;
+
 using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
-using CashOverflow.Models.Locations;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace CashOverflow.Brokers.Storages
 {
@@ -20,7 +18,7 @@ namespace CashOverflow.Brokers.Storages
             await this.InsertAsync(language);
 
         public IQueryable<Language> SelectAllLanguages() =>
-         SelectAll<Language>();
+            SelectAll<Language>();
 
         public async ValueTask<Language> DeleteLanguageAsync(Language language)=>
             await DeleteAsync<Language>(language);
