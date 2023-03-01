@@ -17,7 +17,7 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Job> InsertJobAsync(Job job) =>
             await InsertAsync(job);
-            
+
         public IQueryable<Job> SelectAllJobs() =>
             SelectAll<Job>();
 
@@ -29,6 +29,5 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Job> DeleteJobAsync(Job job)=>
             await DeleteAsync<Job>(job);
-
     }
 }
