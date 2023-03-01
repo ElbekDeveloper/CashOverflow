@@ -23,5 +23,8 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Location> SelectLocationByIdAsync(Guid id) =>
            await SelectAsync<Location>(id);
-      }
+
+        public async ValueTask<Location> DeleteLocationAsync(Location location) =>
+            await DeleteAsync<Location>(location);
+    }
 }
