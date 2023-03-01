@@ -16,7 +16,7 @@ namespace CashOverflow.Services.Foundations.Locations
         public LocationService(IStorageBroker storageBroker) =>
             this.storageBroker = storageBroker;
 
-        public ValueTask<Location> AddLocationAsync(Location location) =>
-            throw new System.NotImplementedException();
+        public async ValueTask<Location> AddLocationAsync(Location location) =>
+            await this.storageBroker.InsertLocationAsync(location);
     }
 }
