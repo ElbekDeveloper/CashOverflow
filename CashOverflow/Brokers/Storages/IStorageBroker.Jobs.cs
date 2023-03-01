@@ -12,7 +12,6 @@ namespace CashOverflow.Brokers.Storages
     public partial interface IStorageBroker
     {
         ValueTask<Job> InsertJobAsync(Job job);
-
         ValueTask<Job> SelectJobByIdAsync(Guid jobId);   
     }
 }
