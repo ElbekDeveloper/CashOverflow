@@ -18,6 +18,6 @@ namespace CashOverflow.Brokers.Storages
             await InsertAsync(job);
 
         public async ValueTask<Job> SelectJobById(Guid jobId) =>
-            await SelectAsync<Job>(jobId);
+            await SelectAsync(jobId);
     }
 }
