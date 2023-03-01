@@ -17,7 +17,7 @@ namespace CashOverflow.Brokers.Storages
         public async ValueTask<Language> InsertLanguageAsync(Language language) =>
             await this.InsertAsync(language);
 
-        public IQueryable<Language> SelectAllLangueges() =>
+        public IQueryable<Language> SelectAllLanguages() =>
             SelectAll<Language>();
 
         public async ValueTask<Language> UpdateLanguageAsync(Language language) =>
