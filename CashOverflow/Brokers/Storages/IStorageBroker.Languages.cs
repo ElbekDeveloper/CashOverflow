@@ -1,9 +1,11 @@
-using System;
-using System.Collections.Generic;
+// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
 using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
-using CashOverflow.Models.Locations;
 
 namespace CashOverflow.Brokers.Storages
 {
