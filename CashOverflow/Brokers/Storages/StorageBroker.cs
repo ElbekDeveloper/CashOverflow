@@ -5,6 +5,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using CashOverflow.Models.Languages;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -67,6 +68,11 @@ namespace CashOverflow.Brokers.Storages
             string connectionString = this.configuration.GetConnectionString(name: "DefaultConnection");
 
             optionsBuilder.UseSqlServer(connectionString);
+        }
+
+        public IQueryable<Language> SelectAllLanguages()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
