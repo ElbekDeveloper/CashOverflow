@@ -3,7 +3,6 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 
@@ -11,7 +10,8 @@ namespace CashOverflow.Brokers.Storages
 {
     public partial interface IStorageBroker
     {
-        IQueryable<Language> SelectAllLanguages();
+        ValueTask<Language> InsertLanguageAsync(Language language);
+        ValueTask<Language> UpdateLanguageAsync(Language language);
         ValueTask<Language> DeleteLanguageAsync(Language language);
     }
 }
