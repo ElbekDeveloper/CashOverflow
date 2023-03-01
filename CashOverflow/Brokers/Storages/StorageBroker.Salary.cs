@@ -3,9 +3,10 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace CashOverflow.Brokers.Storages
 {
@@ -15,5 +16,8 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Salary> InsertSalaryAsync(Salary salary) =>
             await InsertAsync(salary);
+
+        public async ValueTask<Salary> SelectSalaryByIdAsync(Guid salaryId) =>
+            await SelectAsync<Salary>(salaryId);
     }
 }
