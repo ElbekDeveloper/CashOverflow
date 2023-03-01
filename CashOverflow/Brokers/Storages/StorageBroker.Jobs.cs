@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,10 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Job> InsertJobAsync(Job job) =>
             await InsertAsync(job);
-            
+
+        public IQueryable<Job> SelectAllJobs() =>
+            SelectAll<Job>();
+
         public async ValueTask<Job> SelectJobByIdAsync(Guid jobId) =>
             await SelectAsync<Job>(jobId);
     }
