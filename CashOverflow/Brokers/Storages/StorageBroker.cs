@@ -69,10 +69,5 @@ namespace CashOverflow.Brokers.Storages
 
             optionsBuilder.UseSqlServer(connectionString);
         }
-
-        public IQueryable<Language> SelectAllLanguages()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
