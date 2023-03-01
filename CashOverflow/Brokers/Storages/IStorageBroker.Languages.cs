@@ -13,7 +13,8 @@ namespace CashOverflow.Brokers.Storages
 {
     public partial interface IStorageBroker
     {
-        ValueTask<Language> DeleteLanguageAsync(Language language);             
-        ValueTask<Language> SelectLanguageByIdAsync(Guid Id);
+        ValueTask<Language> InsertLanguageAsync(Language language);
+        ValueTask<Language> UpdateLanguageAsync(Language language);
+        ValueTask<Language> DeleteLanguageAsync(Language language);
     }
 }
