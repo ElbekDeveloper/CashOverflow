@@ -12,6 +12,6 @@ namespace CashOverflow.Brokers.Storages
     public partial interface IStorageBroker
     {
         ValueTask<Salary> InsertSalaryAsync(Salary salary);
-        IQueryable<Salary> SelectAllSalaries();        
+        IQueryable<Salary> SelectAllSalaries();
     }
 }
