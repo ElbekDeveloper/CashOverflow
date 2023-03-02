@@ -59,6 +59,5 @@ namespace CashOverflow
             services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
         }
-
     }
 }
