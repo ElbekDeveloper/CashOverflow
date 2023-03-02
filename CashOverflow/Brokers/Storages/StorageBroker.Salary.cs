@@ -18,9 +18,9 @@ namespace CashOverflow.Brokers.Storages
         public async ValueTask<Salary> InsertSalaryAsync(Salary salary) =>
             await InsertAsync(salary);
 
-        IQueryable<Salary> SelectAllSalaries() => SelectAllSalaries();
+        public IQueryable<Salary> SelectAllSalaries() => SelectAll<Salary>();
 
-        async ValueTask<Salary> SelectSalaryByIdAsync(Guid salaryId) =>
-            await SelectAsync<Salary>(salaryId);
+        public async ValueTask<Salary> SelectSalaryByIdAsync(Guid salaryId) =>
+             await SelectAsync<Salary>(salaryId);
     }
 }
