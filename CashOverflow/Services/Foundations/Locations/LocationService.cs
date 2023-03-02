@@ -11,7 +11,7 @@ using CashOverflow.Models.Locations.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
-    public class LocationService : ILocationService
+    public partial class LocationService : ILocationService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -24,24 +24,12 @@ namespace CashOverflow.Services.Foundations.Locations
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<Location> AddLocationAsync(Location location)
+        public ValueTask<Location> AddLocationAsync(Location location) =>
+        TryCatch(async () =>
         {
-            try
-            {
-                if (location is null)
-                {
-                    throw new NullLocationException();
-                }
+            ValidateLocationNotNull(location);
 
-                return await this.storageBroker.InsertLocationAsync(location);
-            }
-            catch (NullLocationException nullLocationException)
-            {
-                var locationValidationException = new LocationValidationException(nullLocationException);
-                this.loggingBroker.LogError(locationValidationException);
-
-                throw locationValidationException;
-            }
-        }
+            return await this.storageBroker.InsertLocationAsync(location);
+        });
     }
 }
