@@ -72,7 +72,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 key: nameof(Location.CreatedDate),
                 values: "Date is required");
 
-            invalidLocationException.AddData(
+			invalidLocationException.AddData(
                 key: nameof(Location.UpdatedDate),
                 values: "Date is required");
 
