@@ -4,9 +4,10 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace CashOverflow.Brokers.Storages
 {
@@ -16,5 +17,10 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Salary> InsertSalaryAsync(Salary salary) =>
             await InsertAsync(salary);
+
+        IQueryable<Salary> SelectAllSalaries() => SelectAllSalaries();
+
+        async ValueTask<Salary> SelectSalaryByIdAsync(Guid salaryId) =>
+            await SelectAsync<Salary>(salaryId);
     }
 }
