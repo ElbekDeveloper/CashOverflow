@@ -12,7 +12,7 @@ namespace CashOverflow.Services.Foundations.Locations
     public partial class LocationService
     {
         private void ValidateLocationOnAdd(Location location)
-        {
+	{
             ValidateLocationNotNull(location);
 
             Validate(
