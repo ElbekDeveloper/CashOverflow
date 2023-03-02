@@ -17,7 +17,6 @@ namespace CashOverflow.Services.Foundations.Languages
             this.storageBroker = storageBroker;
 
         public async ValueTask<Language> AddLanguageAsync(Language language) =>
-            throw new System.NotImplementedException();
-
+            await this.storageBroker.InsertLanguageAsync(language);
     }
 }
