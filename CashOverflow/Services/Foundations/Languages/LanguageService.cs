@@ -3,12 +3,18 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using System.Linq;
+using CashOverflow.Brokers.Loggings;
+using CashOverflow.Brokers.Storages;
+using CashOverflow.Models.Languages;
+
 namespace CashOverflow.Services.Foundations.Languages
 {
     public class LanguageService : ILanguageService
     {
-        private readonly IStrogeBroker strogeBroker();
-        private readonly ILoggingBroker loggingBroker();
+        private readonly IStorageBroker storageBroker;
+        private readonly ILoggingBroker loggingBroker;
 
         public LanguageService(
           IStorageBroker storageBroker,
@@ -18,7 +24,12 @@ namespace CashOverflow.Services.Foundations.Languages
             this.loggingBroker = loggingBroker;
         }
 
-        IQueryable<Language> RetrieveAllLanguages() =>
-            throw new NotImplementedException();
+        public IQueryable<Language> RetrieveAllLanguages()
+        {
+            IQueryable<Language> storageLanguages = this.storageBroker.SelectAllLanguages();
+
+            return storageLanguages;
+        }
+            
     }
 }
