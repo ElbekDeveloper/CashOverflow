@@ -5,6 +5,7 @@
 
 using CashOverflow.Models.Salaries;
 using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 using System.Threading.Tasks;
 using Xunit;
@@ -24,6 +25,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
             this.storageBrokerMock.Setup(broker =>
             broker.InsertSalaryAsync(inputSalary)).ReturnsAsync(persistedSalary);
+
             //when
             Salary actualSalary = await this.salaryService.AddSalaryAsync(inputSalary);
 
