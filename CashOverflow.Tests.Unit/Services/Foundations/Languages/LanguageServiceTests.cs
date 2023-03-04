@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
 using CashOverflow.Services.Foundations.Languages;
@@ -15,14 +16,17 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
     public partial class LanguageServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ILanguageService languageService;
 
         public LanguageServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
+            this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.languageService = new LanguageService(
-                storageBroker: this.storageBrokerMock.Object);
+                storageBroker: this.storageBrokerMock.Object,
+                loggingBroker: this.loggingBrokerMock.Object);
         }
 
         private DateTimeOffset GetRandomDatetimeOffset() =>
