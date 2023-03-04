@@ -4,12 +4,14 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
 using CashOverflow.Services.Foundations.Languages;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 {
@@ -28,6 +30,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private DateTimeOffset GetRandomDatetimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
