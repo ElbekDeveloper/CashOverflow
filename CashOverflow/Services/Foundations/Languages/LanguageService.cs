@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
+using CashOverflow.Services.Foundations.Languages.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Languages
 {
@@ -25,7 +26,25 @@ namespace CashOverflow.Services.Foundations.Languages
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<Language> AddLanguageAsync(Language language) =>
-            this.storageBroker.InsertLanguageAsync(language);
+        public async ValueTask<Language> AddLanguageAsync(Language language)
+        {
+            try
+            {
+                if(language is null)
+                {
+                    throw new NullLanguageException();
+                }
+
+                return await this.storageBroker.InsertLanguageAsync(language);
+
+            }
+            catch (NullLanguageException nullLanguageException)
+            {
+                var locationValidationException = new LanguageValidationException(nullLanguageException);
+                this.loggingBroker.LogError(locationValidationException);
+
+                throw locationValidationException;
+            }
+        }
     }
 }

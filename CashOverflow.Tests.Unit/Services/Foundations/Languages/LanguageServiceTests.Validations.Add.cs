@@ -18,13 +18,13 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public async Task ShouldThrowValidationExceptionOnAddIfInputIsNull()
         {
             // given
-            Language nullLanguge = null;
+            Language nullLanguage = null;
             var nullLanguageException = new NullLanguageException();
             var expectedLanguageValidationException = new LanguageValidationException(nullLanguageException);
 
             // when
             ValueTask<Language> addLanguageTask = this.languageService.
-                AddLanguageAsync(nullLanguge);
+                AddLanguageAsync(nullLanguage);
 
             LanguageValidationException actualLanguageValidationException =
                 await Assert.ThrowsAsync<LanguageValidationException>(addLanguageTask.AsTask);
