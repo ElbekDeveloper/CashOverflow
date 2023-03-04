@@ -4,10 +4,8 @@
 // --------------------------------------------------------
 
 using System;
-using System.Data;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
-using FluentAssertions.Equivalency.Steps;
 
 namespace CashOverflow.Services.Foundations.Locations
 {

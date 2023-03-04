@@ -3,7 +3,6 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions

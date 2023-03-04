@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
-using CashOverflow.Models.Locations.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
