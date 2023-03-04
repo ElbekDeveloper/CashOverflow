@@ -37,6 +37,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 broker.InsertLanguageAsync(inputLanguage), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
