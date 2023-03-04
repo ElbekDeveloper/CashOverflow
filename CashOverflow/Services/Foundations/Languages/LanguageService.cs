@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
-using CashOverflow.Services.Foundations.Languages.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Languages
 {
-    public class LanguageService : ILanguageService
+    public partial class LanguageService : ILanguageService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -24,26 +23,12 @@ namespace CashOverflow.Services.Foundations.Languages
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<Language> AddLanguageAsync(Language language)
+        public ValueTask<Language> AddLanguageAsync(Language language) =>
+        TryCatch(async () =>
         {
-            try
-            {
-                if (language is null)
-                {
-                    throw new NullLanguageException();
-                }
+            ValidateLanguageNotNull(language);
 
-                return await this.storageBroker.InsertLanguageAsync(language);
-            }
-            catch (NullLanguageException nullLanguageException)
-            {
-                var languageValidationException =
-                    new LanguageValidationException(innerException: nullLanguageException);
-
-                this.loggingBroker.LogError(languageValidationException);
-
-                throw languageValidationException;
-            }
-        }
+            return await this.storageBroker.InsertLanguageAsync(language);
+        });
     }
 }

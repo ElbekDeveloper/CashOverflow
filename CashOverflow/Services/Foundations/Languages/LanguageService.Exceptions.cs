@@ -1,0 +1,37 @@
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System.Threading.Tasks;
+using CashOverflow.Models.Languages;
+using CashOverflow.Services.Foundations.Languages.Exceptions;
+using Xeptions;
+
+namespace CashOverflow.Services.Foundations.Languages
+{
+    public partial class LanguageService
+    {
+        private delegate ValueTask<Language> ReturningLanguageFunction();
+
+        private async ValueTask<Language> TryCatch(ReturningLanguageFunction returningLanguageFunction)
+        {
+            try
+            {
+                return await returningLanguageFunction();
+            }
+            catch (NullLanguageException nullLanguageException)
+            {
+                throw CreateAndLogValidationException(nullLanguageException);
+            }
+        }
+
+        private LanguageValidationException CreateAndLogValidationException(Xeption exception)
+        {
+            var languageValidationException = new LanguageValidationException(innerException: exception);
+            this.loggingBroker.LogError(languageValidationException);
+
+            return languageValidationException;
+        }
+    }
+}
