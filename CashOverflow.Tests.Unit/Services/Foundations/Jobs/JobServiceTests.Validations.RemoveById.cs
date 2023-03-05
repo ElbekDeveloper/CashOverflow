@@ -49,5 +49,45 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        private async Task ShouldThrowNotFoundExceptionOnRemoveIfTeamIsNotFoundAndLogItAsync()
+        {
+            // given
+            Guid randomId = Guid.NewGuid();
+            Guid inputJobId = randomId;
+            Job noJob = null;
+
+            var notFoundJobException =
+                new NotFoundJobException(inputJobId);
+
+            var expectedJobValidationException =
+                new JobValidationException(notFoundJobException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectJobByIdAsync(inputJobId)).ReturnsAsync(noJob);
+
+            // when
+            ValueTask<Job> removeJobByIdAsync =
+                this.jobService.RemoveJobByIdAsync(inputJobId);
+
+            JobValidationException actualJobValidationException =
+                await Assert.ThrowsAsync<JobValidationException>(
+                    removeJobByIdAsync.AsTask);
+
+            // then
+            actualJobValidationException.Should().BeEquivalentTo(expectedJobValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(inputJobId), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobValidationException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+
+        }
     }
 }
