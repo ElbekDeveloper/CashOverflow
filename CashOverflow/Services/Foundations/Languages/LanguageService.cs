@@ -11,7 +11,7 @@ using CashOverflow.Models.Languages;
 
 namespace CashOverflow.Services.Foundations.Languages
 {
-    public class LanguageService : ILanguageService
+    public partial class LanguageService : ILanguageService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -24,12 +24,10 @@ namespace CashOverflow.Services.Foundations.Languages
             this.loggingBroker = loggingBroker;
         }
 
-        public IQueryable<Language> RetrieveAllLanguages()
+        public IQueryable<Language> RetrieveAllLanguages() =>
+        TryCatch(() =>
         {
-            IQueryable<Language> storageLanguages = this.storageBroker.SelectAllLanguages();
-
-            return storageLanguages;
-        }
-            
+            return this.storageBroker.SelectAllLanguages();
+        });
     }
 }
