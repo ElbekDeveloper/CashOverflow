@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /CashOverflow/appsettings.Development.json
 /CashOverflow/appsettings.development.json
+/CashOverflow/Services/Foundations/Locations
+/CashOverflow.Tests.Unit/Services/Foundations
