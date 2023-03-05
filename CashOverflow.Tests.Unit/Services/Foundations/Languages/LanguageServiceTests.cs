@@ -11,6 +11,10 @@ using System.Linq;
 using CashOverflow.Models.Languages;
 using System;
 using Tynamix.ObjectFiller;
+using Microsoft.Data.SqlClient;
+using System.Runtime.Serialization;
+using System.Linq.Expressions;
+using Xeptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 {
@@ -42,6 +46,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
+
+        private static SqlException GetSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static Filler<Language> CreateLanguageFiller(DateTimeOffset date)
         {
