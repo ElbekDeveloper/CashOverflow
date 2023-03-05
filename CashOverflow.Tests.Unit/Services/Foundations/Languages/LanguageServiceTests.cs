@@ -53,6 +53,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
+        private static string GetRandomMessage() =>
+            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
+
         private static Filler<Language> CreateLanguageFiller(DateTimeOffset date)
         {
             var filler = new Filler<Language>();
