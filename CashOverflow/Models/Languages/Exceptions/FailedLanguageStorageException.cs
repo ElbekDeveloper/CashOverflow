@@ -11,7 +11,7 @@ namespace CashOverflow.Models.Languages.Exceptions
     public class FailedLanguageStorageException : Xeption
     {
         public FailedLanguageStorageException(Exception innerException)
-            : base(message: "Failed language storage error occurred, contact support.", innerException) 
-        {}
+            : base(message: "Failed language storage error occurred, contact support.", innerException)
+        { }
     }
 }
