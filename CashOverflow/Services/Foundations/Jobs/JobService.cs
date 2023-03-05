@@ -6,7 +6,7 @@ using CashOverflow.Models.Jobs;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
-    public class JobService : IJobService
+    public partial class JobService : IJobService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -18,6 +18,12 @@ namespace CashOverflow.Services.Foundations.Jobs
         }
 
         public ValueTask<Job> RemoveJobByIdAsync(Guid jobId) =>
-            throw new NotImplementedException();
+        TryCatch(async () =>
+        {
+            Job maybeJob = 
+                await this.storageBroker.SelectJobByIdAsync(jobId);
+
+            return await this.storageBroker.DeleteJobAsync(maybeJob);
+        });
     }
 }

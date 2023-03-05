@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using FluentAssertions;
 using Force.DeepCloner;
-using Microsoft.IdentityModel.Tokens;
 using Moq;
 using Xunit;
 
