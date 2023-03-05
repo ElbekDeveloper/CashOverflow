@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
+using CashOverflow.Models.Jobs.Exceptions;
+using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
@@ -14,10 +16,18 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 return await returningJobFunction();
             }
-            catch
+            catch(InvalidJobException invalidJobException)
             {
-                throw new NotImplementedException();
+                throw CreateAndLogValidationException(invalidJobException);
             }
+        }
+
+        private JobValidationException CreateAndLogValidationException(Xeption exception)
+        {
+            var jobValidationException = new JobValidationException(exception);
+            this.loggingBroker.LogError(jobValidationException);
+
+            return jobValidationException;
         }
     }
 }

@@ -20,6 +20,8 @@ namespace CashOverflow.Services.Foundations.Jobs
         public ValueTask<Job> RemoveJobByIdAsync(Guid jobId) =>
         TryCatch(async () =>
         {
+            ValidateJobId(jobId);
+
             Job maybeJob = 
                 await this.storageBroker.SelectJobByIdAsync(jobId);
 
