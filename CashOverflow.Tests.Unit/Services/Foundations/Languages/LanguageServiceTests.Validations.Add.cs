@@ -20,20 +20,81 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             // given
             Language nullLanguage = null;
             var nullLanguageException = new NullLanguageException();
-            var expectedLanguageValidationException = new LanguageValidationException(nullLanguageException);
+            var expectedLanguageValidationException =
+                new LanguageValidationException(nullLanguageException);
 
             // when
-            ValueTask<Language> addLanguageTask = this.languageService.
-                AddLanguageAsync(nullLanguage);
+            ValueTask<Language> addLanguageTask =
+                this.languageService.AddLanguageAsync(nullLanguage);
+
+            LanguageValidationException actualLanguageValidationException =
+                await Assert.ThrowsAsync<LanguageValidationException>(
+                    addLanguageTask.AsTask);
+
+            // then
+            actualLanguageValidationException.Should()
+                .BeEquivalentTo(expectedLanguageValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLanguageValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ShouldThrowValidationExceptionOnAddLanguageIsInvalidAndLogItAsync(
+            string invalidText)
+
+        {
+            //given
+            var invalidLanguage = new Language()
+            {
+                Name = invalidText
+            };
+
+            var invalidLanguageException = new InvalidLanguageException();
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.Id),
+                values: "Id is required");
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.Name),
+                values: "Text is required");
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.CreatedDate),
+                values: "Date is required");
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.UpdatedDate),
+                values: "Date is required");
+
+            var expectedLanguageValidationException =
+                new LanguageValidationException(invalidLanguageException);
+
+            //when
+            ValueTask<Language> addLanguageTask =
+                this.languageService.AddLanguageAsync(invalidLanguage);
 
             LanguageValidationException actualLanguageValidationException =
                 await Assert.ThrowsAsync<LanguageValidationException>(addLanguageTask.AsTask);
 
-            // then
-            actualLanguageValidationException.Should().BeEquivalentTo(expectedLanguageValidationException);
+            //then
+            actualLanguageValidationException.Should()
+                .BeEquivalentTo(expectedLanguageValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(expectedLanguageValidationException))), Times.Once);
+               broker.LogError(It.Is(SameExceptionAs(
+                   expectedLanguageValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
