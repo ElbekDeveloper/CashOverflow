@@ -16,7 +16,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
     public partial class LanguageServiceTests
     {
         [Fact]
-        public async Task ShouldRetrieveAllLanguages()
+        public void ShouldRetrieveAllLanguages()
         {
             // given
             IQueryable<Language> randomLanguages = CreateRandomLanguages();
