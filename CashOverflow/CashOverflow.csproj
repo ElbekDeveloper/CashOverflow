@@ -10,6 +10,7 @@
     <EmbeddedResource Remove="Brokers\Salaries\**" />
     <None Remove="Brokers\Salaries\**" />
     <None Remove="Brokers\Loggings\" />
+    <None Remove="Models\Locations\Exceptions\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,5 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Brokers\Loggings\" />
+    <Folder Include="Models\Locations\Exceptions\" />
   </ItemGroup>
 </Project>

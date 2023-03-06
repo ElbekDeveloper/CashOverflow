@@ -5,6 +5,7 @@
 
 using System;
 using System.Threading.Tasks;
+using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
 
@@ -12,8 +13,8 @@ namespace CashOverflow.Services.Foundations.Locations
 {
 	public class LocationService:ILocationService
     {
-        private IStorageBroker storageBroker;
-
+        private readonly IStorageBroker storageBroker;
+        private readonly ILoggingBroker loggingBroker;
         public LocationService(IStorageBroker storageBroker)=>
             this.storageBroker = storageBroker;
 
