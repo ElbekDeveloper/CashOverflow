@@ -22,7 +22,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.jobService = new JobService(
-                strogeBroker: this.storageBrokerMock.Object);
+                storageBroker: this.storageBrokerMock.Object);
         }
 
         private static IQueryable<Job> CreateRandomJobs()
