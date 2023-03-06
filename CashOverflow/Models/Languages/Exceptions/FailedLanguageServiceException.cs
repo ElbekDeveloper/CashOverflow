@@ -11,7 +11,7 @@ namespace CashOverflow.Models.Languages.Exceptions
     public class FailedLanguageServiceException : Xeption
     {
         public FailedLanguageServiceException(Exception innerException)
-            : base(message: "Service error occured", innerException)
+            : base(message: "Failed language service error occurred, contact support.", innerException)
         { }
     }
 }

@@ -37,8 +37,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         private static IQueryable<Language> CreateRandomLanguages()
         {
             return CreateLanguageFiller(date: GetRandomDateTimeOffset())
-                .Create(count: GetRandomNumber())
-                    .AsQueryable();
+                .Create(count: GetRandomNumber()).AsQueryable();
         }
 
         private static int GetRandomNumber() =>

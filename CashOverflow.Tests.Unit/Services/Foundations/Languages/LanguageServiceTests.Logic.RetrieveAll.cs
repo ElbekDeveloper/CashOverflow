@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 using Xunit;
 
@@ -20,7 +21,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             // given
             IQueryable<Language> randomLanguages = CreateRandomLanguages();
             IQueryable<Language> storageLanguages = randomLanguages;
-            IQueryable<Language> expectedLanguges = storageLanguages;
+            IQueryable<Language> expectedLanguges = storageLanguages.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectAllLanguages())

@@ -24,9 +24,6 @@ namespace CashOverflow.Services.Foundations.Languages
         }
 
         public IQueryable<Language> RetrieveAllLanguages() =>
-        TryCatch(() =>
-        {
-            return this.storageBroker.SelectAllLanguages();
-        });
+            TryCatch(() => this.storageBroker.SelectAllLanguages());
     }
 }

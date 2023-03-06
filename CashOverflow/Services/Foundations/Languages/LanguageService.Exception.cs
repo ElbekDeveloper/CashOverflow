@@ -40,20 +40,20 @@ namespace CashOverflow.Services.Foundations.Languages
 
         private LanguageDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var LanguageDependencyException =
+            var languageDependencyException =
                 new LanguageDependencyException(exception);
 
-            this.loggingBroker.LogCritical(LanguageDependencyException);
+            this.loggingBroker.LogCritical(languageDependencyException);
 
-            return LanguageDependencyException;
+            return languageDependencyException;
         }
 
         private LanguageServiceException CreateAndLogServiceException(Xeption exception)
         {
-            var LanguageServiceException = new LanguageServiceException(exception);
-            this.loggingBroker.LogError(LanguageServiceException);
+            var languageServiceException = new LanguageServiceException(exception);
+            this.loggingBroker.LogError(languageServiceException);
 
-            return LanguageServiceException;
+            return languageServiceException;
         }
     }
 }
