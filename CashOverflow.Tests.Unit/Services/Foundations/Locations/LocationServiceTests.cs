@@ -38,8 +38,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
+        private int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
+
         private DateTimeOffset GetRandomDatetimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private Location CreateRandomLocation(DateTimeOffset dates) =>
+            CreateLocationFiller(dates).Create();
 
         private Location CreateRandomLocation() =>
             CreateLocationFiller(dates: GetRandomDatetimeOffset()).Create();
