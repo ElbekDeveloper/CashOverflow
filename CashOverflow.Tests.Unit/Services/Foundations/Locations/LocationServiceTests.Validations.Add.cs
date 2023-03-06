@@ -10,7 +10,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 		public async Task ShouldThrowValidationExceptionOnAddIfInputIsNullAndLogItAsync()
 		{
 			// given
-
+			
 			// when
 
 			// then
