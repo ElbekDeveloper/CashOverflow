@@ -7,6 +7,7 @@ using System;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
 using CashOverflow.Services.Foundations.Locations;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Moq;
 using Tynamix.ObjectFiller;
 
@@ -20,9 +21,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         public LocationServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
-
             this.locationService = new LocationService(
-                storageBroker: this.storageBrokerMock.Object);
+				storageBroker:this.storageBrokerMock.Object);
+
         }
 
         private DateTimeOffset GetRandomDatetimeOffset() =>
@@ -35,12 +36,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         {
             var filler = new Filler<Location>();
 
-            filler.Setup()
-                .OnType<DateTimeOffset>().Use(dates);
+			filler.Setup().
+				OnType<DateTimeOffset>().Use(dates);
 
             return filler;
         }
-
-
     }
 }
