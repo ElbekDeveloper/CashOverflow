@@ -5,7 +5,7 @@
 
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
-using CashOverflow.Services.Foundations.Languages.Exceptions;
+using CashOverflow.Models.Languages.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -52,7 +52,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         [InlineData(" ")]
         public async Task ShouldThrowValidationExceptionOnAddLanguageIsInvalidAndLogItAsync(
             string invalidText)
-
         {
             //given
             var invalidLanguage = new Language()

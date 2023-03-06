@@ -5,7 +5,7 @@
 
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
-using CashOverflow.Services.Foundations.Languages.Exceptions;
+using CashOverflow.Models.Languages.Exceptions;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Languages
@@ -23,6 +23,10 @@ namespace CashOverflow.Services.Foundations.Languages
             catch (NullLanguageException nullLanguageException)
             {
                 throw CreateAndLogValidationException(nullLanguageException);
+            }
+            catch (InvalidLanguageException invalidLanguageException)
+            {
+                throw CreateAndLogValidationException(invalidLanguageException);
             }
         }
 
