@@ -5,7 +5,7 @@
 
 using Xeptions;
 
-namespace CashOverflow.Services.Foundations.Languages.Exceptions
+namespace CashOverflow.Models.Languages.Exceptions
 {
     public class LanguageValidationException : Xeption
     {

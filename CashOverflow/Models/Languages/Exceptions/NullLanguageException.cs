@@ -5,12 +5,12 @@
 
 using Xeptions;
 
-namespace CashOverflow.Services.Foundations.Languages.Exceptions
+namespace CashOverflow.Models.Languages.Exceptions
 {
-    public class InvalidLanguageException : Xeption
+    public class NullLanguageException : Xeption
     {
-        public InvalidLanguageException()
-            : base(message: "Language is invalid")
+        public NullLanguageException()
+            : base(message: "Language is null")
         { }
     }
 }
