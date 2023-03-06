@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,8 +32,13 @@ namespace CashOverflow
                     name: "v1",
                     info: new OpenApiInfo { Title = "CashOverflow", Version = "v1" });
             });
+            AddBrokers(services);
+        }
 
+        private static void AddBrokers(IServiceCollection services)
+        {
             services.AddTransient<IStorageBroker, StorageBroker>();
+            services.AddTransient<ILoggingBroker, LoggingBroker>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
