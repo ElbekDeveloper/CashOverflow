@@ -3,7 +3,9 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
@@ -25,5 +27,9 @@ namespace CashOverflow.Services.Foundations.Languages
 
         public IQueryable<Language> RetrieveAllLanguages() =>
             TryCatch(() => this.storageBroker.SelectAllLanguages());
+
+        public async ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId)=>
+             throw new NotImplementedException();
+        
     }
 }
