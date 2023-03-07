@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 using CashOverflow.Brokers.Storages;
-using CashOverflow.Models.Locations;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Services.Foundations.Salaries;
 using Moq;
