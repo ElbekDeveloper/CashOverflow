@@ -5,6 +5,7 @@
 
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
+using CashOverflow.Services.Foundations.Salaries;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -58,6 +59,11 @@ namespace CashOverflow
         {
             services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
+        }
+        
+        private static void AddFoundationService(IServiceCollection services)
+        {
+            services.AddTransient<ISalaryService, SalaryService>();
         }
     }
 }
