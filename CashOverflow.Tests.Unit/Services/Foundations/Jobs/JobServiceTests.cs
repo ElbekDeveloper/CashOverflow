@@ -1,3 +1,5 @@
+
+using System.Linq.Expressions;
 // --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
@@ -11,16 +13,22 @@ using CashOverflow.Services.Foundations.Jobs;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Jobs;
 using Tynamix.ObjectFiller;
+using Microsoft.Data.SqlClient;
+using System.Runtime.Serialization;
+using CashOverflow.Brokers.Loggings;
+using Xeptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 {
     public partial class JobServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IJobService jobService;
         public JobServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
+            this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.jobService = new JobService(
                 storageBroker: this.storageBrokerMock.Object);
         }
@@ -47,5 +55,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             
             return filler;
         }
+        private static SqlException CreateSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
     }
 }

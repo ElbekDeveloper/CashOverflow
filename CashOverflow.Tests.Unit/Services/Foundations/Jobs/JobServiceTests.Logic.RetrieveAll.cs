@@ -35,8 +35,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectAllJobs(), Times.Once());
             
-            this.storageBrokerMock.VerifyNoOtherCalls();
-
+            this.storageBrokerMock.VerifyNoOtherCalls();   
         }
     }
 }
