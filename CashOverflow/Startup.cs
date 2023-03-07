@@ -35,6 +35,7 @@ namespace CashOverflow
             });
 
             AddBrokers(services);
+            AddFoundationService(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
