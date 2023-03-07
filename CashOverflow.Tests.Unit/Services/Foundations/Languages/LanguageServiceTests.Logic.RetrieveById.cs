@@ -4,9 +4,6 @@
 // --------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using FluentAssertions;
@@ -26,7 +23,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             Guid inputLanguageId = randomLanguageId;
             Language randomLanguage = CreateRandomLangauage();
             Language persistedLanguage = randomLanguage;
-            Language expectedLanguage= persistedLanguage.DeepClone();
+            Language expectedLanguage = persistedLanguage.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLanguageByIdAsync(inputLanguageId))
@@ -46,6 +43,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
-        
+
     }
 }
