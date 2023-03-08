@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
+using CashOverflow.Models.Languages.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Languages
 {
@@ -28,7 +29,24 @@ namespace CashOverflow.Services.Foundations.Languages
         public IQueryable<Language> RetrieveAllLanguages() =>
             TryCatch(() => this.storageBroker.SelectAllLanguages());
 
-        public async ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId) =>
-             await this.storageBroker.SelectLanguageByIdAsync(languageId);
+        public async ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId)
+        {
+            try
+            {
+                if (languageId == Guid.Empty)
+                {
+                    throw new NulllLanguageIdExcaption();
+                }
+
+                return await this.storageBroker.SelectLanguageByIdAsync(languageId);
+            }
+            catch (NulllLanguageIdExcaption nullLanguageIdExcaption)
+            {
+                var languageValidationExcaption = new LanguageValidationExcaption(nullLanguageIdExcaption);
+                this.loggingBroker.LogError(languageValidationExcaption);
+                throw languageValidationExcaption;
+            }
+        }
+            
     }
 }
