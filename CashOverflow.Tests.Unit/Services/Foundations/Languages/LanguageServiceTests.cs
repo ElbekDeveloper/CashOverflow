@@ -39,8 +39,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
+        private int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
+
         private DateTimeOffset GetRandomDatetimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private Language CreateRandomLanguage(DateTimeOffset dates) =>
+            CreateLanguageFiller(dates).Create();
 
         private Language CreateRandomLanguage() =>
             CreateLanguageFiller(GetRandomDatetimeOffset()).Create();
