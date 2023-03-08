@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
 using Microsoft.Data.SqlClient;
@@ -54,6 +55,28 @@ namespace CashOverflow.Services.Foundations.Languages
             this.loggingBroker.LogError(languageServiceException);
 
             return languageServiceException;
+        }
+
+        private delegate ValueTask<Language> ReturningLanguageFunction();
+
+        private async ValueTask<Language> TryCatch(ReturningLanguageFunction returningLanguageFunction)
+        {
+            try
+            {
+                return await returningLanguageFunction();
+            }
+            catch (NulllLanguageIdExcaption nullLanguageIdExcaption)
+            {
+                throw CreateAndLogValidationExcaption(nullLanguageIdExcaption);
+            }
+        }
+
+        private LanguageValidationExcaption CreateAndLogValidationExcaption(Xeption excaption)
+        {
+            var languageValidationExcaption = new LanguageValidationExcaption(excaption);
+            this.loggingBroker.LogError(languageValidationExcaption);
+
+            return languageValidationExcaption;
         }
     }
 }
