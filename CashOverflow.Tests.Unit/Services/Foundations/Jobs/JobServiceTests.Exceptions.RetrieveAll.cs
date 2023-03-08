@@ -51,6 +51,47 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
     
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public void ShouldThrowServiceExceptionOnRetrieveAllWhenAllServiceErrorOccursAndLogIt()
+        {
+            //given
+            string exceptionMessage = GetRandomString();
+            var serviceException = 
+                new Exception(exceptionMessage);
+
+            var failedJobServiceException = 
+                new FailedJobServiceException(serviceException);
+
+            var expectedJobServiceException = 
+                new JobServiceException(failedJobServiceException);
+            
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllJobs()).Throws(serviceException);
+            
+            //when
+            Action retrieveAllJobAction = () =>
+                this.jobService.RetrieveAllJobs();
+            
+            JobServiceException actualJobServiceException = 
+                Assert.Throws<JobServiceException>(retrieveAllJobAction);
+            
+            //then
+            actualJobServiceException.Should().BeEquivalentTo(expectedJobServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllJobs(), Times.Once);
+            
+            this.loggingBrokerMock.Verify(broker => 
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobServiceException))), Times.Once);
+            
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
     }
 }

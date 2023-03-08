@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Moq;
 using CashOverflow.Services.Foundations.Jobs;
 using CashOverflow.Brokers.Storages;
+using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Models.Jobs;
 using Tynamix.ObjectFiller;
 using Microsoft.Data.SqlClient;
@@ -23,14 +24,18 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly IJobService jobService;
         public JobServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
+
             this.jobService = new JobService(
                 storageBroker: this.storageBrokerMock.Object,
-                loggingBroker: this.loggingBrokerMock.Object);
+                loggingBroker: this.loggingBrokerMock.Object,
+                dateTimeBroker: this.dateTimeBrokerMock.Object);
         }
 
         private static IQueryable<Job> CreateRandomJobs()
@@ -42,6 +47,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
         private static int GetRandomNumber()=>
             new IntRange(min: 2, max: 10).GetValue();
+        
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
         private static DateTimeOffset GetRandomDateTimeOffset()=>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
