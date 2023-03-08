@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Jobs;
@@ -16,14 +17,15 @@ namespace CashOverflow.Services.Foundations.Jobs
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
-        public JobService
-        (
+        private readonly IDateTimeBroker dateTimeBroker;
+        public JobService(
             IStorageBroker storageBroker,
-            ILoggingBroker loggingBroker
-        )
+            ILoggingBroker loggingBroker,
+            IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
+            this.dateTimeBroker = dateTimeBroker;
         }
         public IQueryable<Job> RetrieveAllJobs() =>
             TryCatch(() =>
