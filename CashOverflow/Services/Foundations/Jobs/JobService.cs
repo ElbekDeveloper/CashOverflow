@@ -12,16 +12,23 @@ using CashOverflow.Models.Jobs;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
-    public class JobService: IJobService
+    public partial class JobService: IJobService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
-        public JobService(IStorageBroker storageBroker)
+        public JobService
+        (
+            IStorageBroker storageBroker,
+            ILoggingBroker loggingBroker
+        )
         {
             this.storageBroker = storageBroker;
+            this.loggingBroker = loggingBroker;
         }
-
         public IQueryable<Job> RetrieveAllJobs() =>
-            this.storageBroker.SelectAllJobs();
+            TryCatch(() =>
+                {
+                    return this.storageBroker.SelectAllJobs();
+                });
     }
 }
