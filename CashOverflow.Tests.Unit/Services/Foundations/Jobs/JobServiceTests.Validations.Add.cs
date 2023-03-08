@@ -24,7 +24,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 			var expectedJobValidationException =
 				new JobValidationException(nullJobException);
 
-
 			// when
 			ValueTask<Job> addJobTask = this.jobService.AddJobAsync(nullJob);
 
