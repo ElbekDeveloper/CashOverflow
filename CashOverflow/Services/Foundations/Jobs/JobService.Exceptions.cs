@@ -1,12 +1,13 @@
-//using System.Data.SqlTypes;
+// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using Xeptions;
-using System.Runtime.Serialization;
 using Microsoft.Data.SqlClient;
 
 namespace CashOverflow.Services.Foundations.Jobs
