@@ -19,7 +19,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
     public partial class LanguageServiceTests
     {
         [Fact]
-        public async void ShouldRetrieveByIdLanguages()
+        public async void ShouldRetrieveByIdLanguage()
         {
             // given
             Guid randomLanguageId = Guid.NewGuid();
