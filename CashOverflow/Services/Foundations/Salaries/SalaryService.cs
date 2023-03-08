@@ -3,9 +3,9 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System.Threading.Tasks;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Salaries;
-using System.Threading.Tasks;
 
 namespace CashOverflow.Services.Foundations.Salaries
 {
