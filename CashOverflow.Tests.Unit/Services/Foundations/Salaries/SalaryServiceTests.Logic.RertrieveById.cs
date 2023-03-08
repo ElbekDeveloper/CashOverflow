@@ -1,11 +1,13 @@
-﻿using CashOverflow.Models.Salaries;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using CashOverflow.Models.Salaries;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,8 +19,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         public async Task ShouldRetrieveSalaryByIdAsync()
         {
             //given
-            Guid randonmSalaryId = Guid.NewGuid();
-            Guid inputSalaryId = randonmSalaryId;
+            Guid randomSalaryId = Guid.NewGuid();
+            Guid inputSalaryId = randomSalaryId;
             Salary randomSalary = CreateRandomSalary();
             Salary storageSalary = randomSalary;
             Salary expectedSalary = storageSalary.DeepClone();
@@ -30,7 +32,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             //when
             Salary actualSalary = await this.salaryService
                     .RetriveSalaryByIdAsync(inputSalaryId);
-            
+
             //then
             actualSalary.Should().BeEquivalentTo(expectedSalary);
 
