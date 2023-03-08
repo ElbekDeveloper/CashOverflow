@@ -27,7 +27,7 @@ namespace CashOverflow.Services.Foundations.Salaries
             await storageBroker.InsertSalaryAsync(salary);
 
         public IQueryable<Salary> RetrieveSalaryAll() =>
-            throw new NotImplementedException();
+            storageBroker.SelectAllSalaries();
 
 
         public ValueTask<Salary> RetriveSalaryByIdAsync(Guid id)
