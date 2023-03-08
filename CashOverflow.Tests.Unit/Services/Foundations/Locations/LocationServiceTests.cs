@@ -13,6 +13,7 @@ using CashOverflow.Services.Foundations.Locations;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 {
@@ -35,10 +36,25 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
+        public static TheoryData<int> InvalidMinutes()
+        {
+            int minutesInFuture = GetRandomNumber();
+            int minutesInPast = GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                minutesInFuture,
+                minutesInPast
+            };
+        }
+
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private int GetRandomNumber() =>
+        private static int GetRandomNegativeNumber() =>
+          -1 * new IntRange(min: 2, max: 9).GetValue();
+
+        private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
         private DateTimeOffset GetRandomDatetimeOffset() =>
@@ -59,7 +75,5 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             return filler;
         }
-
-
     }
 }
