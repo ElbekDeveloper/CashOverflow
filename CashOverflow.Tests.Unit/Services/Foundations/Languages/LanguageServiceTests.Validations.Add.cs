@@ -21,6 +21,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             // given
             Language nullLanguage = null;
             var nullLanguageException = new NullLanguageException();
+
             var expectedLanguageValidationException =
                 new LanguageValidationException(nullLanguageException);
 
@@ -94,8 +95,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 .BeEquivalentTo(expectedLanguageValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-               broker.LogError(It.Is(SameExceptionAs(
-                   expectedLanguageValidationException))), Times.Once);
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLanguageValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);

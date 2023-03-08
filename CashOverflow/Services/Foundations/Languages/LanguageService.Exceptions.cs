@@ -27,15 +27,15 @@ namespace CashOverflow.Services.Foundations.Languages
             catch (InvalidLanguageException invalidLanguageException)
             {
                 throw CreateAndLogValidationException(invalidLanguageException);
-            }
+        }
         }
 
         private LanguageValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var locationValidationException = new LanguageValidationException(innerException: exception);
-            this.loggingBroker.LogError(locationValidationException);
+            var languageValidationException = new LanguageValidationException(innerException: exception);
+            this.loggingBroker.LogError(languageValidationException);
 
-            return locationValidationException;
+            return languageValidationException;
         }
     }
 }
