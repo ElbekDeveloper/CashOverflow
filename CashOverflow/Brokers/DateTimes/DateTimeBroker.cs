@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CashOverflow.Brokers.DateTimes
 {
-    public class DateTimeBroker
+    public class DateTimeBroker: IDateTimeBroker
     {
         public DateTimeOffset GetCurrentDateTime() =>
             DateTimeOffset.UtcNow;
