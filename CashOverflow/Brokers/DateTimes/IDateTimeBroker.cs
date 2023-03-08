@@ -4,6 +4,7 @@
 //=================================
 
 using System;
+
 namespace CashOverflow.Brokers.DateTimes
 {
     public interface IDateTimeBroker
@@ -11,3 +12,4 @@ namespace CashOverflow.Brokers.DateTimes
         DateTimeOffset GetCurrentDateTime();
     }
 }
+
