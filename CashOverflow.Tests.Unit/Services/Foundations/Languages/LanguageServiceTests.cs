@@ -34,7 +34,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        private static IQueryable<Language> CreateRandomLanguages()
+        private static Language CreateRandomLanguage() =>
+            CreateLanguageFiller(GetRandomDateTimeOffset()).Create();
+
+        private IQueryable<Language> CreateRandomLanguages()
         {
             return CreateLanguageFiller(date: GetRandomDateTimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
