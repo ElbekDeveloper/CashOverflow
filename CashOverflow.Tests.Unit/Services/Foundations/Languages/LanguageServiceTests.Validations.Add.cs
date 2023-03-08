@@ -7,7 +7,6 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
-using CashOverflow.Models.Locations;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -132,7 +131,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             actualLanguageValidationException.Should().BeEquivalentTo(expectedLanguageValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs( expectedLanguageValidationException))), Times.Once);
+                broker.LogError(It.Is(SameExceptionAs(expectedLanguageValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker => broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
 
