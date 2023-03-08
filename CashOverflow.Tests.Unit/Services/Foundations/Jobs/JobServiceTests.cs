@@ -24,6 +24,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
+            this.dateTimeBroker = new Mock<IDateTimeBroker>();
 
             this.jobService = new JobService(
                 storageBroker: this.storageBrokerMock.Object,

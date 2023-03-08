@@ -46,7 +46,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 broker.SelectJobByIdAsync(inputJobId), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.DeleteJobAsync(expectedJob), Times.Once);
+                broker.DeleteJobAsync(expectedInputJob), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

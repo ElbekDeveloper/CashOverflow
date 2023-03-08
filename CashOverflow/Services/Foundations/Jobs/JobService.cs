@@ -26,9 +26,11 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public ValueTask<Job> RemoveJobByIdAsync(Guid JobId)
+        public async ValueTask<Job> RemoveJobByIdAsync(Guid jobId)
         {
-            throw new NotImplementedException();
+            Job maybeJob = await this.storageBroker.SelectJobByIdAsync(jobId);
+
+            return await this.storageBroker.DeleteJobAsync(maybeJob);   
         }
     }
 }
