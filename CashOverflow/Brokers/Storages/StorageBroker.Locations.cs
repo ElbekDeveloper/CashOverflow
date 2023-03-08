@@ -3,12 +3,11 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using CashOverflow.Models.Locations;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CashOverflow.Models.Languages;
-using CashOverflow.Models.Locations;
-using Microsoft.EntityFrameworkCore;
 
 namespace CashOverflow.Brokers.Storages
 {
@@ -27,7 +26,7 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Location> UpdateLocationAsync(Location location) =>
             await UpdateAsync(location);
-  
+
         public async ValueTask<Location> DeleteLocationAsync(Location location) =>
             await DeleteAsync<Location>(location);
     }

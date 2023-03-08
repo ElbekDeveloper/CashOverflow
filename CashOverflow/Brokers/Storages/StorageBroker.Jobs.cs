@@ -3,11 +3,11 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using CashOverflow.Models.Jobs;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CashOverflow.Models.Jobs;
-using Microsoft.EntityFrameworkCore;
 
 namespace CashOverflow.Brokers.Storages
 {
@@ -27,7 +27,7 @@ namespace CashOverflow.Brokers.Storages
         public async ValueTask<Job> UpdateJobAsync(Job job) =>
             await UpdateAsync<Job>(job);
 
-        public async ValueTask<Job> DeleteJobAsync(Job job)=>
+        public async ValueTask<Job> DeleteJobAsync(Job job) =>
             await DeleteAsync<Job>(job);
     }
 }

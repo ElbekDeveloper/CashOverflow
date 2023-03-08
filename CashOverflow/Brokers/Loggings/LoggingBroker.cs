@@ -3,8 +3,8 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace CashOverflow.Brokers.Loggings
 {
@@ -14,7 +14,7 @@ namespace CashOverflow.Brokers.Loggings
 
         public LoggingBroker(ILogger<LoggingBroker> logger) =>
             this.logger = logger;
- 
+
         public void LogError(Exception exception) =>
             this.logger.LogError(exception.Message, exception);
 

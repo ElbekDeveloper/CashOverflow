@@ -3,11 +3,11 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Linq;
-using System.Threading.Tasks;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CashOverflow.Brokers.Storages
 {
