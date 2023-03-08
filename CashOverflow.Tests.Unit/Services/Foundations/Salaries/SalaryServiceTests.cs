@@ -24,9 +24,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         }
 
         private Salary CreateRandomSalary()
-            => CreateLocationFiller(GetRandomDatetimeOffset()).Create();
+            => CreateSalaryFiller(GetRandomDatetimeOffset()).Create();
         
-        private Filler<Salary> CreateLocationFiller(DateTimeOffset dates)
+        private Filler<Salary> CreateSalaryFiller(DateTimeOffset dates)
         {
             var filler = new Filler<Salary>();
             filler.Setup()
