@@ -30,9 +30,8 @@ namespace CashOverflow.Services.Foundations.Salaries
             storageBroker.SelectAllSalaries();
 
 
-        public ValueTask<Salary> RetriveSalaryByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        public async ValueTask<Salary> RetriveSalaryByIdAsync(Guid id) =>
+            await storageBroker.SelectSalaryByIdAsync(id);
+            
     }
 }
