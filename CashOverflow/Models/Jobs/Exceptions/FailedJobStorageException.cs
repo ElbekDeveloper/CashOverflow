@@ -9,7 +9,7 @@ namespace CashOverflow.Models.Jobs.Exceptions
     public class FailedJobStorageException: Xeption
     {
         public FailedJobStorageException(Exception innerException)
-            :base(message: "Failed ticket storage error occurred, contact support.", innerException)
+            :base(message: "Failed job storage error occurred, contact support.", innerException)
         { }
     }
 }
