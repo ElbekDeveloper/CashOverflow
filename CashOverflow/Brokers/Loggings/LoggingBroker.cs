@@ -19,7 +19,6 @@ namespace CashOverflow.Brokers.Loggings
 
         public void LogCritical(Exception exception) =>
             this.logger.LogCritical(exception.Message, exception);
-
         
     }
 }

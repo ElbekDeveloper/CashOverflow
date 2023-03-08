@@ -28,4 +28,10 @@
     <ProjectReference Include="..\CashOverflow\CashOverflow.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Services\Foundations\Jobs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\Foundations\Jobs\" />
+  </ItemGroup>
 </Project>

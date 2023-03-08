@@ -5,12 +5,13 @@
 
 using System;
 using System.Threading.Tasks;
-using CashOverflow.Models.Locations;
+using CashOverflow.Models.Jobs;
 
-namespace CashOverflow.Services.Foundations.Locations
+namespace CashOverflow.Services.Foundations.Jobs
 {
-    public interface ILocationService
-    {
-        ValueTask<Location> AddLocationAsync(Location location);
-    }
+	public interface IJobService
+	{
+		ValueTask<Job> AddJobAsync(Job job);
+	}
 }
+

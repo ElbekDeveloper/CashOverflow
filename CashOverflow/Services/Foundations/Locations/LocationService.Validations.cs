@@ -18,7 +18,6 @@ namespace CashOverflow.Services.Foundations.Locations
                 throw new NullLocationException();
             }
         }
-
     }
 }
 

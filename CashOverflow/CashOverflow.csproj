@@ -11,6 +11,8 @@
     <None Remove="Brokers\Salaries\**" />
     <None Remove="Brokers\Loggings\" />
     <None Remove="Models\Locations\Exceptions\" />
+    <None Remove="Models\Jobs\Exceptions\" />
+    <None Remove="Services\Foundations\Jobs\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,5 +35,7 @@
   <ItemGroup>
     <Folder Include="Brokers\Loggings\" />
     <Folder Include="Models\Locations\Exceptions\" />
+    <Folder Include="Models\Jobs\Exceptions\" />
+    <Folder Include="Services\Foundations\Jobs\" />
   </ItemGroup>
 </Project>
