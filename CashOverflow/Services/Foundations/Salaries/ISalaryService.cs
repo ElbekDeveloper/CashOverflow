@@ -1,4 +1,9 @@
-﻿using CashOverflow.Models.Salaries;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using CashOverflow.Models.Salaries;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
