@@ -27,7 +27,7 @@ namespace CashOverflow.Services.Foundations.Languages
             catch (InvalidLanguageException invalidLanguageException)
             {
                 throw CreateAndLogValidationException(invalidLanguageException);
-        }
+            }
         }
 
         private LanguageValidationException CreateAndLogValidationException(Xeption exception)
