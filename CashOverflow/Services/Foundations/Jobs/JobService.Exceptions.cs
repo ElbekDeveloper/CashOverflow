@@ -24,7 +24,14 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 var failedJobStorageException = new FailedJobStorageException(sqlException);
                 
-                throw CreatedAndLogCriticalDependencyException(failedJobStorageException); 
+                throw CreatedAndLogCriticalDependencyException(failedJobStorageException);
+            }
+            catch(Exception exception)
+            {
+                var failedJobServiceException =
+                    new FailedJobServiceException(exception);
+                
+                throw CreateAndLogServiceException(failedJobServiceException);
             }
         }
         private JobDependencyException CreatedAndLogCriticalDependencyException(Xeption exception)
@@ -33,6 +40,14 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.loggingBroker.LogCritical(jobDependencyException);
 
             return jobDependencyException;
+        }
+        private JobServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var JobServiceException = new JobServiceException(exception);
+
+            this.loggingBroker.LogError(JobServiceException);
+
+            return JobServiceException;
         }
     }
 }
