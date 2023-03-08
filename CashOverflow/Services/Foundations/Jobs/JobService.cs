@@ -24,6 +24,6 @@ namespace CashOverflow.Services.Foundations.Jobs
         }
 
         public IQueryable<Job> RetrieveAllJobs() =>
-            throw new System.NotImplementedException();
+            this.storageBroker.SelectAllJobs();
     }
 }
