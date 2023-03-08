@@ -3,11 +3,13 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Services.Foundations.Salaries;
 using Moq;
 using System;
+using System.Linq;
 using Tynamix.ObjectFiller;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
@@ -16,16 +18,23 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
     {
         private readonly ISalaryService salaryService;
         private readonly Mock<IStorageBroker> storageBrokerMock;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         public SalaryServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
+            this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.salaryService = new SalaryService(
-                storageBroker: storageBrokerMock.Object);
+                storageBroker: storageBrokerMock.Object, 
+                loggingBroker: loggingBrokerMock.Object);
         }
 
         private Salary CreateRandomSalary()
             => CreateSalaryFiller(GetRandomDatetimeOffset()).Create();
         
+        private IQueryable<Salary> CreateRandomSalaries() =>
+            CreateSalaryFiller(dates: GetRandomDatetimeOffset()).Create(count: GetRandomNumber()).AsQueryable();
+
+
         private Filler<Salary> CreateSalaryFiller(DateTimeOffset dates)
         {
             var filler = new Filler<Salary>();
@@ -35,5 +44,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         }
         private DateTimeOffset GetRandomDatetimeOffset()
             => new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 99).GetValue();
     }
 }
