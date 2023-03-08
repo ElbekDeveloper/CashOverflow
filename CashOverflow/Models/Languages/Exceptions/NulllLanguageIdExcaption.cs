@@ -1,13 +1,11 @@
-﻿using CashOverflow.Models.Languages.Exceptions;
-using System;
-using Xeptions;
+﻿using Xeptions;
 
 namespace CashOverflow.Models.Languages.Exceptions
 {
-    public class NulllLanguageIdExcaption:Xeption
+    public class NulllLanguageIdExcaption : Xeption
     {
         public NulllLanguageIdExcaption()
-            : base(message: "Input Id is Null") 
+            : base(message: "Input Id is Null")
         {
 
         }

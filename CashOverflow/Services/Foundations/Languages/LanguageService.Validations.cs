@@ -1,5 +1,5 @@
-﻿using CashOverflow.Models.Languages.Exceptions;
-using System;
+﻿using System;
+using CashOverflow.Models.Languages.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Languages
 {
