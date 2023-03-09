@@ -3,11 +3,16 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using CashOverflow.Models.Locations;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+<<<<<<< HEAD
 using CashOverflow.Models.Locations;
 using Microsoft.EntityFrameworkCore;
+=======
+>>>>>>> cd307bc66517cf430e3e32d96cdfcc10dbe2ca48
 
 namespace CashOverflow.Brokers.Storages
 {

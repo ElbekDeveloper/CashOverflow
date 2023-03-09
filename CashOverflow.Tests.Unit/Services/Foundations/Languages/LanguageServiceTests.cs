@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+<<<<<<< HEAD
 using System;
 using System.Linq;
 using CashOverflow.Brokers.Loggings;
@@ -10,6 +11,15 @@ using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
 using CashOverflow.Services.Foundations.Languages;
 using Moq;
+=======
+using CashOverflow.Brokers.Loggings;
+using CashOverflow.Brokers.Storages;
+using CashOverflow.Models.Languages;
+using CashOverflow.Services.Foundations.Languages;
+using Moq;
+using System;
+using System.Linq;
+>>>>>>> cd307bc66517cf430e3e32d96cdfcc10dbe2ca48
 using Tynamix.ObjectFiller;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Languages

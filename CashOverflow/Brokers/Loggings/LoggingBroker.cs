@@ -3,8 +3,8 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace CashOverflow.Brokers.Loggings
 {
