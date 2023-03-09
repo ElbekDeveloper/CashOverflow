@@ -10,6 +10,7 @@ using CashOverflow.Models.Languages.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
+using Xunit.Sdk;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 {
@@ -140,5 +141,47 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(InvalidMinutes))]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
+            int invalidMinutes)
+        {
+            // given
+            DateTimeOffset randomDate = GetRandomDatetimeOffset();
+            Language randomLanguage = CreateRandomLanguage(randomDate);
+            Language invalidLanguage = randomLanguage;
+            invalidLanguage.CreatedDate = randomDate.AddMinutes(invalidMinutes);
+            var invalidLanguageException = new InvalidLanguageException();
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.CreatedDate),
+                values: "Date is not recent");
+
+            var expectedLanguageValidationException = new LanguageValidationException(invalidLanguageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDate);
+
+            // when
+            ValueTask<Language> addLanguageTask = this.languageService.AddLanguageAsync(invalidLanguage);
+
+            LanguageValidationException actualLanguageValidationException =
+                await Assert.ThrowsAsync<LanguageValidationException>(addLanguageTask.AsTask);
+
+            // then
+            actualLanguageValidationException.Should().BeEquivalentTo(expectedLanguageValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedLanguageValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker => broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
+
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        } 
     }
 }

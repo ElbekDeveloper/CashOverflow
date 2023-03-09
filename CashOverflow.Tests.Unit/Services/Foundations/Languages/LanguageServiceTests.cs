@@ -13,6 +13,7 @@ using CashOverflow.Services.Foundations.Languages;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 {
@@ -36,10 +37,25 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 );
         }
 
+        public static TheoryData<int> InvalidMinutes()
+        {
+            int minutesInFuture = GetRandomNumber();
+            int minutesInPast = GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                minutesInFuture,
+                minutesInPast
+            };
+        }
+
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private int GetRandomNumber() =>
+        private static int GetRandomNegativeNumber() =>
+         -1 * new IntRange(min: 2, max: 9).GetValue();
+
+        private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
         private DateTimeOffset GetRandomDatetimeOffset() =>
