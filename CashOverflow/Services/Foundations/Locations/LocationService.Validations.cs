@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 using System;
-using System.Data;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 

@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq.Expressions;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
 using CashOverflow.Services.Foundations.Languages;
+using CashOverflow.Services.Foundations.Languages.Exceptions;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 {
@@ -26,6 +29,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 dateTimeBroker: dateTimeBrokerMock.Object,
                 loggingBroker: loggingBrokerMock.Object);
         }
+        private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => expectedException.SameExceptionAs(actualException);
 
         private DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
