@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using FluentAssertions;
-using Force.DeepCloner;
 using Moq;
 using Xunit;
 
