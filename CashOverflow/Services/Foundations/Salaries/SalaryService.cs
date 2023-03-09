@@ -3,12 +3,12 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using CashOverflow.Brokers.Loggings;
-using CashOverflow.Brokers.Storages;
-using CashOverflow.Models.Salaries;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CashOverflow.Brokers.Loggings;
+using CashOverflow.Brokers.Storages;
+using CashOverflow.Models.Salaries;
 
 namespace CashOverflow.Services.Foundations.Salaries
 {

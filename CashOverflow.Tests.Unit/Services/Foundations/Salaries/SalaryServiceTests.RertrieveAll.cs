@@ -3,10 +3,10 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System.Linq;
 using CashOverflow.Models.Salaries;
 using FluentAssertions;
 using Moq;
-using System.Linq;
 using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries

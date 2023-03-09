@@ -3,11 +3,11 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
 using CashOverflow.Services.Foundations.Locations;
 using Moq;
-using System;
 using Tynamix.ObjectFiller;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations

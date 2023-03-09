@@ -3,8 +3,8 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using CashOverflow.Models.Locations;
 using System.Threading.Tasks;
+using CashOverflow.Models.Locations;
 
 namespace CashOverflow.Services.Foundations.Locations
 {

@@ -3,11 +3,11 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
@@ -22,8 +22,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             Salary inputSalary = randomSalary;
             Salary persistedSalary = inputSalary;
             Salary expectedSalary = persistedSalary.DeepClone();
-            
-            this.storageBrokerMock.Setup(broker => 
+
+            this.storageBrokerMock.Setup(broker =>
             broker.InsertSalaryAsync(inputSalary)).ReturnsAsync(expectedSalary);
 
             //when
@@ -32,7 +32,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
             //then
             actualSalary.Should().BeEquivalentTo(expectedSalary);
-            
+
             this.storageBrokerMock.Verify(broker =>
             broker.InsertSalaryAsync(inputSalary), Times.Once());
 
