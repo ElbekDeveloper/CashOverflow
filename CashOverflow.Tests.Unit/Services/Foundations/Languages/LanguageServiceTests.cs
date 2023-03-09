@@ -30,8 +30,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         }
         private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => expectedException.SameExceptionAs(actualException);
-        private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
-            actualException => actualException.SameExceptionAs(expectedException);
 
         private DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
