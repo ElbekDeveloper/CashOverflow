@@ -4,6 +4,8 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
+using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Services.Foundations.Salaries;
@@ -15,14 +17,17 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
     public partial class SalaryServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ISalaryService salaryService;
 
         public SalaryServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
+            this.loggingBrokerMock = new Mock<ILoggingBroker>(); 
 
             this.salaryService = new SalaryService(
-                storageBroker: this.storageBrokerMock.Object);
+                storageBroker: this.storageBrokerMock.Object,
+                loggingBroker: this.loggingBrokerMock.Object);
         }
 
         private DateTimeOffset GetRandomDateTimeOffset() =>
@@ -31,6 +36,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         private Salary CreateRandomSalary() =>
             CreateSalaryFiller(dates: GetRandomDateTimeOffset()).Create();
 
+        private IQueryable<Salary> CreateRandomSalaries() =>
+           CreateSalaryFiller(dates: GetRandomDatetimeOffset())
+            .Create(count: GetRandomNumber()).AsQueryable();
         private Filler<Salary> CreateSalaryFiller(DateTimeOffset dates)
         {
             var filler = new Filler<Salary>();
@@ -40,5 +48,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
             return filler;
         }
+
+        private DateTimeOffset GetRandomDatetimeOffset()
+          => new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 99).GetValue();
     }
 }
