@@ -3,11 +3,11 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System.Linq;
 using CashOverflow.Models.Languages;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
-using System.Linq;
 using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Languages

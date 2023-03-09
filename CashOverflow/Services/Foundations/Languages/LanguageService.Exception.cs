@@ -3,11 +3,11 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using System.Linq;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Linq;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Languages
