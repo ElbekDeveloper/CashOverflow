@@ -1,4 +1,9 @@
-﻿using System;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
@@ -24,6 +29,8 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             Job maybeJob = 
                 await this.storageBroker.SelectJobByIdAsync(jobId);
+
+            ValidateStorageJobExists(maybeJob, jobId);
 
             return await this.storageBroker.DeleteJobAsync(maybeJob);
         });

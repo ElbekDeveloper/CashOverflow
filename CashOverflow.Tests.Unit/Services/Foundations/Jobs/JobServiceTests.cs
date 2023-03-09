@@ -1,4 +1,9 @@
-﻿using System;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
 using System.Linq.Expressions;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;

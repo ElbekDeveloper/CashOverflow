@@ -1,4 +1,9 @@
-﻿using System;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
@@ -19,6 +24,10 @@ namespace CashOverflow.Services.Foundations.Jobs
             catch(InvalidJobException invalidJobException)
             {
                 throw CreateAndLogValidationException(invalidJobException);
+            }
+            catch(NotFoundJobException notFoundJobException)
+            {
+                throw CreateAndLogValidationException(notFoundJobException);
             }
         }
 

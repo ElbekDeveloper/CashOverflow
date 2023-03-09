@@ -1,4 +1,9 @@
-﻿using System;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 
@@ -6,6 +11,14 @@ namespace CashOverflow.Services.Foundations.Jobs
 {
     public partial class JobService
     {
+        private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
+        {
+            if(maybejob == null)
+            {
+                throw new NotFoundJobException(jobId);
+            }
+        }
+
         private static void ValidateJobId(Guid jobId) =>
             Validate((Rule: IsInvalid(jobId), Parameter: nameof(Job.Id)));
 

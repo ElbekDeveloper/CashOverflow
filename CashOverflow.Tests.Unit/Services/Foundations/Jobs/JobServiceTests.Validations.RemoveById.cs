@@ -1,11 +1,13 @@
-﻿using System;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
 using System.Threading.Tasks;
-using System.Windows.Markup;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using FluentAssertions;
-using Force.DeepCloner;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Moq;
 using Xunit;
 
