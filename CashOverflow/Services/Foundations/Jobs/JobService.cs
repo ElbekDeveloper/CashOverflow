@@ -14,10 +14,8 @@ namespace CashOverflow.Services.Foundations.Jobs
 
         }
 
-        public async ValueTask<Job> AddJobAsync(Job job)
-        {
-
-            return await this.storageBroker.InsertJobAsync(job);
-        }
+        public async ValueTask<Job> AddJobAsync(Job job)=>
+         await this.storageBroker.InsertJobAsync(job);
+        
     }
 }
