@@ -27,9 +27,7 @@ namespace CashOverflow.Services.Foundations.Locations
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public IQueryable<Location> RetrieveAllLocations()
-        {
-            throw new System.NotImplementedException();
-        }
+        public IQueryable<Location> RetrieveAllLocations() =>
+            this.storageBroker.SelectAllLocations();
     }
 }
