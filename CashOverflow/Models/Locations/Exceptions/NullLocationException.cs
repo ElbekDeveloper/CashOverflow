@@ -4,12 +4,15 @@
 // --------------------------------------------------------
 
 using System;
-namespace CashOverflow.Brokers.Loggings
+using Xeptions;
+
+namespace CashOverflow.Models.Locations.Exceptions
 {
-	public interface ILoggingBroker
+	public class NullLocationException:Xeption
 	{
-		void LogError(Exception exception);
-		void LogCritical(Exception exception);
+		public NullLocationException():base(message:"Location is null.")
+		{}
+
 	}
 }
 

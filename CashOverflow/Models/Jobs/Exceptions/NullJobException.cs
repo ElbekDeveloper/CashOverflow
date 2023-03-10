@@ -4,12 +4,15 @@
 // --------------------------------------------------------
 
 using System;
-namespace CashOverflow.Brokers.Loggings
+using Xeptions;
+
+namespace CashOverflow.Models.Jobs.Exceptions
 {
-	public interface ILoggingBroker
+	public class NullJobException:Xeption
 	{
-		void LogError(Exception exception);
-		void LogCritical(Exception exception);
+		public NullJobException():base(message: "Job is null.")
+		{
+		}
 	}
 }
 

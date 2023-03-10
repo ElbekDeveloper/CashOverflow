@@ -1,21 +1,43 @@
-﻿using CashOverflow.Brokers.Storages;
-using CashOverflow.Models.Jobs;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CashOverflow.Brokers.Loggings;
+using CashOverflow.Brokers.Storages;
+using CashOverflow.Models.Jobs;
+using CashOverflow.Models.Jobs.Exceptions;
+using CashOverflow.Models.Locations;
+using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
-    public class JobService : IJobService
-    {
+	public partial class JobService:IJobService
+	{
         private readonly IStorageBroker storageBroker;
+        private readonly ILoggingBroker loggingBroker;
 
-        public JobService(IStorageBroker storageBroker)
-        {
+        public JobService(IStorageBroker storageBroker,ILoggingBroker loggingBroker)
+		{
             this.storageBroker = storageBroker;
+            this.loggingBroker = loggingBroker;
+		}
 
-        }
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
-        public async ValueTask<Job> AddJobAsync(Job job)=>
-         await this.storageBroker.InsertJobAsync(job);
-        
+
+        public ValueTask<Job> AddJobAsync(Job job) =>
+        TryCatch(async () =>
+        {
+            ValidateJobNotNull(job);
+
+           return await this.storageBroker.InsertJobAsync(job);
+       });
+
+
     }
 }
