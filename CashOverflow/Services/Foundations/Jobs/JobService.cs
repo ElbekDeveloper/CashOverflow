@@ -12,7 +12,7 @@ using CashOverflow.Models.Jobs;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
-    public class JobService : IJobService
+    public partial class JobService : IJobService
     {
 
         private readonly IStorageBroker storageBroker;
