@@ -16,7 +16,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
     public partial class JobServiceTests
     {
         [Fact]
-        public async Task ShouldRetrieveJobByIDAsync()
+        public async Task ShouldRetrieveJobByIdAsync()
         {
             //given
             Guid randomJobId = Guid.NewGuid();
