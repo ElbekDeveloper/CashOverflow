@@ -1,6 +1,6 @@
 ﻿namespace CashOverflow.Services.Foundations.Jobs
 {
-    public class JobService
+    public partial class JobService
     {
     }
 }
