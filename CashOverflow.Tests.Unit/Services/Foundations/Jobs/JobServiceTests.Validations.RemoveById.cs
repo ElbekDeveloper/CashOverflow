@@ -66,7 +66,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 new JobValidationException(notFoundJobException);
 
             this.storageBrokerMock.Setup(broker =>
-            broker.SelectJobByIdAsync(It.IsAny<Guid>())).ReturnsAsync(noJob);
+                 broker.SelectJobByIdAsync(It.IsAny<Guid>())).ReturnsAsync(noJob);
 
             // when
             ValueTask<Job> removeJobByIdTask =
