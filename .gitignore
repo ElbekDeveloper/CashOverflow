@@ -363,5 +363,3 @@ MigrationBackup/
 FodyWeavers.xsd
 /CashOverflow/appsettings.Development.json
 /CashOverflow/appsettings.development.json
-/CashOverflow.Tests.Unit/Services/Foundations/Salaries
-/.gitignore
