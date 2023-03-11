@@ -56,6 +56,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+        
         [Fact]
         public async Task ShouldThrowServiceExceptionOnRetrieveByIdAsyncIfServiceErrorOccursAndLogItAsync()
         {
