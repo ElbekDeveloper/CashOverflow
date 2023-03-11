@@ -30,7 +30,7 @@ namespace CashOverflow.Services.Foundations.Languages
                     Parameter: nameof(Language.CreatedDate)));
         }
 
-        private void ValidateLanguageNotNull(Language language)
+        private static void ValidateLanguageNotNull(Language language)
         {
             if (language is null)
             {
@@ -38,13 +38,13 @@ namespace CashOverflow.Services.Foundations.Languages
             }
         }
 
-        private dynamic IsInvalid(Guid id) => new
+        private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,
             Message = "Id is required"
         };
 
-        private dynamic IsInvalid(
+        private static dynamic IsInvalid(
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
             string secondDateName) => new
@@ -53,13 +53,13 @@ namespace CashOverflow.Services.Foundations.Languages
                 Message = $"Date is not same as {secondDateName}"
             };
 
-        private dynamic IsInvalid(string text) => new
+        private static dynamic IsInvalid(string text) => new
         {
             Condition = string.IsNullOrWhiteSpace(text),
             Message = "Text is required"
         };
 
-        private dynamic IsInvalid(DateTimeOffset date) => new
+        private static dynamic IsInvalid(DateTimeOffset date) => new
         {
             Condition = date == default,
             Message = "Date is required"
