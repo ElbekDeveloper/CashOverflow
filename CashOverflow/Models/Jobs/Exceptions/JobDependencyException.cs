@@ -8,7 +8,7 @@ using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public class JobDependencyException: Xeption
+    public class JobDependencyException : Xeption
     {
         public JobDependencyException(Exception innerException)
             : base(message: "Job dependency error occured, contact support.", innerException)

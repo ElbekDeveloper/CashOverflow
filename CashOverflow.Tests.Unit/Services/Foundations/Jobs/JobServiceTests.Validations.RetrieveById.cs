@@ -57,24 +57,24 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             Guid someJobId = Guid.NewGuid();
             Job noJob = null;
 
-            var notFoundJobException = 
+            var notFoundJobException =
                 new NotFoundJobException(someJobId);
-            
-            var excpectedJobValidationException = 
+
+            var excpectedJobValidationException =
                 new JobValidationException(notFoundJobException);
-            
+
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectJobByIdAsync(It.IsAny<Guid>()))
                     .ReturnsAsync(noJob);
-            
+
             //when 
-            ValueTask<Job> retrieveJobByIdTask = 
+            ValueTask<Job> retrieveJobByIdTask =
                 this.jobService.RetrieveJobByIdAsync(someJobId);
-            
+
             JobValidationException actualJobValidationException =
                 await Assert.ThrowsAsync<JobValidationException>(
                         retrieveJobByIdTask.AsTask);
-            
+
             //then
             actualJobValidationException.Should().BeEquivalentTo(excpectedJobValidationException);
 
@@ -84,7 +84,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     excpectedJobValidationException))), Times.Once);
-            
+
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

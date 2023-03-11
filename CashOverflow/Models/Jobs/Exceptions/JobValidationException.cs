@@ -8,10 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public class JobValidationException:Xeption  
+    public class JobValidationException : Xeption
     {
-        public JobValidationException(Exception innerException) 
-            :base(message:"", innerException)
+        public JobValidationException(Exception innerException)
+            : base(message: "", innerException)
         { }
     }
 }

@@ -8,7 +8,7 @@ using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public class FailedJobStorageException: Xeption
+    public class FailedJobStorageException : Xeption
     {
         public FailedJobStorageException(Exception innerException)
             : base(message: "Failed user storage error occurred, contact support.", innerException)

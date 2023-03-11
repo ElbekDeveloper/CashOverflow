@@ -19,7 +19,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         [Fact]
         public async Task ShouldThrowCriticalDependencyExceptionOnRetrieveByIdIfSqlErrorOccursAndLogItAsync()
         {
-           //given
+            //given
             Guid someId = Guid.NewGuid();
             SqlException sqlException = CreateSqlException();
 
@@ -28,30 +28,30 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             var expectedJobDependencyException =
                 new JobDependencyException(failedJobStorageException);
-            
+
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectJobByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(sqlException);
-            
+
             //when
             ValueTask<Job> retrieveJobByIdTask =
                 this.jobService.RetrieveJobByIdAsync(someId);
-            
-            JobDependencyException actualJobDependencyexception = 
+
+            JobDependencyException actualJobDependencyexception =
                 await Assert.ThrowsAsync<JobDependencyException>(
                     retrieveJobByIdTask.AsTask);
-            
+
             //then
             actualJobDependencyexception.Should().BeEquivalentTo(
                 expectedJobDependencyException);
-            
+
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectJobByIdAsync(It.IsAny<Guid>()), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
                     expectedJobDependencyException))), Times.Once);
-            
+
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -63,22 +63,22 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             Guid someId = Guid.NewGuid();
             var serviceException = new Exception();
 
-            var failedJobServiceException = 
+            var failedJobServiceException =
                 new FailedJobServiceException(serviceException);
-            
+
             var expectedJobServiceException =
                 new JobServiceException(failedJobServiceException);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectJobByIdAsync(It.IsAny<Guid>())).ThrowsAsync(serviceException);
-            
+
             //when
-            ValueTask<Job> retrieveJobByIdTask = 
+            ValueTask<Job> retrieveJobByIdTask =
                 this.jobService.RetrieveJobByIdAsync(someId);
-            
+
             JobServiceException actualJobServiceException =
                 await Assert.ThrowsAsync<JobServiceException>(retrieveJobByIdTask.AsTask);
-            
+
             //then
             actualJobServiceException.Should().BeEquivalentTo(expectedJobServiceException);
 

@@ -8,10 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public class JobServiceException: Xeption
+    public class JobServiceException : Xeption
     {
         public JobServiceException(Exception innerException)
-            : base(message: "Job service error occured, contact support.", innerException)    
+            : base(message: "Job service error occured, contact support.", innerException)
         { }
     }
 }

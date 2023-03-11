@@ -1,11 +1,11 @@
-﻿using System.Runtime.Serialization;
-// --------------------------------------------------------
+﻿// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
@@ -24,7 +24,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IJobService jobService;
-        
+
         public JobServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
