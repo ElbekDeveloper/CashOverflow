@@ -26,7 +26,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             Job excpectedJob = randomJob.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-            broker.SelectJobByIdAsync(inputJobId)).ReturnsAsync(storageJob);
+                broker.SelectJobByIdAsync(inputJobId)).ReturnsAsync(storageJob);
 
             //when
             Job actuallJob = await this.jobService.RetrieveJobByIdAsync(inputJobId);
@@ -35,7 +35,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             actuallJob.Should().BeEquivalentTo(excpectedJob);
 
             this.storageBrokerMock.Verify(broker =>
-            broker.SelectJobByIdAsync(inputJobId), Times.Once());
+                broker.SelectJobByIdAsync(inputJobId), Times.Once());
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
