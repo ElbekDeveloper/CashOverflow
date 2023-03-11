@@ -15,7 +15,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
     public partial class SalaryServiceTests
     {
         [Fact]
-        public async Task ShouldRetrieveAllSalarys()
+        public async Task ShouldRetrieveAllSalaries()
         {
             //given
             IQueryable<Salary> randomSalaries = CreateRandomSalaries();
