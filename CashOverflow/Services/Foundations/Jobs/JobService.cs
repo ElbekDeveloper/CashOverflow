@@ -29,8 +29,9 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
         }
+        
         public ValueTask<Job> RetrieveJobByIdAsync(Guid jobId) =>
-            TryCatch(async () =>
+        TryCatch(async () =>
         {
             ValidateJobId(jobId);
 
