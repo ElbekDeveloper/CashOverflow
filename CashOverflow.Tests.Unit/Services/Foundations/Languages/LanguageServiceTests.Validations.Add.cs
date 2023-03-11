@@ -149,7 +149,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             // given
             DateTimeOffset randomDate = GetRandomDatetimeOffset();
             DateTimeOffset invalidDateTime = randomDate.AddMinutes(invalidMinutes);
-            Language randomLanguage = CreateRandomLanguage(randomDate);
+            Language randomLanguage = CreateRandomLanguage(invalidDateTime);
             Language invalidLanguage = randomLanguage;
             var invalidLanguageException = new InvalidLanguageException();
 
@@ -171,12 +171,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             // then
             actualLanguageValidationException.Should().BeEquivalentTo(expectedLanguageValidationException);
 
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedLanguageValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker => broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
-
-            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();

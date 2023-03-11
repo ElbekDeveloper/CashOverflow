@@ -76,10 +76,10 @@ namespace CashOverflow.Services.Foundations.Languages
             DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();
             TimeSpan timeDifference = currentDate.Subtract(date);
 
-            return timeDifference.TotalSeconds is > 60 or < 0;
+            return timeDifference.Seconds is > 60 or < 0;
         }
 
-        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
+        private void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidLanguageException = new InvalidLanguageException();
 
