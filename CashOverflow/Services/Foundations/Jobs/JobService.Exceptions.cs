@@ -43,6 +43,7 @@ namespace CashOverflow.Services.Foundations.Jobs
                 throw CreateAndLogServiceException(failedJobServiceException);
             }
         }
+
         private JobValidationException CreateAndLogValidationException(Xeption exception)
         {
             var jobValidationExpcetion = new JobValidationException(exception);
@@ -50,6 +51,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return jobValidationExpcetion;
         }
+
         private JobDependencyException CreateAndLogDependencyException(Xeption exception)
         {
             var jobDependencyException = new JobDependencyException(exception);
@@ -57,6 +59,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return jobDependencyException;
         }
+        
         private JobServiceException CreateAndLogServiceException(Xeption innerException)
         {
             var jobServiceException = new JobServiceException(innerException);
