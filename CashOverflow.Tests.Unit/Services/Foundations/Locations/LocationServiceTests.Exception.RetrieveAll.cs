@@ -3,12 +3,11 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using CashOverflow.Models.Languages.Exceptions;
+using System;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
-using System;
 using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
