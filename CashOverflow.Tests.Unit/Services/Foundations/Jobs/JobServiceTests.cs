@@ -21,19 +21,19 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
     public partial class JobServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
-        private readonly Mock<IDateTimeBroker> timeBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IJobService jobService;
         
         public JobServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
-            this.timeBrokerMock = new Mock<IDateTimeBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.jobService = new JobService(
                 storageBroker: this.storageBrokerMock.Object,
-                dateTimeBroker: this.timeBrokerMock.Object,
+                dateTimeBroker: this.dateTimeBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 

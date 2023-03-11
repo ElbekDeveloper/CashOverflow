@@ -38,7 +38,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             broker.SelectJobByIdAsync(inputJobId), Times.Once());
 
             this.storageBrokerMock.VerifyNoOtherCalls();
-            this.timeBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
