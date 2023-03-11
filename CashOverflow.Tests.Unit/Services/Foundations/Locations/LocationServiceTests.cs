@@ -42,11 +42,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             return CreateLocationFiller(GetRandomDateTimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
         }
-        
-        private int GetRandomNumber() =>
+
+        private static string GetRandomMessage() =>
+            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
+
+        private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
 
-        private DateTimeOffset GetRandomDateTimeOffset() =>
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
         private static SqlException GetSqlException() =>
