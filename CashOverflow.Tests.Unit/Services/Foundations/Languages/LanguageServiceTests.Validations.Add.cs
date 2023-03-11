@@ -148,9 +148,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         {
             // given
             DateTimeOffset randomDate = GetRandomDatetimeOffset();
+            DateTimeOffset invalidDateTime = randomDate.AddMinutes(invalidMinutes);
             Language randomLanguage = CreateRandomLanguage(randomDate);
             Language invalidLanguage = randomLanguage;
-            invalidLanguage.CreatedDate = randomDate.AddMinutes(invalidMinutes);
             var invalidLanguageException = new InvalidLanguageException();
 
             invalidLanguageException.AddData(
