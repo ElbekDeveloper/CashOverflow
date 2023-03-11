@@ -10,6 +10,7 @@ using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
+using CashOverflow.Models.Locations;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
@@ -29,8 +30,14 @@ namespace CashOverflow.Services.Foundations.Jobs
             actualException => actualException.SameExceptionAs(expectedException);
 
 
-        public ValueTask<Job> AddJobAsync(Job job) =>
-      throw new NotImplementedException();
+        public ValueTask<Job> AddJobAsync(Job job) => 
+            TryCatch(async () =>
+        {
+            ValidateJobNotNull(job);
+
+            return await this.storageBroker.InsertJobAsync(job);
+        });
+
 
 
     }
