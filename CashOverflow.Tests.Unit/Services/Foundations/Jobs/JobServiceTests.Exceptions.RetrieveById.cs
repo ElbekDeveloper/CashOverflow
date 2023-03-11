@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 {
-    public class JobServiceTests
+    public partial class JobServiceTests
     {
+
     }
 }
