@@ -54,5 +54,42 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.timeBrokerMock.VerifyNoOtherCalls();
         }
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveByIdAsyncIfServiceErrorOccursAndLogItAsync()
+        {
+            //given
+            Guid someId = Guid.NewGuid();
+            var serviceException = new Exception();
+
+            var failedJobServiceException = 
+                new FailedJobServiceException(serviceException);
+            
+            var expectedJobServiceException =
+                new JobServiceException(failedJobServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectJobByIdAsync(It.IsAny<Guid>())).ThrowsAsync(serviceException);
+            
+            //when
+            ValueTask<Job> retrieveJobByIdTask = 
+                this.jobService.RetrieveJobByIdAsync(someId);
+            
+            JobServiceException actualJobServiceException =
+                await Assert.ThrowsAsync<JobServiceException>(retrieveJobByIdTask.AsTask);
+            
+            //then
+            actualJobServiceException.Should().BeEquivalentTo(expectedJobServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(It.IsAny<Guid>()), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobServiceException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.timeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
