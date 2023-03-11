@@ -63,7 +63,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             string exceptionMessage = GetRandomMessage();
             var serviceException = new Exception(exceptionMessage);
 
-            var failedLocationServiceException = 
+            var failedLocationServiceException =
                 new FailedLocationServiceException(serviceException);
 
             var expectedLocationServiceException =
@@ -87,8 +87,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectAllLocations(),
                     Times.Once);
+
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogCritical(It.Is(SameExceptionAs(
+                broker.LogError(It.Is(SameExceptionAs(
                     expectedLocationServiceException))),
                         Times.Once);
 
