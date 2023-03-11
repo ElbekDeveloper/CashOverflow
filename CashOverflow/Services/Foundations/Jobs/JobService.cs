@@ -31,15 +31,16 @@ namespace CashOverflow.Services.Foundations.Jobs
         }
         
         public ValueTask<Job> RetrieveJobByIdAsync(Guid jobId) =>
-        TryCatch(async () =>
-        {
-            ValidateJobId(jobId);
+            TryCatch(async () =>
+            {
+                ValidateJobId(jobId);
 
-            Job maybeJob = await storageBroker.SelectJobByIdAsync(jobId);
+                Job maybeJob =
+                    await storageBroker.SelectJobByIdAsync(jobId);
 
-            ValidateStorageJobExists(maybeJob, jobId);
+                ValidateStorageJobExists(maybeJob, jobId);
 
-            return maybeJob;
-        });
+                return maybeJob;
+            });
     }
 }
