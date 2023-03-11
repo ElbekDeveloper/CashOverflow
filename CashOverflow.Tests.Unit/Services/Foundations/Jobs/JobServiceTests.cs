@@ -1,4 +1,5 @@
-﻿// --------------------------------------------------------
+﻿using System.Runtime.Serialization;
+// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
@@ -10,6 +11,7 @@ using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Services.Foundations.Jobs;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -40,6 +42,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+        private static SqlException CreateSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private static Job CreateRandomJob() =>
             CreateJobFiller(GetRandomDateTime()).Create();
