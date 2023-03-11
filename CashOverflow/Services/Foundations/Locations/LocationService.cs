@@ -11,7 +11,7 @@ using CashOverflow.Models.Locations;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
-    public class LocationService : ILocationService
+    public partial class LocationService : ILocationService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -28,6 +28,6 @@ namespace CashOverflow.Services.Foundations.Locations
         }
 
         public IQueryable<Location> RetrieveAllLocations() =>
-            this.storageBroker.SelectAllLocations();
+            TryCatch(() => this.storageBroker.SelectAllLocations());
     }
 }

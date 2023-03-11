@@ -28,7 +28,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 new LocationDependencyException(failedStorageException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllLanguages())
+                broker.SelectAllLocations())
                     .Throws(sqlException);
 
             // when
