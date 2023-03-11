@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
@@ -118,6 +119,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             var expectedLocationValidationException = new LocationValidationException(invalidLocationException);
 
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Returns(randomDate);
+
             // when
             ValueTask<Location> addLocationTask = this.locationService.AddLocationAsync(invalidLocation);
 
@@ -126,6 +130,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             // then
             actualLocationValidationException.Should().BeEquivalentTo(expectedLocationValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
                 expectedLocationValidationException))), Times.Once);
