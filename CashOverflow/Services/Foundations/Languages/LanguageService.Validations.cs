@@ -11,7 +11,7 @@ namespace CashOverflow.Services.Foundations.Languages
 {
     public partial class LanguageService
     {
-        private static void ValidateLanguageOnAdd(Language language)
+        private void ValidateLanguageOnAdd(Language language)
         {
             ValidateLanguageNotNull(language);
 
@@ -20,6 +20,7 @@ namespace CashOverflow.Services.Foundations.Languages
                 (Rule: IsInvalid(language.Name), Parameter: nameof(Language.Name)),
                 (Rule: IsInvalid(language.CreatedDate), Parameter: nameof(Language.CreatedDate)),
                 (Rule: IsInvalid(language.UpdatedDate), Parameter: nameof(Language.UpdatedDate)),
+                (Rule: IsNotRecent(language.CreatedDate), Parameter: nameof(Language.CreatedDate)),
 
                 (Rule: IsInvalid(
                     firstDate: language.CreatedDate,
@@ -29,7 +30,7 @@ namespace CashOverflow.Services.Foundations.Languages
                     Parameter: nameof(Language.CreatedDate)));
         }
 
-        private static void ValidateLanguageNotNull(Language language)
+        private void ValidateLanguageNotNull(Language language)
         {
             if (language is null)
             {
@@ -37,13 +38,13 @@ namespace CashOverflow.Services.Foundations.Languages
             }
         }
 
-        private static dynamic IsInvalid(Guid id) => new
+        private dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,
             Message = "Id is required"
         };
 
-        private static dynamic IsInvalid(
+        private dynamic IsInvalid(
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
             string secondDateName) => new
@@ -52,17 +53,31 @@ namespace CashOverflow.Services.Foundations.Languages
                 Message = $"Date is not same as {secondDateName}"
             };
 
-        private static dynamic IsInvalid(string text) => new
+        private dynamic IsInvalid(string text) => new
         {
             Condition = string.IsNullOrWhiteSpace(text),
             Message = "Text is required"
         };
 
-        private static dynamic IsInvalid(DateTimeOffset date) => new
+        private dynamic IsInvalid(DateTimeOffset date) => new
         {
             Condition = date == default,
             Message = "Date is required"
         };
+
+        private dynamic IsNotRecent(DateTimeOffset date) => new
+        {
+            Condition = IsDateNotRecent(date),
+            Message = "Date is not recent"
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset date)
+        {
+            DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();
+            TimeSpan timeDifference = currentDate.Subtract(date);
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
