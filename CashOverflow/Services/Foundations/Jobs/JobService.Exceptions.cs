@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
@@ -37,6 +38,12 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                 throw CreateAndLogDependencyException(failedJobStorageException);
             }
+            catch(Exception exception)
+            {
+                var failedJobServiceException = new FailedJobServiceException(exception);
+
+                throw CreateAndLogServiceException(failedJobServiceException);
+            }
         }
 
         private JobValidationException CreateAndLogValidationException(Xeption exception)
@@ -52,6 +59,13 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.loggingBroker.LogCritical(jobDependencyException);
 
             return jobDependencyException;
+        }
+        private JobServiceException CreateAndLogServiceException(Xeption innerException)
+        {
+            var jobServiceException = new JobServiceException(innerException);
+            this.loggingBroker.LogError(jobServiceException);
+
+            return jobServiceException;
         }
     }
 }
