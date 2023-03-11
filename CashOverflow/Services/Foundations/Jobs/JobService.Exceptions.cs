@@ -14,8 +14,6 @@ namespace CashOverflow.Services.Foundations.Jobs
 {
     public partial class JobService
     {
-
-
         private delegate ValueTask<Job> ReturningJobFunction();
 
         private async ValueTask<Job> TryCatch(ReturningJobFunction returningJobFunction)
@@ -45,7 +43,6 @@ namespace CashOverflow.Services.Foundations.Jobs
                 throw CreateAndLogServiceException(failedJobServiceException);
             }
         }
-
         private JobValidationException CreateAndLogValidationException(Xeption exception)
         {
             var jobValidationExpcetion = new JobValidationException(exception);

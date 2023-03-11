@@ -34,15 +34,11 @@ namespace CashOverflow.Services.Foundations.Jobs
         {
             ValidateJobId(jobId);
 
-            Job maybeJob =
-            await storageBroker.SelectJobByIdAsync(jobId);
+            Job maybeJob = await storageBroker.SelectJobByIdAsync(jobId);
 
             ValidateStorageJobExists(maybeJob, jobId);
 
             return maybeJob;
         });
-
-            
-
     }
 }
