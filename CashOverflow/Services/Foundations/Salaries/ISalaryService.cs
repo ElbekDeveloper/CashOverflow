@@ -12,6 +12,6 @@ namespace CashOverflow.Services.Foundations.Salaries
     public interface ISalaryService
     {
         ValueTask<Salary> AddSalaryAsync(Salary salary);
-        IQueryable<Salary> RetrieveAllSalary();
+        IQueryable<Salary> RetrieveAllSalaries();
     }
 }

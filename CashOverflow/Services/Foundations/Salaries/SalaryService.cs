@@ -25,7 +25,7 @@ namespace CashOverflow.Services.Foundations.Salaries
         public async ValueTask<Salary> AddSalaryAsync(Salary salary) =>
             await this.storageBroker.InsertSalaryAsync(salary);
 
-        public IQueryable<Salary> RetrieveAllSalary() =>
+        public IQueryable<Salary> RetrieveAllSalaries() =>
             this.storageBroker.SelectAllSalaries();
     }
 }

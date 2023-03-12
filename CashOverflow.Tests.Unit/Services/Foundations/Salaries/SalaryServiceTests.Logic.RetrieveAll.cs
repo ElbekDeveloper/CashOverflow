@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 using System.Linq;
-using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using FluentAssertions;
 using Moq;
@@ -15,7 +14,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
     public partial class SalaryServiceTests
     {
         [Fact]
-        public async Task ShouldRetrieveAllSalaries()
+        public void ShouldRetrieveAllSalaries()
         {
             //given
             IQueryable<Salary> randomSalaries = CreateRandomSalaries();
@@ -26,7 +25,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
                 broker.SelectAllSalaries()).Returns(expectedSalaries);
 
             //when
-            IQueryable<Salary> actualSalaries = this.salaryService.RetrieveAllSalary();
+            IQueryable<Salary> actualSalaries = this.salaryService.RetrieveAllSalaries();
 
             //then
             actualSalaries.Should().BeEquivalentTo(expectedSalaries);
