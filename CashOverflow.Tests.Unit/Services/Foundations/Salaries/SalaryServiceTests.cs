@@ -51,6 +51,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
         private DateTimeOffset GetRandomDatetimeOffset()
           => new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 99).GetValue();
     }

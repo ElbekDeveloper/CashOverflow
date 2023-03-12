@@ -9,7 +9,6 @@ namespace CashOverflow.Models.Salaries.Exceptions
 {
     public class NullSalaryException : Xeption
     {
-
         public NullSalaryException()
             : base(message: "Salary is null.")
         { }

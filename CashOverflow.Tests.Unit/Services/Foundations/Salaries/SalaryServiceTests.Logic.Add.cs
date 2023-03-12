@@ -33,7 +33,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             actualSalary.Should().BeEquivalentTo(expectedSalary);
 
             this.storageBrokerMock.Verify(broker =>
-            broker.InsertSalaryAsync(inputSalary), Times.Once);
+                broker.InsertSalaryAsync(inputSalary), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
