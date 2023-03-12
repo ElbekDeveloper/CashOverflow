@@ -4,7 +4,6 @@ using CashOverflow.Models.Salaries.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
-using Xunit.Sdk;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 {
