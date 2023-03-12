@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using FluentAssertions;
@@ -18,10 +19,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public async Task ShouldAddLanguageAsync()
         {
             // given
-            Language randomLanguage = CreateRandomLanguage();
+            DateTimeOffset randomDateTime = GetRandomDatetimeOffset();
+            Language randomLanguage = CreateRandomLanguage(randomDateTime);
             Language inputLanguage = randomLanguage;
             Language persistedLanguage = inputLanguage;
-            Language expectedLanguage = inputLanguage.DeepClone();
+            Language expectedLanguage = persistedLanguage.DeepClone();
+
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Returns(randomDateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertLanguageAsync(inputLanguage)).ReturnsAsync(persistedLanguage);
@@ -32,6 +37,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             //then
             actualLanguage.Should().BeEquivalentTo(expectedLanguage);
+
+            this.dateTimeBrokerMock.Verify(broker => broker
+            .GetCurrentDateTimeOffset(),Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLanguageAsync(inputLanguage), Times.Once);

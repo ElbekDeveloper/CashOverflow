@@ -14,17 +14,17 @@ namespace CashOverflow.Services.Foundations.Languages
     public partial class LanguageService : ILanguageService
     {
         private readonly IStorageBroker storageBroker;        
-        private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
 
         public LanguageService(
             IStorageBroker storageBroker,           
-            IDateTimeBroker dateTimeBroker,
-            ILoggingBroker loggingBroker)          
+            ILoggingBroker loggingBroker, 
+            IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
-            this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
+            this.dateTimeBroker = dateTimeBroker;
         }
 
         public ValueTask<Language> AddLanguageAsync(Language language) =>
