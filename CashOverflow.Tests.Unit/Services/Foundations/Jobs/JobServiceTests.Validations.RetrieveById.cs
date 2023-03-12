@@ -42,7 +42,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
-                excpectedJobValidationException))), Times.Once);
+                    excpectedJobValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectJobByIdAsync(It.IsAny<Guid>()), Times.Never);
@@ -74,7 +74,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             JobValidationException actualJobValidationException =
                 await Assert.ThrowsAsync<JobValidationException>(
-                        retrieveJobByIdTask.AsTask);
+                    retrieveJobByIdTask.AsTask);
 
             //then
             actualJobValidationException.Should().BeEquivalentTo(excpectedJobValidationException);
