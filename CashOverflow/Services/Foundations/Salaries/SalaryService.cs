@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Salaries;
-using CashOverflow.Models.Salaries.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Salaries
 {
@@ -22,24 +21,13 @@ namespace CashOverflow.Services.Foundations.Salaries
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<Salary> AddSalaryAsync(Salary salary)
+        public ValueTask<Salary> AddSalaryAsync(Salary salary) =>
+        TryCatch(async () => 
         {
-            try
-            {
-                if (salary is null)
-                {
-                    throw new NullSalaryException();
-                }
+            ValidateSalaryNotNull(salary);
 
-                return await this.storageBroker.InsertSalaryAsync(salary);
-            }
-            catch(NullSalaryException nullSalaryException)
-            {
-                var salaryValidationException = new SalaryValidationException(nullSalaryException);
-                this.loggingBroker.LogError(salaryValidationException);
-
-                throw salaryValidationException;
-            }
-        }
+            return await this.storageBroker.InsertSalaryAsync(salary);
+        });
+        
     }
 }
