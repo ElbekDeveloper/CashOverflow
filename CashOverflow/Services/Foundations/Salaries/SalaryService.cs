@@ -28,6 +28,5 @@ namespace CashOverflow.Services.Foundations.Salaries
 
             return await this.storageBroker.InsertSalaryAsync(salary);
         });
-
     }
 }
