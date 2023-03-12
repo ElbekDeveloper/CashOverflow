@@ -53,6 +53,7 @@ namespace CashOverflow.Services.Foundations.Jobs
                         value: rule.Message);
                 }
             }
+            
             invalidJobException.ThrowIfContainsErrors();
         }
     }
