@@ -24,7 +24,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             Salary expectedSalary = persistedSalary.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-            broker.InsertSalaryAsync(inputSalary)).ReturnsAsync(persistedSalary);
+                broker.InsertSalaryAsync(inputSalary)).ReturnsAsync(persistedSalary);
 
             //when
             Salary actualSalary = await this.salaryService.AddSalaryAsync(inputSalary);
@@ -33,7 +33,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             actualSalary.Should().BeEquivalentTo(expectedSalary);
 
             this.storageBrokerMock.Verify(broker =>
-            broker.InsertSalaryAsync(inputSalary), Times.Once);
+                broker.InsertSalaryAsync(inputSalary), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
