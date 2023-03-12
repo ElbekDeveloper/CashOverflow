@@ -28,11 +28,11 @@ namespace CashOverflow.Services.Foundations.Languages
         }
 
         public ValueTask<Language> AddLanguageAsync(Language language) =>
-        TryCatch(async () =>
-        {
-            ValidateLanguageOnAdd(language);
+            TryCatch(async () =>
+            {
+                ValidateLanguageOnAdd(language);
 
-            return await this.storageBroker.InsertLanguageAsync(language);
-        });
+                return await this.storageBroker.InsertLanguageAsync(language);
+            });
     }
 }
