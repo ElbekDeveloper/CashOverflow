@@ -11,7 +11,7 @@ using CashOverflow.Models.Salaries;
 
 namespace CashOverflow.Services.Foundations.Salaries
 {
-    public class SalaryService : ISalaryService
+    public partial class SalaryService : ISalaryService
     {
         private IStorageBroker storageBroker;
         private ILoggingBroker loggingBroker;
@@ -26,6 +26,6 @@ namespace CashOverflow.Services.Foundations.Salaries
             await this.storageBroker.InsertSalaryAsync(salary);
 
         public IQueryable<Salary> RetrieveAllSalaries() =>
-            this.storageBroker.SelectAllSalaries();
+            TryCatch(() => this.storageBroker.SelectAllSalaries());
     }
 }

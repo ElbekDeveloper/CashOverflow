@@ -3,15 +3,15 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using Xeptions;
 
 namespace CashOverflow.Models.Salaries.Exceptions
 {
-    public class SalaryValidationException : Xeption
+    public class FailedSalaryServiceException : Xeption
     {
-        public SalaryValidationException(Xeption innerException)
-            : base(message: "Salary validation error occurred, fix the error, and try again!",
-                  innerException)
+        public FailedSalaryServiceException(Exception innerException)
+            : base(message: "Failed salary service error occurred, contact support.", innerException)
         { }
     }
 }
