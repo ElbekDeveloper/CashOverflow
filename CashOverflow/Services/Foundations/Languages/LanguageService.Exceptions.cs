@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Languages
@@ -28,6 +29,12 @@ namespace CashOverflow.Services.Foundations.Languages
             {
                 throw CreateAndLogValidationException(invalidLanguageException);
             }
+            catch (SqlException sqlException)
+            {
+                var FailedLanguageStorageException = new FailedLanguageStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(FailedLanguageStorageException);
+            }
         }
 
         private LanguageValidationException CreateAndLogValidationException(Xeption exception)
@@ -36,6 +43,14 @@ namespace CashOverflow.Services.Foundations.Languages
             this.loggingBroker.LogError(languageValidationException);
 
             return languageValidationException;
+        }
+
+        private LanguageDependencyException CreateAndLogCriticalDependencyException(Xeption exeption)
+        {
+            var LanguageDependencyException = new LanguageDependencyException(exeption);
+            this.loggingBroker.LogCritical(LanguageDependencyException);
+
+            return LanguageDependencyException;
         }
     }
 }
