@@ -25,6 +25,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
+
             this.salaryService = new SalaryService(
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
@@ -32,6 +33,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedExceptoin) =>
             actualException => actualException.SameExceptionAs(expectedExceptoin);
+
         private DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 

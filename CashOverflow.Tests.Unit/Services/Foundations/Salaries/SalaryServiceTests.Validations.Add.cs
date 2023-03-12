@@ -1,4 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
 using FluentAssertions;
@@ -17,7 +22,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             var nullSalaryException = new NullSalaryException();
             var expectedSalaryValidationException = new SalaryValidationException(nullSalaryException);
 
-
             //when
             ValueTask<Salary> addSalaryTask = this.salaryService.AddSalaryAsync(nullSalary);
 
@@ -29,16 +33,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
                 .BeEquivalentTo(expectedSalaryValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-            broker.LogError(It.Is(SameExceptionAs(
-                expectedSalaryValidationException))), Times.Once());
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedSalaryValidationException))), Times.Once());
 
             this.storageBrokerMock.Verify(broker =>
-            broker.InsertSalaryAsync(It.IsAny<Salary>()), Times.Never);
+                broker.InsertSalaryAsync(It.IsAny<Salary>()), Times.Never);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
-
-
         }
     }
 }
