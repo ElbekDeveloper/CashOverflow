@@ -15,6 +15,7 @@ namespace CashOverflow.Services.Foundations.Salaries
     public partial class SalaryService
     {
         private delegate IQueryable<Salary> ReturningSalaryFunction();
+
         private IQueryable<Salary> TryCatch(ReturningSalaryFunction returningSalaryFunction)
         {
             try
