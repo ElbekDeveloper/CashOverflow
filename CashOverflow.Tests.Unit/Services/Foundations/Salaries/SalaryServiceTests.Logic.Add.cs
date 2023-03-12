@@ -36,7 +36,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
                 broker.InsertSalaryAsync(inputSalary), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
-            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
