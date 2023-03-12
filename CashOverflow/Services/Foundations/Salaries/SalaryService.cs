@@ -11,7 +11,7 @@ using CashOverflow.Models.Salaries.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Salaries
 {
-    public class SalaryService : ISalaryService
+    public partial class SalaryService : ISalaryService
     {
         private IStorageBroker storageBroker;
         private ILoggingBroker loggingBroker;
