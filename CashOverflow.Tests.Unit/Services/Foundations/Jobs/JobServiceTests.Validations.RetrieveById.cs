@@ -41,16 +41,17 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             actuallJobValidationException.Should().BeEquivalentTo(excpectedJobValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-            broker.LogError(It.Is(SameExceptionAs(
+                broker.LogError(It.Is(SameExceptionAs(
                 excpectedJobValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-            broker.SelectJobByIdAsync(It.IsAny<Guid>()), Times.Never);
+                broker.SelectJobByIdAsync(It.IsAny<Guid>()), Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
         [Fact]
         public async Task ShouldThrowNotFoundExceptionOnRetrieveByIdIfTeamIsNotFoundAndLogItAsync()
         {
