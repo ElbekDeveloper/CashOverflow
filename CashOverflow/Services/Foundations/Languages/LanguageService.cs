@@ -13,13 +13,13 @@ namespace CashOverflow.Services.Foundations.Languages
 {
     public partial class LanguageService : ILanguageService
     {
-        private readonly IStorageBroker storageBroker;        
+        private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
         private readonly IDateTimeBroker dateTimeBroker;
 
         public LanguageService(
-            IStorageBroker storageBroker,           
-            ILoggingBroker loggingBroker, 
+            IStorageBroker storageBroker,
+            ILoggingBroker loggingBroker,
             IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;

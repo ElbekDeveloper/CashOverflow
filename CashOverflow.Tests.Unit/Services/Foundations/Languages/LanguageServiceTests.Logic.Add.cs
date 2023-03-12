@@ -39,7 +39,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             actualLanguage.Should().BeEquivalentTo(expectedLanguage);
 
             this.dateTimeBrokerMock.Verify(broker => broker
-            .GetCurrentDateTimeOffset(),Times.Once);
+            .GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLanguageAsync(inputLanguage), Times.Once);
