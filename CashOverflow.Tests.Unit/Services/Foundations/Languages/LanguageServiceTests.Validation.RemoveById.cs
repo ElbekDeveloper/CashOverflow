@@ -14,13 +14,16 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public async Task ShouldThrowValidationExceptionOnRemoveIfInputIdIsNullAndLogItAsync()
         {
             // given
-            Guid nullLanguageId = Guid.NewGuid();
-            var nullLanguageException = new NullLanguageException();
-            nullLanguageException.AddData(
+            Guid nullLanguageId = Guid.Empty;
+            var invalidLanguageException = new InvalidLanguageException();
+
+            invalidLanguageException.AddData(
                 key: nameof(Language.Id),
                 values: "Id is required");
 
-            var expectedLanguageValidationException = new LanguageValidationException(nullLanguageException);
+            var expectedLanguageValidationException = 
+                new LanguageValidationException(invalidLanguageException);
+          
             // when
             ValueTask<Language> removeLanguageByIdTask =
                 this.languageService.RemoveLanguageByIdAsync(nullLanguageId);

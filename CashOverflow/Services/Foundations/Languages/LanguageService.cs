@@ -23,12 +23,15 @@ namespace CashOverflow.Services.Foundations.Languages
             this.storageBroker = storageBroker;
         }
 
-        public async ValueTask<Language> RemoveLanguageByIdAsync(Guid languageId)
-        {
-            Language maybeLanguage = await this.storageBroker.
-                SelectLanguageByIdAsync(languageId);
+        public ValueTask<Language> RemoveLanguageByIdAsync(Guid languageId) =>
+            TryCatch(async () =>
+            {
+                ValidateLanguageId(languageId);
 
-            return await this.storageBroker.DeleteLanguageAsync(maybeLanguage);
-        }
+                Language maybeLanguage = await this.storageBroker.
+                    SelectLanguageByIdAsync(languageId);
+
+                return await this.storageBroker.DeleteLanguageAsync(maybeLanguage);
+            });
     }
 }

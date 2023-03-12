@@ -28,8 +28,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 dateTimeBroker: dateTimeBrokerMock.Object,
                 loggingBroker: loggingBrokerMock.Object);
         }
-        private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
-            actualException => expectedException.SameExceptionAs(actualException);
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
