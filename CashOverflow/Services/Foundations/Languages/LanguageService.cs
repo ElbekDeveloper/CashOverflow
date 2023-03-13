@@ -34,9 +34,15 @@ namespace CashOverflow.Services.Foundations.Languages
         public ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId) =>
             TryCatch(async () =>
             {
-                ValidateLanguageNotNull(languageId);
+                ValidateLanguageId(languageId);
 
-                return await this.storageBroker.SelectLanguageByIdAsync(languageId);
+                Language maybeLanguage =
+                    await this.storageBroker.SelectLanguageByIdAsync(languageId);
+
+                ValidateStorageLanguage(maybeLanguage, languageId);
+
+                return maybeLanguage;
+
             });
     }
 }
