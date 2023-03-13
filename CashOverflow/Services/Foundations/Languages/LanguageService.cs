@@ -1,14 +1,17 @@
-﻿using System;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
 
-namespace CashOverflow.Services.Foundations.Languages
-{
-    public partial class LanguageService : ILanguageService
-    {
+namespace CashOverflow.Services.Foundations.Languages {
+    public partial class LanguageService : ILanguageService {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
         private readonly IDateTimeBroker dateTimeBroker;
@@ -16,20 +19,20 @@ namespace CashOverflow.Services.Foundations.Languages
         public LanguageService(
             IDateTimeBroker dateTimeBroker,
             ILoggingBroker loggingBroker,
-            IStorageBroker storageBroker)
-        {
+            IStorageBroker storageBroker) {
             this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
         }
 
         public ValueTask<Language> RemoveLanguageByIdAsync(Guid languageId) =>
-            TryCatch(async () =>
-            {
+            TryCatch(async () => {
                 ValidateLanguageId(languageId);
 
                 Language maybeLanguage = await this.storageBroker.
                     SelectLanguageByIdAsync(languageId);
+
+                ValidateStorageLanguageExist(maybeLanguage, languageId);
 
                 return await this.storageBroker.DeleteLanguageAsync(maybeLanguage);
             });
