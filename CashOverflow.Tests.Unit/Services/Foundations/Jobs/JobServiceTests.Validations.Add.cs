@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
+using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -42,6 +43,66 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 			this.loggingBrokerMock.VerifyNoOtherCalls();
 			this.storageBrokerMock.VerifyNoOtherCalls();
 		}
-	}
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+		public async Task ShouldThrowValidationExceptionOnAddIfJobIsInvalidAndLogItAsync(
+			string invalidText)
+		{
+			// given
+
+			var invalidJob = new Job
+			{
+				Title = invalidText
+			};
+
+			var invalidJobException = new InvalidJobException();
+
+			invalidJobException.AddData(
+				key: nameof(Job.Id),
+				values: "Id is required");
+
+            invalidJobException.AddData(
+                key: nameof(Job.Title),
+                values: "Title is required");
+
+            invalidJobException.AddData(
+                key: nameof(Job.Level),
+                values: "Level is required");
+
+            invalidJobException.AddData(
+                key: nameof(Job.CreatedDate),
+                values: "Date is required");
+
+            invalidJobException.AddData(
+                key: nameof(Job.UpdatedDate),
+                values: "Date is required");
+
+			var expectedJobValidationException =
+				new JobValidationException(invalidJobException);
+
+			// when
+
+			ValueTask<Job> AddJobTask = this.jobService.AddJobAsync(invalidJob);
+
+			JobValidationException actualJobValidationException =
+				await Assert.ThrowsAsync<JobValidationException>(AddJobTask.AsTask);
+
+			// then
+			actualJobValidationException.Should().BeEquivalentTo(expectedJobValidationException);
+
+			this.loggingBrokerMock.Verify(broker =>
+			broker.LogError(It.Is(
+				SameExceptionAs(actualJobValidationException))), Times.Once);
+
+			this.storageBrokerMock.Verify(broker =>
+			broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
+
+			this.loggingBrokerMock.VerifyNoOtherCalls();
+			this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+    }
 }
 
