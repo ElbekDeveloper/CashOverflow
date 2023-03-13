@@ -18,18 +18,18 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         [Fact]
         public async Task ShouldThrowValidationExceptionOnAddIfInputIsNullAndLogItAsync()
         {
-            //given
+            // given
             Salary nullSalary = null;
             var nullSalaryException = new NullSalaryException();
             var expectedSalaryValidationException = new SalaryValidationException(nullSalaryException);
 
-            //when
+            // when
             ValueTask<Salary> addSalaryTask = this.salaryService.AddSalaryAsync(nullSalary);
 
             SalaryValidationException actualSalaryValidationException =
                 await Assert.ThrowsAsync<SalaryValidationException>(addSalaryTask.AsTask);
 
-            //then
+            // then
             actualSalaryValidationException.Should()
                 .BeEquivalentTo(expectedSalaryValidationException);
 

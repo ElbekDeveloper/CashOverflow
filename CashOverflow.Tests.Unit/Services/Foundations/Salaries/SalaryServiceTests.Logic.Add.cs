@@ -17,7 +17,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         [Fact]
         public async Task ShouldAddSalaryAsync()
         {
-            //given 
+            // given 
             Salary randomSalary = CreateRandomSalary();
             Salary inputSalary = randomSalary;
             Salary persistedSalary = inputSalary;
@@ -26,10 +26,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertSalaryAsync(inputSalary)).ReturnsAsync(persistedSalary);
 
-            //when
+            // when
             Salary actualSalary = await this.salaryService.AddSalaryAsync(inputSalary);
 
-            //then
+            // then
             actualSalary.Should().BeEquivalentTo(expectedSalary);
 
             this.storageBrokerMock.Verify(broker =>
