@@ -11,7 +11,6 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-
 namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 {
     public partial class LanguageServiceTests
