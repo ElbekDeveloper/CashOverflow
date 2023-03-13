@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Xeptions;
 
@@ -35,6 +36,12 @@ namespace CashOverflow.Services.Foundations.Locations
 
                 throw CreateAndLogCriticalDependencyException(failedLocationStorageException);
             }
+            catch(DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsLocationException = new AlreadyExistsLocationException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLocationException);
+            }
         }
 
         private LocationValidationException CreateAndLogValidationException(Xeption exception)
@@ -51,6 +58,14 @@ namespace CashOverflow.Services.Foundations.Locations
             this.loggingBroker.LogCritical(locationDependencyException);
 
             return locationDependencyException;
+        }
+
+        private LocationDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var locationDependencyValidationException = new LocationDependencyValidationException(exception);
+            this.loggingBroker.LogError(locationDependencyValidationException);
+
+            return locationDependencyValidationException;
         }
     }
 }
