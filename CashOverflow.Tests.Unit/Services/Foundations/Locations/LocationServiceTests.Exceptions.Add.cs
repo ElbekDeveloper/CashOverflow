@@ -3,6 +3,8 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
@@ -76,6 +78,39 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
                 expectedLocationDependencyValidationException))), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Location someLocation = CreateRandomLocation();
+            var serviceException = new Exception();
+            var failedLocationServiceException = new FailedLocationServiceException(serviceException);
+
+            var expectedLocationServiceException = 
+                new LocationServiceException(failedLocationServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Throws(serviceException);
+
+            // when
+            ValueTask<Location> addLocationTask = this.locationService.AddLocationAsync(someLocation);
+
+            LocationServiceException actualLocationServiceException = await Assert.
+                ThrowsAsync<LocationServiceException>(addLocationTask.AsTask);
+
+            // then
+            actualLocationServiceException.Should().BeEquivalentTo(expectedLocationServiceException);
+
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
+                expectedLocationServiceException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
