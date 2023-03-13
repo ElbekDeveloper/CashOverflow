@@ -6,6 +6,8 @@
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
+using CashOverflow.Services.Foundations.Languages;
+using CashOverflow.Services.Foundations.Locations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +37,7 @@ namespace CashOverflow
             });
 
             AddBrokers(services);
-            AddServices(services);
+            AddFoundationServices(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
