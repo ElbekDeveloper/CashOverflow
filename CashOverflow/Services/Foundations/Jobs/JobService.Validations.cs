@@ -20,29 +20,48 @@ namespace CashOverflow.Services.Foundations.Jobs
         }
 
         private void ValidateJobId(Guid jobId) =>
-          Validate((Rule: IsInvalid(jobId), Parameter: nameof(Job.Id)));
+           Validate((Rule: IsInvalid(jobId), Parameter: nameof(Job.Id)));
 
         private static dynamic IsInvalid(Guid jobId) => new
         {
             Condition = jobId == default,
             Message = "Id is required"
         };
-            
 
-        private void Validate(params(dynamic Rule, string Parameter)[] validations)
+        private static dynamic IsInvalid(string text) => new
+        {
+            Condition = string.IsNullOrWhiteSpace(text),
+            Message = "Text is required"
+        };
+
+        private static dynamic IsInvalid(DateTimeOffset date) => new
+        {
+            Condition = date == default,
+            Message = "Value is required"
+        };
+
+        private static void ValidateStorageJobExists(Job maybeJob, Guid jobId)
+        {
+            if (maybeJob is null)
+            {
+                throw new NotFoundJobException(jobId);
+            }
+        }
+
+        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidJobException = new InvalidJobException();
 
-            foreach((dynamic rule, string parameter) in validations)
+            foreach ((dynamic rule, string parameter) in validations)
             {
-                if(rule.Condition)
+                if (rule.Condition)
                 {
                     invalidJobException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
-
+            
             invalidJobException.ThrowIfContainsErrors();
         }
     }
