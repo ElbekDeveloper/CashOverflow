@@ -116,11 +116,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             invalidLanguage.UpdatedDate = randomDate.AddMinutes(randomMinutes);
             var invalidLanguageException = new InvalidLanguageException();
 
-            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset()).Returns(randomDate);
-
             invalidLanguageException.AddData(
                 key: nameof(Language.CreatedDate),
                 values: $"Date is not same as {nameof(Language.UpdatedDate)}");
+
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset()).Returns(randomDate);
 
             var expectedLanguageValidationException = new LanguageValidationException(invalidLanguageException);
 
@@ -133,10 +133,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             //then
             actualLanguageValidationException.Should().BeEquivalentTo(expectedLanguageValidationException);
 
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedLanguageValidationException))), Times.Once);
-
-            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker => broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
 
@@ -182,9 +182,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             this.storageBrokerMock.Verify(broker => broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
 
-            this.dateTimeBrokerMock.VerifyNoOtherCalls();
-            this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
