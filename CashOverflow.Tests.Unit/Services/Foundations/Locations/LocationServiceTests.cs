@@ -50,6 +50,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             };
         }
 
+        private string GetRandomString() =>
+            new MnemonicString().GetValue();
+
         private SqlException CreateSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
