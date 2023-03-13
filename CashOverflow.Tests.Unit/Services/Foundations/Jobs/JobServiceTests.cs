@@ -4,12 +4,8 @@
 // --------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
@@ -40,14 +36,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.jobService = new JobService(
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object,
-                dateTimeBroker: this.dateTimeBroker.Object);    
+                dateTimeBroker: this.dateTimeBroker.Object);
         }
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
              actualException => actualException.SameExceptionAs(expectedException);
 
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
-            
+
         private static SqlException CreateSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
