@@ -1,4 +1,6 @@
-﻿// --------------------------------------------------------
+﻿using System;
+using System.Linq.Expressions;
+// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
@@ -8,6 +10,7 @@ using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Services.Foundations.Locations;
 using Moq;
+using Xeptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 {
@@ -29,5 +32,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 loggingBroker: this.loggingBrokerMock.Object,
                 dateTimeBroker: this.dateTimeBrokerMock.Object);
         }
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
     }
 }
