@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using Microsoft.AspNetCore.Authentication;
+using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
@@ -25,11 +26,15 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
               throw  CreateAndLogValidationException(nullJobException);
             }
+            catch(InvalidJobException invalidJobException)
+            {
+                throw CreateAndLogValidationException(invalidJobException);
+            }
         }
 
-        private JobValidationException CreateAndLogValidationException(NullJobException nullJobException)
+        private JobValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var jobValidationException = new JobValidationException(nullJobException);
+            var jobValidationException = new JobValidationException(exception);
             this.loggingBroker.LogError(jobValidationException);
 
             return jobValidationException;

@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
+using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
@@ -24,11 +25,15 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 throw CreateAndLogValidationException(nullLocationException);
             }
+            catch(InvalidLocationException invalidLocationException)
+            {
+                throw CreateAndLogValidationException(invalidLocationException);
+            }
         }
 
-        private LocationValidationException CreateAndLogValidationException(NullLocationException nullLocationException)
+        private LocationValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var locationValidationException = new LocationValidationException(nullLocationException);
+            var locationValidationException = new LocationValidationException(exception);
             this.loggingBroker.LogError(locationValidationException);
 
             return locationValidationException;

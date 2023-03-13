@@ -33,7 +33,7 @@ namespace CashOverflow.Services.Foundations.Jobs
         public ValueTask<Job> AddJobAsync(Job job) => 
             TryCatch(async () =>
         {
-            ValidateJobNotNull(job);
+            ValidateJobOnAdd(job);
 
             return await this.storageBroker.InsertJobAsync(job);
         });
