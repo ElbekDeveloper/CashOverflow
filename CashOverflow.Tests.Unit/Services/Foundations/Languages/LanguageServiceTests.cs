@@ -9,16 +9,13 @@ using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
-namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
-{
-    public partial class LanguageServiceTests
-    {
+namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
+    public partial class LanguageServiceTests {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly ILanguageService languageService;
-        public LanguageServiceTests()
-        {
+        public LanguageServiceTests() {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
@@ -37,8 +34,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         private Language CreateRandomLanguage() =>
             CreateLanguageFiller(GetRandomDateTime()).Create();
 
-        private Filler<Language> CreateLanguageFiller(DateTimeOffset dates)
-        {
+        private Filler<Language> CreateLanguageFiller(DateTimeOffset dates) {
             var filler = new Filler<Language>();
 
             filler.Setup()

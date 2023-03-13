@@ -5,10 +5,8 @@
 
 using System;
 
-namespace CashOverflow.Models.Salaries
-{
-    public class Salary
-    {
+namespace CashOverflow.Models.Salaries {
+    public class Salary {
         public Guid Id { get; set; }
         public decimal Amount { get; set; }
         public int Experience { get; set; }

@@ -6,10 +6,8 @@
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace CashOverflow.Brokers.Loggings
-{
-    public class LoggingBroker : ILoggingBroker
-    {
+namespace CashOverflow.Brokers.Loggings {
+    public class LoggingBroker : ILoggingBroker {
         private readonly ILogger<LoggingBroker> logger;
 
         public LoggingBroker(ILogger<LoggingBroker> logger) =>

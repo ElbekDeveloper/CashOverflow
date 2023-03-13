@@ -5,10 +5,8 @@
 
 using System;
 
-namespace CashOverflow.Models.Jobs
-{
-    public class Job
-    {
+namespace CashOverflow.Models.Jobs {
+    public class Job {
         public Guid Id { get; set; }
         public string Title { get; set; }
         public Level Level { get; set; }

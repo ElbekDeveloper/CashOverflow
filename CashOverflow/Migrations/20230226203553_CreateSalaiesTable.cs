@@ -8,18 +8,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CashOverflow.Migrations
-{
+namespace CashOverflow.Migrations {
     /// <inheritdoc />
-    public partial class CreateSalaiesTable : Migration
-    {
+    public partial class CreateSalaiesTable : Migration {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.CreateTable(
                 name: "Salaries",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Experience = table.Column<int>(type: "int", nullable: false),
@@ -28,15 +24,13 @@ namespace CashOverflow.Migrations
                     LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Salaries", x => x.Id);
                 });
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropTable(
                 name: "Salaries");
         }

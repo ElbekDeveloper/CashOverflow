@@ -10,13 +10,10 @@ using Force.DeepCloner;
 using Moq;
 using Xunit;
 
-namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
-{
-    public partial class LocationServiceTests
-    {
+namespace CashOverflow.Tests.Unit.Services.Foundations.Locations {
+    public partial class LocationServiceTests {
         [Fact]
-        public async Task ShouldAddLocationAsync()
-        {
+        public async Task ShouldAddLocationAsync() {
             // given
             Location randomLocation = CreateRandomLocation();
             Location inputLocation = randomLocation;

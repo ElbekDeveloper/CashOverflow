@@ -5,12 +5,9 @@
 
 using Xeptions;
 
-namespace CashOverflow.Models.Locations.Exceptions
-{
-    public class NullLocationException : Xeption
-    {
+namespace CashOverflow.Models.Locations.Exceptions {
+    public class NullLocationException : Xeption {
         public NullLocationException()
-            : base(message: "Location is null.")
-        { }
+            : base(message: "Location is null.") { }
     }
 }

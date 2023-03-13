@@ -3,10 +3,8 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-namespace CashOverflow.Models.Locations
-{
-    public enum Country
-    {
+namespace CashOverflow.Models.Locations {
+    public enum Country {
         Uzbekistan
     }
 }

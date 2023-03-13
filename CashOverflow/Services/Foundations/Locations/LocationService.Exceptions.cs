@@ -8,30 +8,23 @@ using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using Xeptions;
 
-namespace CashOverflow.Services.Foundations.Locations
-{
-    public partial class LocationService
-    {
+namespace CashOverflow.Services.Foundations.Locations {
+    public partial class LocationService {
         private delegate ValueTask<Location> ReturningLocationFunction();
 
-        private async ValueTask<Location> TryCatch(ReturningLocationFunction returningLocationFunction)
-        {
-            try
-            {
+        private async ValueTask<Location> TryCatch(ReturningLocationFunction returningLocationFunction) {
+            try {
                 return await returningLocationFunction();
             }
-            catch (NullLocationException nullLocationException)
-            {
+            catch (NullLocationException nullLocationException) {
                 throw CreateAndLogValidationException(nullLocationException);
             }
-            catch (InvalidLocationException invalidLocationException)
-            {
+            catch (InvalidLocationException invalidLocationException) {
                 throw CreateAndLogValidationException(invalidLocationException);
             }
         }
 
-        private LocationValidationException CreateAndLogValidationException(Xeption exception)
-        {
+        private LocationValidationException CreateAndLogValidationException(Xeption exception) {
             var locationValidationException = new LocationValidationException(exception);
             this.loggingBroker.LogError(locationValidationException);
 

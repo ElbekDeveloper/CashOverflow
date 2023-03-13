@@ -6,13 +6,10 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
-{
-    public partial class LanguageServiceTests
-    {
+namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
+    public partial class LanguageServiceTests {
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnRemoveIfInputIdIsNullAndLogItAsync()
-        {
+        public async Task ShouldThrowValidationExceptionOnRemoveIfInputIdIsNullAndLogItAsync() {
             // given
             Guid nullLanguageId = Guid.Empty;
             var invalidLanguageException = new InvalidLanguageException();
@@ -21,9 +18,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 key: nameof(Language.Id),
                 values: "Id is required");
 
-            var expectedLanguageValidationException = 
+            var expectedLanguageValidationException =
                 new LanguageValidationException(invalidLanguageException);
-          
+
             // when
             ValueTask<Language> removeLanguageByIdTask =
                 this.languageService.RemoveLanguageByIdAsync(nullLanguageId);
@@ -47,23 +44,22 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         }
 
         [Fact]
-        public async Task ShouldThrowNotFoundExceptionOnRemoveIfLanguageIsNotFoundAndLogItAsync()
-        {
+        public async Task ShouldThrowNotFoundExceptionOnRemoveIfLanguageIsNotFoundAndLogItAsync() {
             //given
-            Guid randomLanguageId=Guid.NewGuid();
+            Guid randomLanguageId = Guid.NewGuid();
             Guid inputLanguageId = randomLanguageId;
             Language noLanguage = null;
-            var notFoundLanguageException=new NotFoundLanguageException(inputLanguageId);
+            var notFoundLanguageException = new NotFoundLanguageException(inputLanguageId);
 
-            var expectedLanguageValidationException=
+            var expectedLanguageValidationException =
                 new LanguageValidationException(notFoundLanguageException);
 
-            this.storageBrokerMock.Setup(broker=>
+            this.storageBrokerMock.Setup(broker =>
                 broker.SelectLanguageByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(noLanguage);
 
             //when
-            ValueTask<Language> removeLanguageByIdTask=
+            ValueTask<Language> removeLanguageByIdTask =
                 this.languageService.RemoveLanguageByIdAsync(inputLanguageId);
 
             LanguageValidationException actualLanguageValidationException =
@@ -73,19 +69,19 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             actualLanguageValidationException.Should()
                 .BeEquivalentTo(expectedLanguageValidationException);
 
-            this.storageBrokerMock.Verify(broker=>
-                broker.SelectLanguageByIdAsync(It.IsAny<Guid>()), Times.Once());    
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLanguageByIdAsync(It.IsAny<Guid>()), Times.Once());
 
-            this.loggingBrokerMock.Verify(broker=>
+            this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLanguageValidationException))), Times.Once);
 
-            this.storageBrokerMock.Verify(broker=>
+            this.storageBrokerMock.Verify(broker =>
                 broker.DeleteLanguageAsync(It.IsAny<Language>()), Times.Never());
 
             this.storageBrokerMock.VerifyNoOtherCalls();
-            this.loggingBrokerMock.VerifyNoOtherCalls();  
-            this.dateTimeBrokerMock.VerifyNoOtherCalls();   
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
