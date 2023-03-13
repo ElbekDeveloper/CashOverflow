@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 using System;
-using System.IO.Compression;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
@@ -58,7 +57,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             var duplicateKeyException = new DuplicateKeyException(someMessage);
             var alreadyExistsLocationException = new AlreadyExistsLocationException(duplicateKeyException);
 
-            var expectedLocationDependencyValidationException = 
+            var expectedLocationDependencyValidationException =
                 new LocationDependencyValidationException(alreadyExistsLocationException);
 
             this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
@@ -92,7 +91,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             var serviceException = new Exception();
             var failedLocationServiceException = new FailedLocationServiceException(serviceException);
 
-            var expectedLocationServiceException = 
+            var expectedLocationServiceException =
                 new LocationServiceException(failedLocationServiceException);
 
             this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
