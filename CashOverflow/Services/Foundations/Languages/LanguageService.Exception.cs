@@ -65,15 +65,15 @@ namespace CashOverflow.Services.Foundations.Languages
             {
                 return await returningLanguageFunction();
             }
-            catch (NulllLanguageIdExcaption nullLanguageIdExcaption)
+            catch (InvalidLanguageException nullLanguageIdExcaption)
             {
                 throw CreateAndLogValidationExcaption(nullLanguageIdExcaption);
             }
         }
 
-        private LanguageValidationExcaption CreateAndLogValidationExcaption(Xeption excaption)
+        private LanguageValidationException CreateAndLogValidationExcaption(Xeption excaption)
         {
-            var languageValidationExcaption = new LanguageValidationExcaption(excaption);
+            var languageValidationExcaption = new LanguageValidationException(excaption);
             this.loggingBroker.LogError(languageValidationExcaption);
 
             return languageValidationExcaption;
