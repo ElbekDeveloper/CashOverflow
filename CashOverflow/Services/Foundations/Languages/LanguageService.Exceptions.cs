@@ -39,7 +39,7 @@ namespace CashOverflow.Services.Foundations.Languages
 
         private LanguageValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var languageValidationException = new LanguageValidationException(innerException: exception);
+            var languageValidationException = new LanguageValidationException(exception);
             this.loggingBroker.LogError(languageValidationException);
 
             return languageValidationException;
