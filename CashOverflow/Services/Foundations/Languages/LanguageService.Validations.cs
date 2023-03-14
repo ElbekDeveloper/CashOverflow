@@ -76,7 +76,7 @@ namespace CashOverflow.Services.Foundations.Languages
             DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();
             TimeSpan timeDifference = currentDate.Subtract(date);
 
-            return timeDifference.Seconds is > 60 or < 0;
+            return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
         private void Validate(params (dynamic Rule, string Parameter)[] validations)
