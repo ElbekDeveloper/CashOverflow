@@ -37,8 +37,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 
-            this.loggingBrokerMock.Verify(broker => broker.LogCritical(
-                It.Is(SameExceptionAs(expectedLanguageDependencyException))), Times.Once);
+            this.loggingBrokerMock.Verify(broker => 
+                broker.LogCritical(It.Is(SameExceptionAs(expectedLanguageDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
