@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
-using Xunit;
 using Moq;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 {
@@ -24,18 +24,18 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             invalidLocationException.AddData(
                 key: nameof(Location.Id),
                 values: "Id is required");
-            
+
             var expectedLocationValidationException = new
                 LocationValidationException(invalidLocationException);
-            
+
             //when
-            ValueTask<Location> retrieveLocationByIdTask = 
+            ValueTask<Location> retrieveLocationByIdTask =
                 this.locationService.RetrieveLocationByIdAsync(invalidLocationId);
 
-            LocationValidationException actualLocationValidationException = 
+            LocationValidationException actualLocationValidationException =
                 await Assert.ThrowsAsync<LocationValidationException>(
                     retrieveLocationByIdTask.AsTask);
-            
+
             //then
             actualLocationValidationException.Should().BeEquivalentTo(expectedLocationValidationException);
 
@@ -45,7 +45,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLocationByIdAsync(It.IsAny<Guid>()), Times.Never);
-            
+
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -60,28 +60,28 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             var notFoundLocationException =
                 new NotFoundLocationException(someLocationId);
-            
+
             var expectedValidationException =
                 new LocationValidationException(notFoundLocationException);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLocationByIdAsync(It.IsAny<Guid>()))
                     .ReturnsAsync(noLocation);
-            
+
             //when
             ValueTask<Location> retrieveByIdLocationTask =
                 this.locationService.RetrieveLocationByIdAsync(someLocationId);
-            
+
             LocationValidationException actualValidationException =
                 await Assert.ThrowsAsync<LocationValidationException>(
                     retrieveByIdLocationTask.AsTask);
-            
+
             //then 
             actualValidationException.Should().BeEquivalentTo(expectedValidationException);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLocationByIdAsync(It.IsAny<Guid>()), Times.Once);
-            
+
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedValidationException))), Times.Once);
