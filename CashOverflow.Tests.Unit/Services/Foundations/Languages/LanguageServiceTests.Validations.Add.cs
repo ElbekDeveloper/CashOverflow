@@ -120,7 +120,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 key: nameof(Language.CreatedDate),
                 values: $"Date is not same as {nameof(Language.UpdatedDate)}");
 
-            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset()).Returns(randomDate);
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Returns(randomDate);
 
             var expectedLanguageValidationException = new LanguageValidationException(invalidLanguageException);
 
