@@ -5,15 +5,34 @@
 
 using System;
 using System.Threading.Tasks;
+using CashOverflow.Brokers.DateTimes;
+using CashOverflow.Brokers.Loggings;
+using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
     public class LocationService : ILocationService
     {
-        public ValueTask<Location> RemoveLocationById(Guid locationId)
+        private readonly IStorageBroker storageBroker;
+        private readonly ILoggingBroker loggingBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
+
+        public LocationService(
+            ILoggingBroker loggingBroker,
+            IStorageBroker storageBroker,
+            IDateTimeBroker dateTimeBroker)
         {
-            throw new NotImplementedException();
+            this.loggingBroker = loggingBroker;
+            this.storageBroker = storageBroker;
+            this.dateTimeBroker = dateTimeBroker;
+        }
+
+        public async ValueTask<Location> RemoveLocationByIdAsync(Guid LocationId)
+        {
+            Location someLocation = await this.storageBroker.SelectLocationByIdAsync(LocationId);
+
+            return await this.storageBroker.DeleteLocationAsync(someLocation);
         }
     }
 }

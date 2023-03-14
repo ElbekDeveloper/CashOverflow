@@ -37,7 +37,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             // when
             Location actualLocation = await this.locationService
-                .RemoveLocationById(inputLocationId);
+                .RemoveLocationByIdAsync(inputLocationId);
 
             // then
             actualLocation.Should().BeEquivalentTo(expectedLocation);

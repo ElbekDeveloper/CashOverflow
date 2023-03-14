@@ -11,6 +11,6 @@ namespace CashOverflow.Services.Foundations.Locations
 {
     public interface ILocationService
     {
-        ValueTask<Location> RemoveLocationById(Guid locationId);
+        ValueTask<Location> RemoveLocationByIdAsync(Guid locationId);
     }
 }

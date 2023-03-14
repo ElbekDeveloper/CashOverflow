@@ -21,7 +21,19 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly ILocationService locationService;
 
-        private static Location CreateRandomLocation() =>        
+        public LocationServiceTests()
+        {
+            this.storageBrokerMock = new Mock<IStorageBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
+            this.loggingBrokerMock = new Mock<ILoggingBroker>();
+
+            this.locationService = new LocationService(
+                storageBroker: this.storageBrokerMock.Object,
+                dateTimeBroker: this.dateTimeBrokerMock.Object,
+                loggingBroker: this.loggingBrokerMock.Object);
+        }
+
+        private static Location CreateRandomLocation() =>
             CreateLocationFiller(date: GetRandomDateTimeOffset()).Create();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
