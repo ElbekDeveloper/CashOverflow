@@ -1,10 +1,9 @@
-using System.ComponentModel.DataAnnotations;
-using System;
 // --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
@@ -24,7 +23,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             invalidLocationException.AddData(
                 key: nameof(Location.Id),
-                values: "Id is requried");
+                values: "Id is required");
             
             var expectedLocationValidationException = new
                 LocationValidationException(invalidLocationException);

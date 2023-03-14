@@ -12,7 +12,7 @@ using CashOverflow.Models.Locations;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
-    public class LocationService:ILocationService
+    public partial class LocationService:ILocationService
     {
 
         private readonly IStorageBroker storageBroker;
@@ -31,7 +31,14 @@ namespace CashOverflow.Services.Foundations.Locations
         }
 
         public ValueTask<Location> RetrieveLocationByIdAsync(Guid locationId) =>
-            throw new NotImplementedException();
-        
+        TryCatch( async() =>
+        {
+            ValidateLocationId(locationId);
+            
+            Location maybeLocation =
+                await this.storageBroker.SelectLocationByIdAsync(locationId);
+            
+            return maybeLocation;
+        });
     }
 }
