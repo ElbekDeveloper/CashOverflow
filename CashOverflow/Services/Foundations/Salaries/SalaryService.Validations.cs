@@ -40,7 +40,7 @@ namespace CashOverflow.Services.Foundations.Salaries
             Condition = amount == 0,
             Message = "Amount is required."
         };
-        
+
         private static dynamic IsInvalid(int experience) => new
         {
             Condition = experience == 0,

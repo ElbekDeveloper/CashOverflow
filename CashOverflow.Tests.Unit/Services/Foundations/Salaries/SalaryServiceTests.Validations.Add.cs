@@ -3,7 +3,6 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.ComponentModel;
 using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
@@ -82,11 +81,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             actualSalaryValidationException.Should()
                 .BeEquivalentTo(expectedSalaryValidationException);
 
-            this.loggingBrokerMock.Verify(broker => 
+            this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedSalaryValidationException))), Times.Once());
 
-            this.storageBrokerMock.Verify(broker => 
+            this.storageBrokerMock.Verify(broker =>
                 broker.InsertSalaryAsync(It.IsAny<Salary>()), Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();

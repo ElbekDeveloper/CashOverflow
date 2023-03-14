@@ -11,6 +11,6 @@ namespace CashOverflow.Models.Salaries.Exceptions
     {
         public InvalidSalaryException()
             : base(message: "Salary is invalid.")
-        {}
+        { }
     }
 }
