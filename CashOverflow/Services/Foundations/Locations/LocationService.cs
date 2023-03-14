@@ -12,7 +12,7 @@ using CashOverflow.Models.Locations;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
-    public class LocationService : ILocationService
+    public partial class LocationService : ILocationService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -28,11 +28,13 @@ namespace CashOverflow.Services.Foundations.Locations
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public async ValueTask<Location> RemoveLocationByIdAsync(Guid LocationId)
-        {
-            Location someLocation = await this.storageBroker.SelectLocationByIdAsync(LocationId);
+        public ValueTask<Location> RemoveLocationByIdAsync(Guid locationId) =>
+            TryCatch(async () =>
+            {
+                ValidateLocationById(locationId);
+                Location someLocation = await this.storageBroker.SelectLocationByIdAsync(locationId);
 
-            return await this.storageBroker.DeleteLocationAsync(someLocation);
-        }
+                return await this.storageBroker.DeleteLocationAsync(someLocation);
+            });
     }
 }
