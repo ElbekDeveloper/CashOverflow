@@ -1,4 +1,9 @@
-﻿using System;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
@@ -43,32 +48,32 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+
         }
 
         [Fact]
-        public async Task ShouldThrowNotFoundExceptionOnRetrieveByIdIfLanguageIsNotFoundAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfLanguageNotFoundAndLogItAsync()
         {
             //given
             Guid someLanguageId = Guid.NewGuid();
             Language noLanguage = null;
 
-            var notFoundLanguageException =
-               new NotFoundLanguageException(someLanguageId);
+            var notFoundLanguageValidationException =
+                new NotFoundLanguageException(someLanguageId);
 
             var expectedLanguageValidationExcaption =
-                new LanguageValidationException(notFoundLanguageException);
+                new LanguageValidationException(notFoundLanguageValidationException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectLanguageByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(noLanguage);
+                broker.SelectLanguageByIdAsync(It.IsAny<Guid>())).ReturnsAsync(noLanguage);
 
             //when
-            ValueTask<Language> retrieveLanguageByIdTask =
+            ValueTask<Language> retrieveByIdLanguageTask =
                 this.languageService.RetrieveLanguageByIdAsync(someLanguageId);
 
             LanguageValidationException actualLanguageValidationExcaption =
                 await Assert.ThrowsAsync<LanguageValidationException>(
-                    retrieveLanguageByIdTask.AsTask);
+                    retrieveByIdLanguageTask.AsTask);
 
             //then
             actualLanguageValidationExcaption.Should().BeEquivalentTo(expectedLanguageValidationExcaption);
@@ -77,7 +82,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 broker.SelectLanguageByIdAsync(It.IsAny<Guid>()), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(expectedLanguageValidationExcaption))), Times.Once);
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLanguageValidationExcaption))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

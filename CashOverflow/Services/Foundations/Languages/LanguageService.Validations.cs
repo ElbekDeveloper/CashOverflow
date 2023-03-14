@@ -1,4 +1,9 @@
-﻿using System;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
 
@@ -37,6 +42,7 @@ namespace CashOverflow.Services.Foundations.Languages
 
             invalidLanguageException.ThrowIfContainsErrors();
         }
+
         private void ValidateStorageLanguage(Language maybeTicket, Guid languageId)
         {
             if (maybeTicket is null)
