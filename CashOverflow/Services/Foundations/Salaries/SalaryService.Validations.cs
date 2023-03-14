@@ -32,25 +32,25 @@ namespace CashOverflow.Services.Foundations.Salaries
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,
-            Message = "Id is required"
+            Message = "Id is required."
         };
 
         private static dynamic IsInvalid(decimal amount) => new
         {
             Condition = amount == 0,
-            Message = "Amount is required"
+            Message = "Amount is required."
         };
         
         private static dynamic IsInvalid(int experience) => new
         {
             Condition = experience == 0,
-            Message = "Experience is required"
+            Message = "Experience is required."
         };
 
         private static dynamic IsInvalid(DateTimeOffset date) => new
         {
             Condition = date == default,
-            Message = "Date is required"
+            Message = "Date is required."
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
