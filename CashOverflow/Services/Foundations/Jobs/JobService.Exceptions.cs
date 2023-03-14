@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
@@ -29,14 +30,44 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 throw CreateAndLogValidationException(notFoundJobException);
             }
+            catch(SqlException sqlException)
+            {
+                var failedJobStorageException = new FailedJobStorageException(sqlException);
+
+                throw CreateAndLogDependencyException(failedJobStorageException);
+            }
+            catch(Exception exception)
+            {
+                var failedJobServiceException = new FailedJobServiceException(exception);
+
+                throw CreateAndLogServiceException(failedJobServiceException);
+            }
         }
 
         private JobValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var jobValidationException = new JobValidationException(exception);
-            this.loggingBroker.LogError(jobValidationException);
+            var jobValidationExpcetion = new JobValidationException(exception);
+            this.loggingBroker.LogError(jobValidationExpcetion);
 
-            return jobValidationException;
+            return jobValidationExpcetion;
+        }
+
+        private JobDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var jobDependencyException = new JobDependencyException(exception);
+            this.loggingBroker.LogCritical(jobDependencyException);
+
+            return jobDependencyException;
+        }
+        
+        private JobServiceException CreateAndLogServiceException(Xeption innerException)
+        {
+            var jobServiceException = new JobServiceException(innerException);
+            this.loggingBroker.LogError(jobServiceException);
+
+            return jobServiceException;
         }
     }
 }
+
+    
