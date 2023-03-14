@@ -12,13 +12,13 @@ using CashOverflow.Models.Locations;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
-    public partial class LocationService:ILocationService
+    public partial class LocationService : ILocationService
     {
 
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
         private readonly IDateTimeBroker dateTimeBroker;
-        
+
         public LocationService(
             IStorageBroker storageBroker,
             ILoggingBroker loggingBroker,
@@ -31,15 +31,15 @@ namespace CashOverflow.Services.Foundations.Locations
         }
 
         public ValueTask<Location> RetrieveLocationByIdAsync(Guid locationId) =>
-        TryCatch( async() =>
+        TryCatch(async () =>
         {
             ValidateLocationId(locationId);
-            
+
             Location maybeLocation =
                 await this.storageBroker.SelectLocationByIdAsync(locationId);
-            
+
             ValidateStorageLocation(maybeLocation, locationId);
-            
+
             return maybeLocation;
         });
     }
