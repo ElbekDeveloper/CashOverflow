@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
@@ -19,10 +20,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public async Task ShouldThrowCriticalDependencyExceptionOnRetrieveByIdAsyncIfSqlErrorOccursAndLogItAsync()
         {
             //given
-            Guid someId= Guid.NewGuid();
+            Guid someId = Guid.NewGuid();
             SqlException sqlException = GetSqlException();
 
-            var failedLanguageStorageException = 
+            var failedLanguageStorageException =
                 new FailedLanguageStorageException(sqlException);
 
             LanguageDependencyException expectedLanguageDependencyException =
@@ -32,7 +33,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 broker.SelectLanguageByIdAsync(It.IsAny<Guid>())).ThrowsAsync(sqlException);
 
             //when
-            ValueTask<Language> retrieveLanguageByIdTask=
+            ValueTask<Language> retrieveLanguageByIdTask =
                 this.languageService.RetrieveLanguageByIdAsync(someId);
 
             LanguageDependencyException actualLanguageDependencyException =
@@ -41,7 +42,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             //then
             actualLanguageDependencyException.Should().BeEquivalentTo(expectedLanguageDependencyException);
 
-            this.storageBrokerMock.Verify(broker=>
+            this.storageBrokerMock.Verify(broker =>
                 broker.SelectLanguageByIdAsync(It.IsAny<Guid>()), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -51,8 +52,44 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
-
         }
 
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveByIdAsyncIfServiceErrorOccursAndLogItAsync()
+        {
+            //given
+            Guid someId = Guid.NewGuid();
+            var serviceException = new Exception();
+
+            var failedLanguageServiceException =
+                new FailedLanguageServiceException(serviceException);
+
+            var expectedTicketServiceExcpetion =
+                new LanguageServiceException(failedLanguageServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLanguageByIdAsync(It.IsAny<Guid>())).ThrowsAsync(serviceException);
+
+            //when
+            ValueTask<Language> retrieveTicketById =
+                this.languageService.RetrieveLanguageByIdAsync(someId);
+
+            LanguageServiceException actualTeamServiceException =
+                await Assert.ThrowsAsync<LanguageServiceException>(retrieveTicketById.AsTask);
+
+            // then
+            actualTeamServiceException.Should().BeEquivalentTo(expectedTicketServiceExcpetion);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLanguageByIdAsync(It.IsAny<Guid>()), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+               broker.LogError(It.Is(SameExceptionAs(
+                   expectedTicketServiceExcpetion))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
