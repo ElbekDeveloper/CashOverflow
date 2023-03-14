@@ -54,7 +54,41 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         [Fact]
         public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfLocationNotFoundAndLogItAsync()
         {
+            //given
+            Guid someLocationId = Guid.NewGuid();
+            Location noLocation = null;
+
+            var notFoundLocationException =
+                new NotFoundLocationException(someLocationId);
             
+            var expectedValidationException =
+                new LocationValidationException(notFoundLocationException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(noLocation);
+            
+            //when
+            ValueTask<Location> retrieveByIdLocationTask =
+                this.locationService.RetrieveLocationByIdAsync(someLocationId);
+            
+            LocationValidationException actualValidationException =
+                await Assert.ThrowsAsync<LocationValidationException>(
+                    retrieveByIdLocationTask.AsTask);
+            
+            //then 
+            actualValidationException.Should().BeEquivalentTo(expectedValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()), Times.Once);
+            
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedValidationException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
     }
