@@ -6,7 +6,9 @@
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
+using CashOverflow.Services.Foundations.Jobs;
 using CashOverflow.Services.Foundations.Languages;
+using CashOverflow.Services.Foundations.Locations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -63,7 +65,12 @@ namespace CashOverflow
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         }
 
-        private static void AddFoundationServices(IServiceCollection services) =>
+        private static void AddFoundationServices(IServiceCollection services)
+        {
             services.AddTransient<ILanguageService, LanguageService>();
+            services.AddTransient<IJobService, JobService>();
+            services.AddTransient<ILocationService, LocationService>();
+            services.AddTransient<ILanguageService,LanguageService>();
+        }
     }
 }
