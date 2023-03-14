@@ -40,14 +40,6 @@ namespace CashOverflow.Services.Foundations.Jobs
             Message = "Value is required"
         };
 
-        private static void ValidateStorageJobExists(Job maybeJob, Guid jobId)
-        {
-            if (maybeJob is null)
-            {
-                throw new NotFoundJobException(jobId);
-            }
-        }
-
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidJobException = new InvalidJobException();
