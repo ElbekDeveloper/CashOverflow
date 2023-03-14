@@ -67,11 +67,15 @@ namespace CashOverflow.Services.Foundations.Languages
             }
             catch (InvalidLanguageException nullLanguageIdExcaption)
             {
-                throw CreateAndLogValidationExcaption(nullLanguageIdExcaption);
+                throw CreateAndLogValidationException(nullLanguageIdExcaption);
+            }
+            catch (NotFoundLanguageException notFoundLanguageException)
+            {
+                throw CreateAndLogValidationException(notFoundLanguageException);
             }
         }
 
-        private LanguageValidationException CreateAndLogValidationExcaption(Xeption excaption)
+        private LanguageValidationException CreateAndLogValidationException(Xeption excaption)
         {
             var languageValidationExcaption = new LanguageValidationException(excaption);
             this.loggingBroker.LogError(languageValidationExcaption);

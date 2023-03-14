@@ -52,7 +52,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         }
 
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfLanguageNotFoundAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfLanguageIsNotFoundAndLogItAsync()
         {
             //given
             Guid someLanguageId = Guid.NewGuid();
