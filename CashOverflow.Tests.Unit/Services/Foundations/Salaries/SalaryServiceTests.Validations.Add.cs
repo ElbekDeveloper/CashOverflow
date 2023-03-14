@@ -44,18 +44,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("   ")]
-        public async Task ShouldThrowValidationExceptionOnAddIfSalaryIsInvalidAndLogItAsync(
-            string invalidText)
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfSalaryIsInvalidAndLogItAsync()
         {
             // given
-            var invalidSalary = new Salary
-            {
-                Amount = default(int)
-            };
+            var invalidSalary = new Salary();
 
             var invalidSalaryException = new InvalidSalaryException();
 

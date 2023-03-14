@@ -10,7 +10,7 @@ namespace CashOverflow.Models.Salaries.Exceptions
     public class InvalidSalaryException : Xeption
     {
         public InvalidSalaryException()
-            : base(message: "Location is invalid.")
+            : base(message: "Salary is invalid.")
         {}
     }
 }
