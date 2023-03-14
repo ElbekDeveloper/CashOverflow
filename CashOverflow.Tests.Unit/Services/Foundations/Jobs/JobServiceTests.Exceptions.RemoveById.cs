@@ -4,9 +4,6 @@
 // --------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
@@ -83,10 +80,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                     .Throws(sqlException);
 
             // when
-            ValueTask<Job> deleteJobTask = 
+            ValueTask<Job> deleteJobTask =
                 this.jobService.RemoveJobByIdAsync(someJobId);
 
-            JobDependencyException actualJobDependencyException=
+            JobDependencyException actualJobDependencyException =
                     await Assert.ThrowsAsync<JobDependencyException>(
                         deleteJobTask.AsTask);
 
@@ -99,6 +96,47 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
                     expectedJobDependencyException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBroker.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someJobId = Guid.NewGuid();
+            var seviceException = new Exception();
+
+            var failedJobServiceException =
+               new FailedJobServiceException(seviceException);
+
+            var expectedJobServiceException =
+                new JobServiceException(failedJobServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectJobByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(seviceException);
+
+            // when
+            ValueTask<Job> removeJobByIdTask =
+                this.jobService.RemoveJobByIdAsync(someJobId);
+
+            JobServiceException actualJobServiceException =
+                await Assert.ThrowsAsync<JobServiceException>(
+                    removeJobByIdTask.AsTask);
+
+            // then
+            actualJobServiceException.Should().BeEquivalentTo(
+                expectedJobServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(It.IsAny<Guid>()), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobServiceException))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
