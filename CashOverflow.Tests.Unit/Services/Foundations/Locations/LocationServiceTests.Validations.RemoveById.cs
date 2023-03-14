@@ -60,5 +60,52 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowNotFoundExceptionOnRemoveLocationByIdIsNotFounfAndLogItAsync()
+        {
+            // given
+            Guid inputLocationId = Guid.NewGuid();
+            Location noLocation = null;
+
+            var notFoundLocationException =
+                new NotFoundLocationException(inputLocationId);
+
+            var expectedLocationValidationException =
+                new LocationValidationException(notFoundLocationException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(noLocation);
+
+            // when
+            ValueTask<Location> removeLocationByIdTask =
+                this.locationService.RemoveLocationByIdAsync(inputLocationId);
+
+            LocationValidationException actualLocationValidationException =
+                await Assert.ThrowsAsync<LocationValidationException>(() =>
+                    removeLocationByIdTask.AsTask());
+
+            // then
+            actualLocationValidationException.Should()
+                .BeEquivalentTo(expectedLocationValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLocationValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.DeleteLocationAsync(It.IsAny<Location>()),
+                    Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

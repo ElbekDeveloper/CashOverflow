@@ -3,15 +3,16 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using Azure.Messaging;
 using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-    public class LocationValidationException : Xeption
+    public class NotFoundLocationException : Xeption
     {
-        public LocationValidationException(Xeption innerException)
-            : base(message: "Location validation error occured, contact support.", 
-                  innerException)
+        public NotFoundLocationException(Guid locationId)
+            : base (message: $"Couldn't find location with id: {locationId}.")
         { }
     }
 }
