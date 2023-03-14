@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using FluentAssertions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
@@ -58,6 +59,46 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.storageBrokerMock.Verify(broker =>
                 broker.DeleteJobAsync(It.IsAny<Job>()), Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBroker.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        private async Task ShouldThrowDependencyExceptionOnDeleteWhenSqlExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someJobId = Guid.NewGuid();
+            SqlException sqlException = CreateSqlException();
+
+            var failedJobStorageException =
+                new FailedJobStorageException(sqlException);
+
+            var expectedJobDependencyException =
+                new JobDependencyException(failedJobStorageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectJobByIdAsync(someJobId))
+                    .Throws(sqlException);
+
+            // when
+            ValueTask<Job> deleteJobTask = 
+                this.jobService.RemoveJobByIdAsync(someJobId);
+
+            JobDependencyException actualJobDependencyException=
+                    await Assert.ThrowsAsync<JobDependencyException>(
+                        deleteJobTask.AsTask);
+
+            // then
+            actualJobDependencyException.Should().BeEquivalentTo(expectedJobDependencyException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(It.IsAny<Guid>()), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogCritical(It.Is(SameExceptionAs(
+                    expectedJobDependencyException))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
