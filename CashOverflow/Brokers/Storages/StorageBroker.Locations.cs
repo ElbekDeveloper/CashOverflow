@@ -13,21 +13,21 @@ namespace CashOverflow.Brokers.Storages
 {
     public partial class StorageBroker
     {
-        public DbSet<Location> Locations { get; set; }
+        public DbSet<Salary> Locations { get; set; }
 
-        public async ValueTask<Location> InsertLocationAsync(Location location) =>
+        public async ValueTask<Salary> InsertLocationAsync(Salary location) =>
             await InsertAsync(location);
 
-        public IQueryable<Location> SelectAllLocations() =>
-         SelectAll<Location>();
+        public IQueryable<Salary> SelectAllLocations() =>
+         SelectAll<Salary>();
 
-        public async ValueTask<Location> SelectLocationByIdAsync(Guid id) =>
-           await SelectAsync<Location>(id);
+        public async ValueTask<Salary> SelectLocationByIdAsync(Guid id) =>
+           await SelectAsync<Salary>(id);
 
-        public async ValueTask<Location> UpdateLocationAsync(Location location) =>
+        public async ValueTask<Salary> UpdateLocationAsync(Salary location) =>
             await UpdateAsync(location);
 
-        public async ValueTask<Location> DeleteLocationAsync(Location location) =>
-            await DeleteAsync<Location>(location);
+        public async ValueTask<Salary> DeleteLocationAsync(Salary location) =>
+            await DeleteAsync<Salary>(location);
     }
 }

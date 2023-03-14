@@ -24,6 +24,10 @@ namespace CashOverflow.Services.Foundations.Salaries
             {
                 throw CreateAndLogValidationException(nullSalaryException);
             }
+            catch (InvalidSalaryException invalidSalaryException)
+            {
+                throw CreateAndLogValidationException(invalidSalaryException);
+            }
         }
 
         private SalaryValidationException CreateAndLogValidationException(Xeption exception)

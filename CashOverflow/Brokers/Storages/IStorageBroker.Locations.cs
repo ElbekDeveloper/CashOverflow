@@ -12,10 +12,10 @@ namespace CashOverflow.Brokers.Storages
 {
     public partial interface IStorageBroker
     {
-        ValueTask<Location> InsertLocationAsync(Location location);
-        IQueryable<Location> SelectAllLocations();
-        ValueTask<Location> SelectLocationByIdAsync(Guid Id);
-        ValueTask<Location> UpdateLocationAsync(Location location);
-        ValueTask<Location> DeleteLocationAsync(Location location);
+        ValueTask<Salary> InsertLocationAsync(Salary location);
+        IQueryable<Salary> SelectAllLocations();
+        ValueTask<Salary> SelectLocationByIdAsync(Guid Id);
+        ValueTask<Salary> UpdateLocationAsync(Salary location);
+        ValueTask<Salary> DeleteLocationAsync(Salary location);
     }
 }

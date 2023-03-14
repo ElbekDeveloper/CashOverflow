@@ -24,7 +24,7 @@ namespace CashOverflow.Services.Foundations.Salaries
         public ValueTask<Salary> AddSalaryAsync(Salary salary) =>
         TryCatch(async () =>
         {
-            ValidateSalaryNotNull(salary);
+            ValidateSalaryOnAdd(salary);
 
             return await this.storageBroker.InsertSalaryAsync(salary);
         });
