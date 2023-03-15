@@ -40,9 +40,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 );
         }
 
-        private static IQueryable<Language> CreateRandomLanguages()
+        private IQueryable<Language> CreateRandomLanguages()
         {
-            return CreateLanguageFiller(date: GetRandomDateTimeOffset())
+            return CreateLanguageFiller(dates: GetRandomDatetimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
         }
 
@@ -72,9 +72,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
         private static int GetRandomNegativeNumber() =>
          -1 * new IntRange(min: 2, max: 9).GetValue();
-
-        private static int GetRandomNumber() =>
-            new IntRange(min: 2, max: 9).GetValue();
 
         private DateTimeOffset GetRandomDatetimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();

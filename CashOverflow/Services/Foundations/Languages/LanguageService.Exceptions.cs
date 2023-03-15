@@ -33,9 +33,9 @@ namespace CashOverflow.Services.Foundations.Languages
             }
             catch (SqlException sqlException)
             {
-                var FailedLanguageStorageException = new FailedLanguageStorageException(sqlException);
+                var failedLanguageStorageException = new FailedLanguageStorageException(sqlException);
 
-                throw CreateAndLogCriticalDependencyException(FailedLanguageStorageException);
+                throw CreateAndLogCriticalDependencyException(failedLanguageStorageException);
             }
             catch (DuplicateKeyException duplicateKeyException)
             {
