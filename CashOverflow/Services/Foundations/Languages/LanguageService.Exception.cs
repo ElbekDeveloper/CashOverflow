@@ -73,6 +73,12 @@ namespace CashOverflow.Services.Foundations.Languages
             {
                 throw CreateAndLogValidationException(notFoundLanguageException);
             }
+            catch (Exception serviceException)
+            {
+                var failedServiceProfileException = new FailedLanguageServiceException(serviceException);
+
+                throw CreateAndLogServiceException(failedServiceProfileException);
+            }
         }
 
         private LanguageValidationException CreateAndLogValidationException(Xeption excaption)
