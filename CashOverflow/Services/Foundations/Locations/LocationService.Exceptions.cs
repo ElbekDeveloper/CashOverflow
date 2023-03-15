@@ -30,13 +30,13 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 throw CreateAndLogValidationsException(notFoundLocationException);
             }
-            catch(SqlException sqlException)
+            catch (SqlException sqlException)
             {
                 var failedLocationStoragException = new FailedLocationStorageException(sqlException);
 
                 throw CreateAndLogDependencyException(failedLocationStoragException);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 var failedLocationServiceException = new FailedLocationServiceException(exception);
 
