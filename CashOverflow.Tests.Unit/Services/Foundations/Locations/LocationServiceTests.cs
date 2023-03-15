@@ -21,8 +21,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
     public partial class LocationServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
-        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ILocationService locationService;
 
         public LocationServiceTests()

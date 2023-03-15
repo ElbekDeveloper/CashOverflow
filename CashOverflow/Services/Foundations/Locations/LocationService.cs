@@ -16,8 +16,8 @@ namespace CashOverflow.Services.Foundations.Locations
     {
 
         private readonly IStorageBroker storageBroker;
-        private readonly ILoggingBroker loggingBroker;
         private readonly IDateTimeBroker dateTimeBroker;
+        private readonly ILoggingBroker loggingBroker;    
 
         public LocationService(
             IStorageBroker storageBroker,

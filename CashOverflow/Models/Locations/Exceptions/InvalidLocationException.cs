@@ -11,7 +11,6 @@ namespace CashOverflow.Models.Locations.Exceptions
     {
         public InvalidLocationException()
             : base(message: "Location is invalid.")
-
         { }
     }
 }
