@@ -53,19 +53,19 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
             invalidSalaryException.AddData(
                 key: nameof(Salary.Id),
-                values: "Id is required.");
+                values: "Id is required");
 
             invalidSalaryException.AddData(
                 key: nameof(Salary.Amount),
-                values: "Amount is required.");
+                values: "Amount is required");
 
             invalidSalaryException.AddData(
                 key: nameof(Salary.Experience),
-                values: "Experience is required.");
+                values: "Experience is required");
 
             invalidSalaryException.AddData(
                 key: nameof(Salary.CreatedDate),
-                values: "Date is required.");
+                values: "Date is required");
 
             var expectedSalaryValidationException =
                 new SalaryValidationException(invalidSalaryException);
