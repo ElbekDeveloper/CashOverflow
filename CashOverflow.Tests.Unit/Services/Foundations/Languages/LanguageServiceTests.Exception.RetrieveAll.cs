@@ -18,7 +18,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public void ShouldThrowCriticalDependencyExceptionOnRetrieveAllWhenSqlExceptionOccursAndLogIt()
         {
             // given
-            SqlException sqlException = GetSqlException();
+            SqlException sqlException = CreateSqlException();
 
             var failedStorageException =
                 new FailedLanguageStorageException(sqlException);
@@ -59,7 +59,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public void ShouldThrowServiceExceptionOnRetrieveAllIfServiceErrorOccursAndLogItAsync()
         {
             // given
-            string exceptionMessage = GetRandomMessage();
+            string exceptionMessage = GetRandomString();
             var serviceException = new Exception(exceptionMessage);
 
             var failedLanguageServiceException =

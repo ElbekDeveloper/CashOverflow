@@ -19,7 +19,7 @@ namespace CashOverflow.Services.Foundations.Languages
         private readonly IDateTimeBroker dateTimeBroker;
 
         public LanguageService(
-          IStorageBroker storageBroker,
+            IStorageBroker storageBroker,
             ILoggingBroker loggingBroker,
             IDateTimeBroker dateTimeBroker)
         {

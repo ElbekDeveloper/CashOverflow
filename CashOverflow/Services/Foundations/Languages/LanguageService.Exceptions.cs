@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
@@ -16,6 +17,7 @@ namespace CashOverflow.Services.Foundations.Languages
     public partial class LanguageService
     {
         private delegate ValueTask<Language> ReturningLanguageFunction();
+        private delegate IQueryable<Language> ReturningLanguagesFunction();
 
         private async ValueTask<Language> TryCatch(ReturningLanguageFunction returningLanguageFunction)
         {
@@ -46,6 +48,26 @@ namespace CashOverflow.Services.Foundations.Languages
             catch (Exception exception)
             {
                 var failedLanguageServiceException = new FailedLanguageServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLanguageServiceException);
+            }
+        }
+
+        private IQueryable<Language> TryCatch(ReturningLanguagesFunction returningLanguageFunction)
+        {
+            try
+            {
+                return returningLanguageFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedLanguageStorageException = new FailedLanguageStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedLanguageStorageException);
+            }
+            catch (Exception serviceException)
+            {
+                var failedLanguageServiceException = new FailedLanguageServiceException(serviceException);
 
                 throw CreateAndLogServiceException(failedLanguageServiceException);
             }
