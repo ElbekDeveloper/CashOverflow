@@ -69,16 +69,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 new LanguageServiceException(failedLanguageServiceException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllLanguages())
-                    .Throws(serviceException);
+                broker.SelectAllLanguages()).Throws(serviceException);
 
             // when
             Action retrieveAllLanguagesAction = () =>
                 this.languageService.RetrieveAllLanguages();
 
             LanguageServiceException actualLanguageServiceException =
-                Assert.Throws<LanguageServiceException>(
-                    retrieveAllLanguagesAction);
+                Assert.Throws<LanguageServiceException>(retrieveAllLanguagesAction);
 
             // then
             actualLanguageServiceException.Should().BeEquivalentTo(expectedLanguageServiceException);
