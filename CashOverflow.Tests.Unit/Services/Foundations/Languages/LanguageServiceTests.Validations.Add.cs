@@ -178,8 +178,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 
-            this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(expectedLanguageValidationException))), Times.Once);
+            this.loggingBrokerMock.Verify(broker => broker.LogError(
+                It.Is(SameExceptionAs(expectedLanguageValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker => broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
 
