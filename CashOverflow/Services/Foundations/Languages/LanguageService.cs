@@ -5,6 +5,7 @@
 
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
+using System.Linq;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Languages;
@@ -18,7 +19,7 @@ namespace CashOverflow.Services.Foundations.Languages
         private readonly IDateTimeBroker dateTimeBroker;
 
         public LanguageService(
-            IStorageBroker storageBroker,
+          IStorageBroker storageBroker,
             ILoggingBroker loggingBroker,
             IDateTimeBroker dateTimeBroker)
         {
@@ -34,5 +35,8 @@ namespace CashOverflow.Services.Foundations.Languages
 
                 return await this.storageBroker.InsertLanguageAsync(language);
             });
+
+        public IQueryable<Language> RetrieveAllLanguages() =>
+            TryCatch(() => this.storageBroker.SelectAllLanguages());
     }
 }

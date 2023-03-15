@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
@@ -39,6 +40,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 );
         }
 
+        private static IQueryable<Language> CreateRandomLanguages()
+        {
+            return CreateLanguageFiller(date: GetRandomDateTimeOffset())
+                .Create(count: GetRandomNumber()).AsQueryable();
+        }
+
         public static TheoryData<int> InvalidMinutes()
         {
             int minutesInFuture = GetRandomNumber();
@@ -53,6 +60,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
         private string GetRandomString() =>
             new MnemonicString().GetValue();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 10).GetValue();
 
         private SqlException CreateSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));

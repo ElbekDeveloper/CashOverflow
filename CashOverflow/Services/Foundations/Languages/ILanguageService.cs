@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System.Threading.Tasks;
+using System.Linq;
 using CashOverflow.Models.Languages;
 
 namespace CashOverflow.Services.Foundations.Languages
@@ -11,5 +12,6 @@ namespace CashOverflow.Services.Foundations.Languages
     public interface ILanguageService
     {
         ValueTask<Language> AddLanguageAsync(Language language);
+        IQueryable<Language> RetrieveAllLanguages();
     }
 }
