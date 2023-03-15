@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
@@ -35,6 +36,12 @@ namespace CashOverflow.Services.Foundations.Locations
 
                 throw CreateAndLogDependencyException(failedLocationStoragException);
             }
+            catch(Exception exception)
+            {
+                var failedLocationServiceException = new FailedLocationServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLocationServiceException);
+            }
         }
 
         private LocationValidationException CreateAndLogValidationsException(Xeption exception)
@@ -51,6 +58,14 @@ namespace CashOverflow.Services.Foundations.Locations
             this.loggingBroker.LogCritical(locationDependencyException);
 
             return locationDependencyException;
+        }
+
+        private LocationServiceException CreateAndLogServiceException(Xeption innerException)
+        {
+            var locationServiceException = new LocationServiceException(innerException);
+            this.loggingBroker.LogError(locationServiceException);
+
+            return locationServiceException;
         }
     }
 }
