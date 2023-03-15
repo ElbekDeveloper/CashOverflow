@@ -11,7 +11,7 @@ namespace CashOverflow.Models.Languages.Exceptions
     public class AlreadyExistsLanguageException : Xeption
     {
         public AlreadyExistsLanguageException(Exception innerException)
-            : base(message: "Already exists exception", innerException) 
+            : base(message: "Already exists exception", innerException)
         { }
     }
 }
