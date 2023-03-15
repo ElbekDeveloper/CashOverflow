@@ -37,15 +37,21 @@ namespace CashOverflow.Services.Foundations.Languages
 
                 throw CreateAndLogCriticalDependencyException(FailedLanguageStorageException);
             }
-            catch(DuplicateKeyException dublicateKeyException)
+            catch (DuplicateKeyException dublicateKeyException)
             {
-                var alreadyExistsLanguageException  = new AlreadyExistsLanguageException(dublicateKeyException);
+                var alreadyExistsLanguageException = new AlreadyExistsLanguageException(dublicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLanguageException);
             }
+            catch (Exception exception)
+            {
+                var failedLanguageServiceException = new FailedLanguageServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLanguageServiceException);
+            }
         }
 
-        private LanguageDependencyValidationException  CreateAndLogDependencyValidationException(Xeption exception )
+        private LanguageDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {
             var languageDependencyValidationException = new LanguageDependencyValidationException(exception);
 
@@ -68,6 +74,15 @@ namespace CashOverflow.Services.Foundations.Languages
             this.loggingBroker.LogCritical(LanguageDependencyException);
 
             return LanguageDependencyException;
+        }
+
+        private LanguageServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var languageServiceException = new LanguageServiceException(exception);
+
+            this.loggingBroker.LogError(languageServiceException);
+
+            return languageServiceException;
         }
     }
 }
