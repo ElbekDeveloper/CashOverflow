@@ -22,7 +22,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly Mock<IDateTimeBroker> dateTimeBroker;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly IJobService jobService;
 
         public JobServiceTests()
@@ -30,12 +30,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
-            this.dateTimeBroker = new Mock<IDateTimeBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
 
             this.jobService = new JobService(
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object,
-                dateTimeBroker: this.dateTimeBroker.Object);
+                dateTimeBroker: this.dateTimeBrokerMock.Object);
         }
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
