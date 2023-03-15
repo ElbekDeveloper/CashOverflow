@@ -37,9 +37,9 @@ namespace CashOverflow.Services.Foundations.Languages
 
                 throw CreateAndLogCriticalDependencyException(FailedLanguageStorageException);
             }
-            catch (DuplicateKeyException dublicateKeyException)
+            catch (DuplicateKeyException duplicateKeyException)
             {
-                var alreadyExistsLanguageException = new AlreadyExistsLanguageException(dublicateKeyException);
+                var alreadyExistsLanguageException = new AlreadyExistsLanguageException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLanguageException);
             }
