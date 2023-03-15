@@ -60,7 +60,40 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         [Fact]
         public async Task ShouldThrowServiceExceptionOnRetrieveByIdAsyncIfServiceErrorOccursAndLogItAsync()
         {
+            //given
+            Guid someId = Guid.NewGuid();
+            var serviceException = new Exception();
 
+            var failedLocationException =
+                new FailedLocationServiceException(serviceException);
+
+            var excpectedLocationServiceException =
+                new LocationServiceException(failedLocationException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>())).ThrowsAsync(serviceException);
+
+            //when
+            ValueTask<Location> retrieveLocationById =
+                this.locationService.RetrieveLocationByIdAsync(someId);
+
+            LocationServiceException actuallLocationServiceException =
+                await Assert.ThrowsAsync<LocationServiceException>(
+                    retrieveLocationById.AsTask);
+
+            //then
+            actuallLocationServiceException.Should().BeEquivalentTo(excpectedLocationServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    excpectedLocationServiceException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
