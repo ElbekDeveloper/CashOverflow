@@ -11,7 +11,7 @@ namespace CashOverflow.Models.Salaries.Exceptions
     public class FailedSalaryStorageException : Xeption
     {
         public FailedSalaryStorageException(Exception innerException)
-            : base(message: "Failed salary storage exception occurred, contact support.", innerException) 
+            : base(message: "Failed salary storage exception occurred, contact support.", innerException)
         { }
     }
 }
