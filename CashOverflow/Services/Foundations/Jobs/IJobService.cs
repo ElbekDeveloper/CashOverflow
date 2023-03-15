@@ -9,9 +9,9 @@ using CashOverflow.Models.Jobs;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
-    public partial interface IJobService
+    public interface IJobService
     {
         ValueTask<Job> RetrieveJobByIdAsync(Guid jobId);
-        ValueTask<Job> RemoveJobByIdAsync(Guid JobId);
+        ValueTask<Job> RemoveJobByIdAsync(Guid jobId);
     }
 }

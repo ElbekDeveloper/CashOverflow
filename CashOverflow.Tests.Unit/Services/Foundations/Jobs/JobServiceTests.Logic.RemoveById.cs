@@ -19,7 +19,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         public async Task ShouldRemoveJobByIdAsync()
         {
             // given
-            var randomId = Guid.NewGuid();
+            Guid randomId = Guid.NewGuid();
             Guid inputJobId = randomId;
             Job randomJob = CreateRandomJob();
             Job storageJob = randomJob;
@@ -28,8 +28,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             Job expectedJob = deletedJob.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-              broker.SelectJobByIdAsync(inputJobId))
-                  .ReturnsAsync(storageJob);
+                broker.SelectJobByIdAsync(inputJobId))
+                    .ReturnsAsync(storageJob);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.DeleteJobAsync(expectedInputJob))
@@ -38,8 +38,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             // when
             Job actualJob = await this.jobService
                 .RemoveJobByIdAsync(inputJobId);
-            
-            //then
+
+            // then
             actualJob.Should().BeEquivalentTo(expectedJob);
 
             this.storageBrokerMock.Verify(broker =>
