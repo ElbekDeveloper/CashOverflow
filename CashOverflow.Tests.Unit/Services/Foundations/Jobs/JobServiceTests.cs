@@ -21,7 +21,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
     public partial class JobServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
-        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBroker;
         private readonly IJobService jobService;

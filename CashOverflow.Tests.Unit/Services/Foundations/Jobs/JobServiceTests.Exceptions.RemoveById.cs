@@ -63,7 +63,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         }
 
         [Fact]
-        private async Task ShouldThrowDependencyExceptionOnDeleteWhenSqlExceptionOccursAndLogItAsync()
+        public async Task ShouldThrowDependencyExceptionOnDeleteWhenSqlExceptionOccursAndLogItAsync()
         {
             // given
             Guid someJobId = Guid.NewGuid();
