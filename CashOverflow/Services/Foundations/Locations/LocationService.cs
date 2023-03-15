@@ -6,6 +6,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
@@ -16,12 +17,17 @@ namespace CashOverflow.Services.Foundations.Locations
     public partial class LocationService : ILocationService
     {
         private readonly IStorageBroker storageBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
 
-        public LocationService(IStorageBroker storageBroker, ILoggingBroker loggingBroker)
+        public LocationService(
+            IStorageBroker storageBroker,
+            IDateTimeBroker dateTimeBroker,
+            ILoggingBroker loggingBroker)
         {
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
+            this.dateTimeBroker = dateTimeBroker;
         }
 
         public  ValueTask<Location> AddLocationAsync(Location location) =>
