@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 {
-    public class LanguageServiceTests
+    public partial class LanguageServiceTests
     {
     }
 }
