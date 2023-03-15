@@ -53,12 +53,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
-                    expectedLocationDependencyValidationException))),
-                        Times.Once);
+                    expectedLocationDependencyValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.DeleteLocationAsync(It.IsAny<Location>()),
-                    Times.Never);
+                broker.DeleteLocationAsync(It.IsAny<Location>()), Times.Never);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
