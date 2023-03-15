@@ -3,9 +3,11 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Xeptions;
 
@@ -35,6 +37,21 @@ namespace CashOverflow.Services.Foundations.Languages
 
                 throw CreateAndLogCriticalDependencyException(FailedLanguageStorageException);
             }
+            catch(DuplicateKeyException dublicateKeyException)
+            {
+                var alreadyExistsLanguageException  = new AlreadyExistsLanguageException(dublicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLanguageException);
+            }
+        }
+
+        private LanguageDependencyValidationException  CreateAndLogDependencyValidationException(Xeption exception )
+        {
+            var languageDependencyValidationException = new LanguageDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(languageDependencyValidationException);
+
+            return languageDependencyValidationException;
         }
 
         private LanguageValidationException CreateAndLogValidationException(Xeption exception)
