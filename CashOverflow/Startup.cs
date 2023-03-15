@@ -68,9 +68,8 @@ namespace CashOverflow
         private static void AddFoundationServices(IServiceCollection services)
         {
             services.AddTransient<ILanguageService, LanguageService>();
-            services.AddTransient<IJobService, JobService>();
             services.AddTransient<ILocationService, LocationService>();
-            services.AddTransient<ILanguageService,LanguageService>();
+            services.AddTransient<IJobService, JobService>();
         }
     }
 }
