@@ -14,6 +14,14 @@ namespace CashOverflow.Services.Foundations.Locations
         public void ValidateLocationById(Guid locationId) =>
              Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
 
+        public void ValidateStorageLocation(Location maybeLocation, Guid loactionId)
+        {
+            if (maybeLocation is null)
+            {
+                throw new NotFoundLocationException(loactionId);
+            }
+        }
+
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,

@@ -33,6 +33,7 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 ValidateLocationById(locationId);
                 Location someLocation = await this.storageBroker.SelectLocationByIdAsync(locationId);
+                ValidateStorageLocation(someLocation,locationId);
 
                 return await this.storageBroker.DeleteLocationAsync(someLocation);
             });
