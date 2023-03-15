@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Locations
@@ -28,6 +29,23 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 throw CreateAndLogValidationException(notFoundLocationException);
             }
+            catch (DbUpdateConcurrencyException databaseUpdateConcurrencyException)
+            {
+                var lockedLocationException =
+                    new LockedLocationException(databaseUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedLocationException);
+            }
+        }
+
+        private LocationDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var locationDependencyValidationException =
+                new LocationDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(locationDependencyValidationException);
+
+            return locationDependencyValidationException;
         }
 
         private LocationValidationException CreateAndLogValidationException(Xeption exception)
