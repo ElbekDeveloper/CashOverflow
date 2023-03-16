@@ -39,8 +39,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 		private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
 			actualException => actualException.SameExceptionAs(expectedException);
 
-		private DateTimeOffset GetRandomDatetimeOffset() =>
+        private int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
+
+        private DateTimeOffset GetRandomDatetimeOffset() =>
 			new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+		private Job CreateRandomJob(DateTimeOffset dates) =>
+			CreateJobFiller(dates).Create();
 
 		private Job CreateRandomJob() =>
 			CreateJobFiller(dates: GetRandomDatetimeOffset()).Create();

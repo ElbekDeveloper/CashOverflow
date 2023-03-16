@@ -23,8 +23,14 @@ namespace CashOverflow.Services.Foundations.Jobs
                 (Rule: IsInvalid(job.Title), Parameter: nameof(Job.Title)),
                 (Rule: IsInvalid(job.Level), Parameter: nameof(Job.Level)),
                 (Rule: IsInvalid(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
-                (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate))
-                );
+                (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)),
+
+                (Rule:IsInvalid(
+                   firstDate:job.CreatedDate,
+                   secondDate: job.UpdatedDate,
+                   secondDateName:nameof(job.UpdatedDate)),
+
+                 Parameter: nameof(Job.CreatedDate)));
         }
 
         private static void ValidateJobNotNull(Job job)
@@ -47,7 +53,16 @@ namespace CashOverflow.Services.Foundations.Jobs
             Message = "Title is required"
         };
 
-        private static dynamic IsInvalid(Level level) => new
+        private static dynamic IsInvalid(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+        {
+            Condition = firstDate!=secondDate,
+            Message = $"Date is not the same as {secondDateName}"
+        };
+
+    private static dynamic IsInvalid(Level level) => new
         {
             Condition = level==default,
             Message = "Level is required"
