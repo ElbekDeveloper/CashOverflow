@@ -46,7 +46,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                     .BeEquivalentTo(excpectedLocationDependencyException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLocationByIdAsync(It.IsAny<Guid>()));
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
