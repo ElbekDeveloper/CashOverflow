@@ -12,9 +12,9 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
-	public partial class JobService
-	{
-        private static void ValidateJobOnAdd(Job job )
+    public partial class JobService
+    {
+        private void ValidateJobOnAdd(Job job)
         {
             ValidateJobNotNull(job);
 
@@ -24,11 +24,12 @@ namespace CashOverflow.Services.Foundations.Jobs
                 (Rule: IsInvalid(job.Level), Parameter: nameof(Job.Level)),
                 (Rule: IsInvalid(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
                 (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)),
+                (Rule: IsNotRecent(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
 
-                (Rule:IsInvalid(
-                   firstDate:job.CreatedDate,
+                (Rule: IsInvalid(
+                   firstDate: job.CreatedDate,
                    secondDate: job.UpdatedDate,
-                   secondDateName:nameof(job.UpdatedDate)),
+                   secondDateName: nameof(job.UpdatedDate)),
 
                  Parameter: nameof(Job.CreatedDate)));
         }
@@ -57,14 +58,14 @@ namespace CashOverflow.Services.Foundations.Jobs
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
             string secondDateName) => new
-        {
-            Condition = firstDate!=secondDate,
-            Message = $"Date is not the same as {secondDateName}"
-        };
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as {secondDateName}"
+            };
 
-    private static dynamic IsInvalid(Level level) => new
+        private static dynamic IsInvalid(Level level) => new
         {
-            Condition = level==default,
+            Condition = level == default,
             Message = "Level is required"
         };
 
@@ -74,13 +75,27 @@ namespace CashOverflow.Services.Foundations.Jobs
             Message = "Date is required"
         };
 
-        private static void Validate(params (dynamic Rule,string Parameter)[] validations)
+        private dynamic IsNotRecent(DateTimeOffset date) => new
+        {
+            Condition = IsDateNotRecent(date),
+            Message = "Date is not recent"
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset date)
+        {
+            DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();
+            TimeSpan timeDifference = currentDate.Subtract(date);
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
+
+        private void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidJobException = new InvalidJobException();
 
             foreach ((dynamic rule, string parameter) in validations)
             {
-                if(rule.Condition)
+                if (rule.Condition)
                 {
                     invalidJobException.UpsertDataList(
                         key: parameter,
