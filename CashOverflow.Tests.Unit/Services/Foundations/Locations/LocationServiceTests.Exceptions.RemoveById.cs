@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
@@ -57,6 +58,48 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.storageBrokerMock.Verify(broker =>
                 broker.DeleteLocationAsync(It.IsAny<Location>()), Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnDeleteWhenSqlExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someLocationId = Guid.NewGuid();
+            SqlException sqlException = GetSqlException();
+
+            var failedLocationStorageException =
+                new FailedLocationStorageException(sqlException);
+
+            var expectedLocationDependencyException =
+                new LocationDependencyException(failedLocationStorageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(sqlException);
+            // when
+            ValueTask<Location> deleteLocationTask =
+                this.locationService.RemoveLocationByIdAsync(someLocationId);
+
+            LocationDependencyException actualLocationDependencyException =
+                await Assert.ThrowsAsync<LocationDependencyException>(
+                    deleteLocationTask.AsTask);
+
+            // then
+            actualLocationDependencyException.Should().BeEquivalentTo(
+                expectedLocationDependencyException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogCritical(It.Is(SameExceptionAs(
+                    expectedLocationDependencyException))),
+                        Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

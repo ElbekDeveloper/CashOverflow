@@ -5,11 +5,13 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
 using CashOverflow.Services.Foundations.Locations;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -43,6 +45,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
+
+        private static SqlException GetSqlException() =>
+           (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private static Filler<Location> CreateLocationFiller(DateTimeOffset date)
         {
