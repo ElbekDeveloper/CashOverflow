@@ -3,9 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-
 using System;
-using System.IO.Compression;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
@@ -14,8 +12,7 @@ using Microsoft.Data.SqlClient;
 using Moq;
 using Xunit;
 
-namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
-{
+namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
     public partial class LanguageServiceTests
     {
         [Fact]
