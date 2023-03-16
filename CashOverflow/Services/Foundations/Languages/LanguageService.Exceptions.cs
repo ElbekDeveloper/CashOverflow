@@ -112,28 +112,3 @@ namespace CashOverflow.Services.Foundations.Languages
         }
     }
 }
-/*        private LanguageDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
-        {
-            var languageDependencyException =
-                new LanguageDependencyException(exception);
-
-            this.loggingBroker.LogCritical(languageDependencyException);
-
-            return languageDependencyException;
-        }
-
-        private LanguageServiceException CreateAndLogServiceException(Xeption exception)
-        {
-            var languageServiceException = new LanguageServiceException(exception);
-            this.loggingBroker.LogError(languageServiceException);
-
-            return languageServiceException;
-        }
-
-        private LanguageValidationException CreateAndLogValidationException(Xeption excaption)
-        {
-            var languageValidationExcaption = new LanguageValidationException(excaption);
-            this.loggingBroker.LogError(languageValidationExcaption);
-
-            return languageValidationExcaption;
-        }*/
