@@ -65,7 +65,6 @@ namespace CashOverflow
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         }
 
-
         private static void AddFoundationServices(IServiceCollection services)
         {
             services.AddTransient<ILanguageService, LanguageService>();
