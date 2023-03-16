@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Salaries
@@ -28,6 +29,12 @@ namespace CashOverflow.Services.Foundations.Salaries
             {
                 throw CreateAndLogValidationException(invalidSalaryException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedSalaryStorageException = new FailedSalaryStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedSalaryStorageException);
+            }
         }
 
         private SalaryValidationException CreateAndLogValidationException(Xeption exception)
@@ -36,6 +43,14 @@ namespace CashOverflow.Services.Foundations.Salaries
             this.loggingBroker.LogError(salaryValidationException);
 
             return salaryValidationException;
+        }
+
+        private SalaryDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var salaryDependencyException = new SalaryDependencyException(exception);
+            this.loggingBroker.LogCritical(salaryDependencyException);
+
+            return salaryDependencyException;
         }
     }
 }

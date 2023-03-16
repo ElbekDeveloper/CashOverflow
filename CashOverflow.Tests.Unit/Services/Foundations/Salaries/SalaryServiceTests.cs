@@ -68,8 +68,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         private DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private Salary CreateRandomSalary(DateTimeOffset invalidDateTime) =>
-            CreateSalaryFiller(dates: GetRandomDateTimeOffset()).Create();
+        private Salary CreateRandomSalary(DateTimeOffset dates) =>
+            CreateSalaryFiller(dates).Create();
 
         private Salary CreateRandomSalary() =>
             CreateSalaryFiller(dates: GetRandomDateTimeOffset()).Create();
