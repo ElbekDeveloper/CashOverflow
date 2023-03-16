@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using FluentAssertions;
@@ -18,10 +19,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         public async Task ShouldAddSalaryAsync()
         {
             // given 
-            Salary randomSalary = CreateRandomSalary();
+            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
+            Salary randomSalary = CreateRandomSalary(randomDateTime);
             Salary inputSalary = randomSalary;
             Salary persistedSalary = inputSalary;
             Salary expectedSalary = persistedSalary.DeepClone();
+
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Returns(randomDateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertSalaryAsync(inputSalary)).ReturnsAsync(persistedSalary);
@@ -31,6 +36,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
             // then
             actualSalary.Should().BeEquivalentTo(expectedSalary);
+
+            this.dateTimeBrokerMock.Verify(broker => 
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertSalaryAsync(inputSalary), Times.Once);
