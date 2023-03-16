@@ -21,7 +21,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         {
             //given
             Guid someId = Guid.NewGuid();
-            SqlException sqlException = GetSqlException();
+            SqlException sqlException = CreateSqlException();
 
             var failedLanguageStorageException =
                 new FailedLanguageStorageException(sqlException);
