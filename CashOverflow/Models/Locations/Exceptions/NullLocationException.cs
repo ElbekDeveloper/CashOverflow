@@ -7,10 +7,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-    public class LocationDependencyException : Xeption
+    public class NullLocationException : Xeption
     {
-        public LocationDependencyException(Xeption innerException)
-            : base(message: "Location dependency exception occurred, contact support.", innerException)
+        public NullLocationException()
+            : base(message: "Location is null.")
         { }
     }
 }
