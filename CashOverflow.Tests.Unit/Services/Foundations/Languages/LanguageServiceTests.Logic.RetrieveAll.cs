@@ -20,7 +20,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             // given
             IQueryable<Language> randomLanguages = CreateRandomLanguages();
             IQueryable<Language> storageLanguages = randomLanguages;
-            IQueryable<Language> expectedLanguges = storageLanguages.DeepClone();
+            IQueryable<Language> expectedLanguages = storageLanguages.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectAllLanguages())
@@ -31,7 +31,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 this.languageService.RetrieveAllLanguages();
 
             // then
-            actualLanguages.Should().BeEquivalentTo(expectedLanguges);
+            actualLanguages.Should().BeEquivalentTo(expectedLanguages);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectAllLanguages(),
