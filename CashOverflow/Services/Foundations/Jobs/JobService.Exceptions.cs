@@ -26,17 +26,17 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 throw CreateAndLogValidationException(inalidJobException);
             }
-            catch(NotFoundJobException notFoundJobException)
+            catch (NotFoundJobException notFoundJobException)
             {
                 throw CreateAndLogValidationException(notFoundJobException);
             }
-            catch(SqlException sqlException)
+            catch (SqlException sqlException)
             {
                 var failedJobStorageException = new FailedJobStorageException(sqlException);
 
                 throw CreateAndLogDependencyException(failedJobStorageException);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 var failedJobServiceException = new FailedJobServiceException(exception);
 
@@ -59,7 +59,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return jobDependencyException;
         }
-        
+
         private JobServiceException CreateAndLogServiceException(Xeption innerException)
         {
             var jobServiceException = new JobServiceException(innerException);
@@ -70,4 +70,3 @@ namespace CashOverflow.Services.Foundations.Jobs
     }
 }
 
-    

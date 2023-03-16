@@ -42,7 +42,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
-            
+
         private static SqlException CreateSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
