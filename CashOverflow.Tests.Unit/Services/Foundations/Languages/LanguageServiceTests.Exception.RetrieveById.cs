@@ -64,28 +64,28 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             var failedLanguageServiceException =
                 new FailedLanguageServiceException(serviceException);
 
-            var expectedTicketServiceExcpetion =
+            var expectedLanguageServiceExcpetion =
                 new LanguageServiceException(failedLanguageServiceException);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLanguageByIdAsync(It.IsAny<Guid>())).ThrowsAsync(serviceException);
 
             //when
-            ValueTask<Language> retrieveTicketById =
+            ValueTask<Language> retrieveLanguageById =
                 this.languageService.RetrieveLanguageByIdAsync(someId);
 
-            LanguageServiceException actualTeamServiceException =
-                await Assert.ThrowsAsync<LanguageServiceException>(retrieveTicketById.AsTask);
+            LanguageServiceException actualLanguageServiceException =
+                await Assert.ThrowsAsync<LanguageServiceException>(retrieveLanguageById.AsTask);
 
             // then
-            actualTeamServiceException.Should().BeEquivalentTo(expectedTicketServiceExcpetion);
+            actualLanguageServiceException.Should().BeEquivalentTo(expectedLanguageServiceExcpetion);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLanguageByIdAsync(It.IsAny<Guid>()), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                broker.LogError(It.Is(SameExceptionAs(
-                   expectedTicketServiceExcpetion))), Times.Once);
+                   expectedLanguageServiceExcpetion))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

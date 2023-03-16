@@ -16,7 +16,7 @@ namespace CashOverflow.Services.Foundations.Languages
     public partial class LanguageService
     {
         private delegate IQueryable<Language> ReturningLanguagesFunction();
-
+        private delegate ValueTask<Language> ReturningLanguageFunction();
         private IQueryable<Language> TryCatch(ReturningLanguagesFunction returningLanguagesFunction)
         {
             try
@@ -38,26 +38,6 @@ namespace CashOverflow.Services.Foundations.Languages
                 throw CreateAndLogServiceException(failedLanguageServiceException);
             }
         }
-
-        private LanguageDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
-        {
-            var languageDependencyException =
-                new LanguageDependencyException(exception);
-
-            this.loggingBroker.LogCritical(languageDependencyException);
-
-            return languageDependencyException;
-        }
-
-        private LanguageServiceException CreateAndLogServiceException(Xeption exception)
-        {
-            var languageServiceException = new LanguageServiceException(exception);
-            this.loggingBroker.LogError(languageServiceException);
-
-            return languageServiceException;
-        }
-
-        private delegate ValueTask<Language> ReturningLanguageFunction();
 
         private async ValueTask<Language> TryCatch(ReturningLanguageFunction returningLanguageFunction)
         {
@@ -85,6 +65,24 @@ namespace CashOverflow.Services.Foundations.Languages
 
                 throw CreateAndLogServiceException(failedServiceProfileException);
             }
+        }
+
+        private LanguageDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var languageDependencyException =
+                new LanguageDependencyException(exception);
+
+            this.loggingBroker.LogCritical(languageDependencyException);
+
+            return languageDependencyException;
+        }
+
+        private LanguageServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var languageServiceException = new LanguageServiceException(exception);
+            this.loggingBroker.LogError(languageServiceException);
+
+            return languageServiceException;
         }
 
         private LanguageValidationException CreateAndLogValidationException(Xeption excaption)

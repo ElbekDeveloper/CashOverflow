@@ -17,16 +17,7 @@ namespace CashOverflow.Services.Foundations.Languages
             Message = "Id is required"
         };
 
-        private static dynamic IsInvalid(DateTimeOffset date) => new
-        {
-            Condition = date == default,
-            Message = "Value is required"
-        };
-
-        private void ValidateLanguageId(Guid languageId) =>
-           Validate((Rule: IsInvalid(languageId), Parameter: nameof(Language.Id)));
-
-        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
+         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidLanguageException = new InvalidLanguageException();
 
@@ -50,5 +41,8 @@ namespace CashOverflow.Services.Foundations.Languages
                 throw new NotFoundLanguageException(languageId);
             }
         }
+
+        private void ValidateLanguageId(Guid languageId) =>
+             Validate((Rule: IsInvalid(languageId), Parameter: nameof(Language.Id)));
     }
 }

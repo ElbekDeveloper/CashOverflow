@@ -48,7 +48,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
-
         }
 
         [Fact]
