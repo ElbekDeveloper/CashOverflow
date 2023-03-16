@@ -81,6 +81,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         private Location CreateRandomLocation(DateTimeOffset dates) =>
             CreateLocationFiller(dates).Create();
+
         private static SqlException GetSqlException() =>
            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 

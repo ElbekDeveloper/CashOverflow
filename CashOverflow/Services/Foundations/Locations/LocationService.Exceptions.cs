@@ -4,8 +4,9 @@
 // --------------------------------------------------------
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
+using System.Linq;
+using CashOverflow.Models.Languages.Exceptions;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using EFxceptions.Models.Exceptions;
@@ -52,7 +53,6 @@ namespace CashOverflow.Services.Foundations.Locations
                 throw CreateAndLogServiceException(failedLocationServiceException);
             }
         }
-
         private IQueryable<Location> TryCatch(ReturningLocationsFunction returningLocationsFunction)
         {
             try
@@ -74,7 +74,6 @@ namespace CashOverflow.Services.Foundations.Locations
                 throw CreateAndLogServiceException(failedLocationServiceException);
             }
         }
-
 
         private LocationValidationException CreateAndLogValidationException(Xeption exception)
         {
