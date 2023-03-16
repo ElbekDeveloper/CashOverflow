@@ -18,7 +18,7 @@ namespace CashOverflow.Services.Foundations.Languages
         private delegate ValueTask<Language> ReturningLanguageFunction();
         private delegate IQueryable<Language> ReturningLanguagesFunction();
 
-        private async ValueTask<Language> TryChatch(ReturningLanguageFunction returningLanguageFunction)
+        private async ValueTask<Language> TryCatch(ReturningLanguageFunction returningLanguageFunction)
         {
             try
             {

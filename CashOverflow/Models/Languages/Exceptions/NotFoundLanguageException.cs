@@ -3,14 +3,15 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Languages
+namespace CashOverflow.Models.Languages.Exceptions
 {
-    public class NullLanguageException : Xeption
+    public class NotFoundLanguageException : Xeption
     {
-        public NullLanguageException()
-            : base(message: "Language is null")
+        public NotFoundLanguageException(Guid languageId)
+            : base(message: $"Couldn't find language with id:{languageId}")
         { }
     }
 }

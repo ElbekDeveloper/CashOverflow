@@ -38,7 +38,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 broker.LogError(It.Is(SameExceptionAs(excpectedLanguageValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.UpdateLanguageAsync(It.IsAny<Language>()), Times.Once);
+                broker.UpdateLanguageAsync(It.IsAny<Language>()), Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
