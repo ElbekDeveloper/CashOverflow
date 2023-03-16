@@ -17,7 +17,6 @@ namespace CashOverflow.Services.Foundations.Locations
         private readonly IStorageBroker storageBroker;
         private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
-        private readonly IDateTimeBroker dateTimeBroker;
 
         public LocationService(
             IStorageBroker storageBroker,
@@ -25,7 +24,6 @@ namespace CashOverflow.Services.Foundations.Locations
             IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
-            this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
         }
@@ -37,6 +35,7 @@ namespace CashOverflow.Services.Foundations.Locations
 
             return await this.storageBroker.InsertLocationAsync(location);
         });
+
         public IQueryable<Location> RetrieveAllLocations() =>
             TryCatch(() => this.storageBroker.SelectAllLocations());
     }

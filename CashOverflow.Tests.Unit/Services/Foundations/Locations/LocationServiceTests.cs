@@ -55,7 +55,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         private IQueryable<Location> CreateRandomLocations()
         {
-            return CreateLocationFiller(GetRandomDateTimeOffset())
+            return CreateLocationFiller(GetRandomDatetimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
         }
 
@@ -86,8 +86,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         private Location CreateRandomLocation() =>
             CreateLocationFiller(dates: GetRandomDatetimeOffset()).Create();
-        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
-           actualException => actualException.SameExceptionAs(expectedException);
 
         private Filler<Location> CreateLocationFiller(DateTimeOffset dates)
         {

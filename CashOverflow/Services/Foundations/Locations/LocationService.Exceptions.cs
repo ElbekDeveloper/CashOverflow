@@ -4,9 +4,8 @@
 // --------------------------------------------------------
 
 using System;
-using System.Threading.Tasks;
 using System.Linq;
-using CashOverflow.Models.Languages.Exceptions;
+using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using EFxceptions.Models.Exceptions;
@@ -52,29 +51,30 @@ namespace CashOverflow.Services.Foundations.Locations
 
                 throw CreateAndLogServiceException(failedLocationServiceException);
             }
+        }
 
-            private IQueryable<Location> TryCatch(ReturningLocationsFunction returningLocationsFunction)
+        private IQueryable<Location> TryCatch(ReturningLocationsFunction returningLocationsFunction)
+        {
+            try
             {
-                try
-                {
-                    return returningLocationsFunction();
-                }
-                catch (SqlException sqlException)
-                {
-                    var failedLocationServiceException =
-                        new FailedLocationStorageException(sqlException);
+                return returningLocationsFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedLocationServiceException =
+                    new FailedLocationStorageException(sqlException);
 
-                    throw CreateAndLogCriticalDependencyException(failedLocationServiceException);
-                }
-                catch (Exception exception)
-                {
-                    var failedLocationServiceException =
-                        new FailedLocationServiceException(exception);
+                throw CreateAndLogCriticalDependencyException(failedLocationServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedLocationServiceException =
+                    new FailedLocationServiceException(exception);
 
-                    throw CreateAndLogServiceException(failedLocationServiceException);
-                }
+                throw CreateAndLogServiceException(failedLocationServiceException);
             }
         }
+
 
         private LocationValidationException CreateAndLogValidationException(Xeption exception)
         {
