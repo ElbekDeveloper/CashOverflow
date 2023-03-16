@@ -105,5 +105,48 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveIfExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someLocationId = Guid.NewGuid();
+            var serviceException = new Exception();
+
+            var failedLocationServiceException =
+                new FailedLocationServiceException(serviceException);
+
+            var expectedLocationServiceException =
+                new LocationServiceException(failedLocationServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<Location> removeLocationByIdTask =
+                this.locationService.RemoveLocationByIdAsync(someLocationId);
+
+            LocationServiceException actualLocationServiceException =
+                await Assert.ThrowsAsync<LocationServiceException>(
+                    removeLocationByIdTask.AsTask);
+
+            // then
+            actualLocationServiceException.Should().BeEquivalentTo(
+                expectedLocationServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()),
+                        Times.Once());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLocationServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
