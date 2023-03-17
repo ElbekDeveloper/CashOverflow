@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
@@ -42,6 +43,20 @@ namespace CashOverflow.Services.Foundations.Salaries
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsSalaryException);
             }
+            catch(Exception exception)
+            {
+                FailedSalaryServiceException faildedSalaction = new FailedSalaryServiceException(exception);    
+
+                throw CreateAndLogServiceException(faildedSalaction);
+            }
+        }
+
+        private SalaryServiceException CreateAndLogServiceException(Xeption exception)
+        {
+               var salaryServiceException = new SalaryServiceException(exception);
+            this.loggingBroker.LogError(salaryServiceException);
+
+            return salaryServiceException;
         }
 
         private SalaryValidationException CreateAndLogValidationException(Xeption exception)
