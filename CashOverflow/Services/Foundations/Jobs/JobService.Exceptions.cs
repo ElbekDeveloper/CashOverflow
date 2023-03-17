@@ -31,7 +31,7 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 throw CreateAndLogValidationException(notFoundJobException);
             }
-            catch(SqlException sqlException)
+            catch (SqlException sqlException)
             {
                 var failedJobStorageException = new FailedJobStorageException(sqlException);
 
@@ -85,4 +85,3 @@ namespace CashOverflow.Services.Foundations.Jobs
     }
 }
 
-    
