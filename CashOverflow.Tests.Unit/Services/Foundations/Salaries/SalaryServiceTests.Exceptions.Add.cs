@@ -65,8 +65,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
             // when
             ValueTask<Salary> addSalaryTask = this.salaryService.AddSalaryAsync(someSalary);
-            SalaryDependencyException actualSalaryDependencyValidationException =
-                await Assert.ThrowsAsync<SalaryDependencyException>(addSalaryTask.AsTask);
+            SalaryDependencyValidationException actualSalaryDependencyValidationException =
+                await Assert.ThrowsAsync<SalaryDependencyValidationException>(addSalaryTask.AsTask);
 
             // then 
             actualSalaryDependencyValidationException.Should()
