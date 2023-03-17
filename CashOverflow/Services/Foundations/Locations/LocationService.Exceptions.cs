@@ -44,12 +44,6 @@ namespace CashOverflow.Services.Foundations.Locations
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLocationException);
             }
-            catch (Exception exception)
-            {
-                var failedLocationServiceException = new FailedLocationServiceException(exception);
-
-                throw CreateAndLogServiceException(failedLocationServiceException);
-            }
             catch (DbUpdateConcurrencyException databaseUpdateConcurrencyException)
             {
                 var lockedLocationException =
@@ -61,16 +55,12 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 throw CreateAndLogValidationException(notFoundLocationException);
             }
-        }
+            catch (Exception exception)
+            {
+                var failedLocationServiceException = new FailedLocationServiceException(exception);
 
-        private LocationDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
-        {
-            var locationDependencyValidationException =
-                new LocationDependencyValidationException(exception);
-
-            this.loggingBroker.LogError(locationDependencyValidationException);
-
-            return locationDependencyValidationException;
+                throw CreateAndLogServiceException(failedLocationServiceException);
+            }
         }
 
         private LocationValidationException CreateAndLogValidationException(Xeption exception)
@@ -91,7 +81,9 @@ namespace CashOverflow.Services.Foundations.Locations
 
         private LocationDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {
-            var locationDependencyValidationException = new LocationDependencyValidationException(exception);
+            var locationDependencyValidationException =
+                new LocationDependencyValidationException(exception);
+
             this.loggingBroker.LogError(locationDependencyValidationException);
 
             return locationDependencyValidationException;

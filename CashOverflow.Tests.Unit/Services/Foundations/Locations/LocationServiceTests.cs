@@ -24,7 +24,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly ILocationService locationService;
 
         public LocationServiceTests()
@@ -43,8 +42,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         {
             int minutesInFuture = GetRandomNumber();
             int minutesInPast = GetRandomNegativeNumber();
-        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
-           actualException => actualException.SameExceptionAs(expectedException);
 
             return new TheoryData<int>
             {
@@ -52,13 +49,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 minutesInPast
             };
         }
-        private static Location CreateRandomLocation() =>
-            CreateLocationFiller(date: GetRandomDateTimeOffset()).Create();
 
         private string GetRandomString() =>
             new MnemonicString().GetValue();
-        private static DateTimeOffset GetRandomDateTimeOffset() =>
-            new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
         private SqlException CreateSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
@@ -72,14 +65,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
-        private DateTimeOffset GetRandomDatetimeOffset() =>
-            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+        private Location CreateRandomLocation() =>
+            CreateLocationFiller(dates: GetRandomDateTimeOffset()).Create();
+
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
+            new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
         private Location CreateRandomLocation(DateTimeOffset dates) =>
             CreateLocationFiller(dates).Create();
-
-        private Location CreateRandomLocation() =>
-            CreateLocationFiller(dates: GetRandomDatetimeOffset()).Create();
 
         private Filler<Location> CreateLocationFiller(DateTimeOffset dates)
         {

@@ -69,7 +69,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         {
             // given
             Guid someLocationId = Guid.NewGuid();
-            SqlException sqlException = GetSqlException();
+            SqlException sqlException = CreateSqlException();
 
             var failedLocationStorageException =
                 new FailedLocationStorageException(sqlException);

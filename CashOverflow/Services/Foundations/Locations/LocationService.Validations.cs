@@ -13,9 +13,7 @@ namespace CashOverflow.Services.Foundations.Locations
     {
         private void ValidateLocationOnAdd(Location location)
         {
-            ValidateLocationNotNull(location);
-        public void ValidateLocationById(Guid locationId) =>
-             Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
+            ValidateLocationNotNull(location);      
 
             Validate(
                 (Rule: IsInvalid(location.Id), Parameter: nameof(Location.Id)),
@@ -33,15 +31,23 @@ namespace CashOverflow.Services.Foundations.Locations
         }
 
         private static void ValidateLocationNotNull(Location location)
-        public void ValidateStorageLocation(Location maybeLocation, Guid loactionId)
         {
             if (location is null)
-            if (maybeLocation is null)
             {
                 throw new NullLocationException();
-                throw new NotFoundLocationException(loactionId);
             }
         }
+
+        public void ValidateStorageLocation(Location maybeLocation, Guid locationId)
+        {
+            if (maybeLocation is null)
+            {
+                throw new NotFoundLocationException(locationId);
+            }
+        }
+
+        public void ValidateLocationById(Guid locationId) =>
+           Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
 
         private static dynamic IsInvalid(Guid id) => new
         {
