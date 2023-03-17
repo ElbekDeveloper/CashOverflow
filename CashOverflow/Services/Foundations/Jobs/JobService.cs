@@ -58,6 +58,6 @@ namespace CashOverflow.Services.Foundations.Jobs
            });
 
         public IQueryable<Job> RetrieveAllJobs() =>
-            throw new NotImplementedException();
+            TryCatch(() => this.storageBroker.SelectAllJobs());
     }
 }
