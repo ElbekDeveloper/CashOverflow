@@ -37,9 +37,9 @@ namespace CashOverflow.Services.Foundations.Locations
             }
             catch (SqlException sqlException)
             {
-                var failedLocationStoragException = new FailedLocationStorageException(sqlException);
+                var failedLocationStorageException = new FailedLocationStorageException(sqlException);
 
-                throw CreateAndLogDependencyException(failedLocationStoragException);
+                throw CreateAndLogCriticalDependencyException(failedLocationStorageException);
             }
             catch (DuplicateKeyException duplicateKeyException)
             {

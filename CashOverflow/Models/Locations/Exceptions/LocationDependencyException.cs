@@ -10,8 +10,8 @@ namespace CashOverflow.Models.Locations.Exceptions
 {
     public class LocationDependencyException : Xeption
     {
-        public LocationDependencyException(Exception innerException)
-            : base(message: "Location dependency error occured, contact support.", innerException)
+        public LocationDependencyException(Xeption innerException)
+            : base(message: "Location dependency error occurred, contact support.", innerException)
         { }
     }
 }
