@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
@@ -55,5 +56,8 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                return await this.storageBroker.DeleteJobAsync(maybeJob);
            });
+
+        public IQueryable<Job> RetrieveAllJobs() =>
+            throw new NotImplementedException();
     }
 }
