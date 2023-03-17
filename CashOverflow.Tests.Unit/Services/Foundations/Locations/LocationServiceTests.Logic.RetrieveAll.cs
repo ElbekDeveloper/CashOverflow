@@ -40,6 +40,5 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBroker.VerifyNoOtherCalls();
         }
-
     }
 }

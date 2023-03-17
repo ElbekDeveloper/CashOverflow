@@ -18,7 +18,28 @@ namespace CashOverflow.Services.Foundations.Locations
     public partial class LocationService
     {
         private delegate ValueTask<Location> ReturningLocationFunction();
-        private delegate IQueryable<Location> ReturningLocationsFunction();
+
+        private IQueryable<Location> TryCatch(ReturningLocationsFunction returningLocationsFunction)
+        {
+            try
+            {
+                return returningLocationsFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedLocationServiceException =
+                    new FailedLocationStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedLocationServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedLocationServiceException =
+                    new FailedLocationServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLocationServiceException);
+            }
+        }
 
         private async ValueTask<Location> TryCatch(ReturningLocationFunction returningLocationFunction)
         {
@@ -53,28 +74,7 @@ namespace CashOverflow.Services.Foundations.Locations
                 throw CreateAndLogServiceException(failedLocationServiceException);
             }
         }
-        private IQueryable<Location> TryCatch(ReturningLocationsFunction returningLocationsFunction)
-        {
-            try
-            {
-                return returningLocationsFunction();
-            }
-            catch (SqlException sqlException)
-            {
-                var failedLocationServiceException =
-                    new FailedLocationStorageException(sqlException);
-
-                throw CreateAndLogCriticalDependencyException(failedLocationServiceException);
-            }
-            catch (Exception exception)
-            {
-                var failedLocationServiceException =
-                    new FailedLocationServiceException(exception);
-
-                throw CreateAndLogServiceException(failedLocationServiceException);
-            }
-        }
-
+       
         private LocationValidationException CreateAndLogValidationException(Xeption exception)
         {
             var locationValidationException = new LocationValidationException(exception);

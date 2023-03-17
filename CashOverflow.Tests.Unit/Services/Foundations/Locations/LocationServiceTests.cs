@@ -25,7 +25,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly Mock<IDateTimeBroker> dateTimeBroker;
         private readonly ILocationService locationService;
 
         public LocationServiceTests()
@@ -33,7 +32,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
-            this.dateTimeBroker = new Mock<IDateTimeBroker>();
 
             this.locationService = new LocationService(
                 storageBroker: this.storageBrokerMock.Object,
@@ -70,6 +68,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         private static int GetRandomNegativeNumber() =>
           -1 * new IntRange(min: 2, max: 9).GetValue();
+       
         private static string GetRandomMessage() =>
             new MnemonicString(wordCount: GetRandomNumber()).GetValue();
 
