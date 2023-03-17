@@ -3,13 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-namespace CashOverflow.Models.Languages
+using System;
+using System.Threading.Tasks;
+using CashOverflow.Models.Jobs;
+
+namespace CashOverflow.Services.Foundations.Jobs
 {
-    public enum Type
+    public interface IJobService
     {
-        Other,
-        Frontend,
-        Backend,
-        FullStack
+        ValueTask<Job> RetrieveJobByIdAsync(Guid jobId);
     }
 }

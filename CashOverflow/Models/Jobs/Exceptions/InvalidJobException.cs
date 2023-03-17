@@ -3,13 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-namespace CashOverflow.Models.Languages
+using Xeptions;
+
+namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public enum Type
+    public class InvalidJobException : Xeption
     {
-        Other,
-        Frontend,
-        Backend,
-        FullStack
+        public InvalidJobException()
+            : base(message: "Job is invalid")
+        { }
     }
 }

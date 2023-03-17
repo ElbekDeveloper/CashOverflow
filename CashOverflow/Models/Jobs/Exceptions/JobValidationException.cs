@@ -3,14 +3,15 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Locations.Exceptions
+namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public class InvalidLocationException : Xeption
+    public class JobValidationException : Xeption
     {
-        public InvalidLocationException()
-            : base(message: "Location is invalid.")
+        public JobValidationException(Exception innerException)
+            : base(message: "", innerException)
         { }
     }
 }

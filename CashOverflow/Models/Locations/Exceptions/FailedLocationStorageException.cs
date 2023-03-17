@@ -11,8 +11,7 @@ namespace CashOverflow.Models.Locations.Exceptions
     public class FailedLocationStorageException : Xeption
     {
         public FailedLocationStorageException(Exception innerException)
-            : base(message: "Failed location storage error occured, contact support.", 
-                  innerException)
+            : base(message: "Failed location storage exception occurred, contact support.", innerException)
         { }
     }
 }

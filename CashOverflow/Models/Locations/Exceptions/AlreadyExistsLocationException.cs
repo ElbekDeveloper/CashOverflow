@@ -3,14 +3,15 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-    public class LocationDependencyException : Xeption
+    public class AlreadyExistsLocationException : Xeption
     {
-        public LocationDependencyException(Xeption innerException)
-            : base(message: "Location dependency exception occurred, contact support.", innerException)
+        public AlreadyExistsLocationException(Exception innerException)
+            : base(message: "Location already exists.", innerException)
         { }
     }
 }
