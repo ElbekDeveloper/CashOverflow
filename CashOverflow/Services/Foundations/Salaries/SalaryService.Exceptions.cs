@@ -43,9 +43,9 @@ namespace CashOverflow.Services.Foundations.Salaries
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsSalaryException);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                FailedSalaryServiceException faildedSalaction = new FailedSalaryServiceException(exception);    
+                FailedSalaryServiceException faildedSalaction = new FailedSalaryServiceException(exception);
 
                 throw CreateAndLogServiceException(faildedSalaction);
             }
@@ -53,7 +53,7 @@ namespace CashOverflow.Services.Foundations.Salaries
 
         private SalaryServiceException CreateAndLogServiceException(Xeption exception)
         {
-               var salaryServiceException = new SalaryServiceException(exception);
+            var salaryServiceException = new SalaryServiceException(exception);
             this.loggingBroker.LogError(salaryServiceException);
 
             return salaryServiceException;
