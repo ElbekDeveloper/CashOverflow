@@ -5,7 +5,6 @@
 
 using System;
 using CashOverflow.Models.Jobs.Exceptions;
-using CashOverflow.Models.Languages.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -27,9 +26,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             var expectedJobDependencyException =
                 new JobDependencyException(faildeStorageException);
 
-            this.storageBrokerMock.Setup(broker => 
-                broker.SelectAllJobs()).
-                    Throws(sqlException);
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllJobs()).Throws(sqlException);
 
             //when
             Action retrieveAllJobsAction = () =>
@@ -46,9 +44,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 broker.SelectAllJobs(),
                     Times.Once);
 
-            this.loggingBrokerMock.Verify(broker => 
-                broker.LogCritical(It.Is(SameExceptionAs(expectedJobDependencyException))),
-                    Times.Once);
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogCritical(It.Is(SameExceptionAs(
+                    expectedJobDependencyException))),Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

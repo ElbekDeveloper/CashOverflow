@@ -31,6 +31,9 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.dateTimeBroker = dateTimeBroker;
         }
 
+        public IQueryable<Job> RetrieveAllJobs() =>
+            TryCatch(() => this.storageBroker.SelectAllJobs());
+
         public ValueTask<Job> RetrieveJobByIdAsync(Guid jobId) =>
            TryCatch(async () =>
            {
@@ -56,8 +59,5 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                return await this.storageBroker.DeleteJobAsync(maybeJob);
            });
-
-        public IQueryable<Job> RetrieveAllJobs() =>
-            TryCatch(() => this.storageBroker.SelectAllJobs());
     }
 }
