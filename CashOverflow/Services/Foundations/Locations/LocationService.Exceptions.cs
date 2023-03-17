@@ -25,17 +25,27 @@ namespace CashOverflow.Services.Foundations.Locations
             }
             catch (InvalidLocationException invalidLocationException)
             {
-                throw CreateAndLogValidationsException(invalidLocationException);
+                throw CreateAndLogValidationException(invalidLocationException);
+            }
+            catch (NullLocationException nullLocationException)
+            {
+                throw CreateAndLogValidationException(nullLocationException);
             }
             catch (NotFoundLocationException notFoundLocationException)
             {
-                throw CreateAndLogValidationsException(notFoundLocationException);
+                throw CreateAndLogValidationException(notFoundLocationException);
             }
             catch (SqlException sqlException)
             {
                 var failedLocationStoragException = new FailedLocationStorageException(sqlException);
 
                 throw CreateAndLogDependencyException(failedLocationStoragException);
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsLocationException = new AlreadyExistsLocationException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLocationException);
             }
             catch (Exception exception)
             {
@@ -45,7 +55,7 @@ namespace CashOverflow.Services.Foundations.Locations
             }
         }
 
-        private LocationValidationException CreateAndLogValidationsException(Xeption exception)
+        private LocationValidationException CreateAndLogValidationException(Xeption exception)
         {
             var locationValidationException = new LocationValidationException(exception);
             this.loggingBroker.LogError(locationValidationException);
@@ -56,17 +66,37 @@ namespace CashOverflow.Services.Foundations.Locations
         private LocationDependencyException CreateAndLogDependencyException(Xeption xeption)
         {
             var locationDependencyException = new LocationDependencyException(xeption);
+
             this.loggingBroker.LogCritical(locationDependencyException);
 
             return locationDependencyException;
         }
 
-        private LocationServiceException CreateAndLogServiceException(Xeption innerException)
+        private LocationDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var locationServiceException = new LocationServiceException(innerException);
+            var locationDependencyException = new LocationDependencyException(exception);
+
+            this.loggingBroker.LogCritical(locationDependencyException);
+
+            return locationDependencyException;
+        }
+
+        private LocationDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var locationDependencyValidationException = new LocationDependencyValidationException(exception);
+            this.loggingBroker.LogError(locationDependencyValidationException);
+
+            return locationDependencyValidationException;
+        }
+
+        private LocationServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var locationServiceException = new LocationServiceException(exception);
+
             this.loggingBroker.LogError(locationServiceException);
 
             return locationServiceException;
         }
     }
 }
+

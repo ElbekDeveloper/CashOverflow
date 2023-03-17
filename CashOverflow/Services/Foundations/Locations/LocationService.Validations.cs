@@ -4,6 +4,8 @@
 // --------------------------------------------------------
 
 using System;
+using System.Data;
+using System.Reflection.Metadata;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 
@@ -11,14 +13,41 @@ namespace CashOverflow.Services.Foundations.Locations
 {
     public partial class LocationService
     {
-        private void ValidateLocationId(Guid locationId) =>
+        private void ValidateLocationOnAdd(Location location)
+        {
+            ValidateLocationNotNull(location);
+
+            Validate(
+                (Rule: IsInvalid(location.Id), Parameter: nameof(Location.Id)),
+                (Rule: IsInvalid(location.Name), Parameter: nameof(Location.Name)),
+                (Rule: IsInvalid(location.CreatedDate), Parameter: nameof(Location.CreatedDate)),
+                (Rule: IsInvalid(location.UpdatedDate), Parameter: nameof(Location.UpdatedDate)),
+                (Rule: IsNotRecent(location.CreatedDate), Parameter: nameof(Location.CreatedDate)),
+
+                (Rule: IsInvalid(
+                    firstDate: location.CreatedDate,
+                    secondDate: location.UpdatedDate,
+                    secondDateName: nameof(Location.UpdatedDate)),
+
+                Parameter: nameof(Location.CreatedDate)));
+        }
+
+        private static void ValidateLocationId(Guid locationId) =>
             Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
 
-        private void ValidateStorageLocation(Location maybeLocation, Guid locationId)
+        private static void ValidateStorageLocation(Location maybeLocation, Guid locationId)
         {
             if (maybeLocation is null)
             {
                 throw new NotFoundLocationException(locationId);
+            }
+        }
+
+        private static void ValidateLocationNotNull(Location location)
+        {
+            if (location is null)
+            {
+                throw new NullLocationException();
             }
         }
 
@@ -28,23 +57,53 @@ namespace CashOverflow.Services.Foundations.Locations
             Message = "Id is required"
         };
 
-        private static void Validate((dynamic Rule, string Parameter) value)
+        private static dynamic IsInvalid(string text) => new
         {
-            DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();//10:51:00
-            TimeSpan timeDifference = currentDate.Subtract(date); //-20
+            Condition = String.IsNullOrWhiteSpace(text),
+            Message = "Text is required"
+        };
+
+        private static dynamic IsInvalid(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not same as {secondDateName}"
+            };
+
+        private static dynamic IsInvalid(DateTimeOffset date) => new
+        {
+            Condition = date == default,
+            Message = "Date is required"
+        };
+
+        private dynamic IsNotRecent(DateTimeOffset date) => new
+        {
+            Condition = IsDateNotRecent(date),
+            Message = "Date is not recent"
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset date)
+        {
+            DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();
+            TimeSpan timeDifference = currentDate.Subtract(date);
 
             return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
-        private void Validate(params (dynamic Rule, string Parameter)[] validations)
+        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidLocationException = new InvalidLocationException();
 
-            if (value.Rule.Condition)
+            foreach ((dynamic rule, string parameter) in validations)
+            {
+                if (rule.Condition)
                 {
-                invalidLocationException.AddData(
-                    key: value.Parameter,
-                    values: value.Rule.Message);
+                    invalidLocationException.UpsertDataList(
+                        key: parameter,
+                        value: rule.Message);
+                }
             }
 
             invalidLocationException.ThrowIfContainsErrors();
