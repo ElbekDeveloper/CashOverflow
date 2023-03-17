@@ -5,6 +5,7 @@
 
 using System;
 using CashOverflow.Models.Jobs.Exceptions;
+using CashOverflow.Models.Languages.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -48,6 +49,45 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.Verify(broker => 
                 broker.LogCritical(It.Is(SameExceptionAs(expectedJobDependencyException))),
                     Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public void ShouldThrowServiceExceptionOnRetrieveAllIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            var serviceException = new Exception(exceptionMessage);
+
+            var failedJobServiceException =
+                new FailedJobServiceException(serviceException);
+
+            var expectedJobServiceException =
+                new JobServiceException(failedJobServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllJobs()).Throws(serviceException);
+
+            // when
+            Action retrieveAllJobsAction = () =>
+                this.jobService.RetrieveAllJobs();
+
+            JobServiceException actualJobServiceException =
+                Assert.Throws<JobServiceException>(retrieveAllJobsAction);
+
+            // then
+            actualJobServiceException.Should().BeEquivalentTo(expectedJobServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllJobs(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobServiceException))),
+                        Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
