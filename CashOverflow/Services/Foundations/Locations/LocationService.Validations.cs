@@ -4,8 +4,6 @@
 // --------------------------------------------------------
 
 using System;
-using System.Data;
-using System.Reflection.Metadata;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 
@@ -29,7 +27,7 @@ namespace CashOverflow.Services.Foundations.Locations
                     secondDate: location.UpdatedDate,
                     secondDateName: nameof(Location.UpdatedDate)),
 
-                Parameter: nameof(Location.CreatedDate)));
+                 Parameter: nameof(Location.CreatedDate)));
         }
 
         private static void ValidateLocationId(Guid locationId) =>

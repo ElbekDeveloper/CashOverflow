@@ -63,7 +63,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             actualException => actualException.SameExceptionAs(expectedException);
 
         private static int GetRandomNegativeNumber() =>
-          -1 * new IntRange(min: 2, max: 9).GetValue();
+            -1 * new IntRange(min: 2, max: 9).GetValue();
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
