@@ -58,7 +58,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedExceptoin) =>
             actualException => actualException.SameExceptionAs(expectedExceptoin);
-        
+
         private static int GetRandomNegativeNumber() =>
             -1 * new IntRange(min: 2, max: 9).GetValue();
 
