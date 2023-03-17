@@ -3,15 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
 using Xeptions;
 
 namespace CashOverflow.Models.Languages.Exceptions
 {
-    public class FailedLanguageServiceException : Xeption
+    public class LanguageValidationException : Xeption
     {
-        public FailedLanguageServiceException(Exception innerException)
-            : base(message: "Failed language service exception occurred, contact support.", innerException)
+        public LanguageValidationException(Xeption innerException)
+            : base(message: "Language validation error occurred, fix the errors and try again later", innerException)
         { }
     }
 }

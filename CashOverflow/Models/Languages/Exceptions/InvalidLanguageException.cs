@@ -3,13 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-namespace CashOverflow.Models.Languages
+using Xeptions;
+
+namespace CashOverflow.Models.Languages.Exceptions
 {
-    public enum Type
+    public class InvalidLanguageException : Xeption
     {
-        Other,
-        Frontend,
-        Backend,
-        FullStack
+        public InvalidLanguageException()
+            : base(message: "Language is invalid")
+        { }
     }
 }

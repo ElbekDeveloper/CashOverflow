@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
@@ -22,21 +23,27 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 return await returningJobFunction();
             }
-            catch(InvalidJobException invalidJobException)
+            catch (InvalidJobException invalidJobException)
             {
                 throw CreateAndLogValidationException(invalidJobException);
             }
-            catch(NotFoundJobException notFoundJobException)
+            catch (NotFoundJobException notFoundJobException)
             {
                 throw CreateAndLogValidationException(notFoundJobException);
             }
-            catch(SqlException sqlException)
+            catch (SqlException sqlException)
             {
                 var failedJobStorageException = new FailedJobStorageException(sqlException);
 
                 throw CreateAndLogDependencyException(failedJobStorageException);
             }
-            catch(Exception exception)
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedJobException = new LockedJobException(dbUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedJobException);
+            }
+            catch (Exception exception)
             {
                 var failedJobServiceException = new FailedJobServiceException(exception);
 
@@ -46,10 +53,10 @@ namespace CashOverflow.Services.Foundations.Jobs
 
         private JobValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var jobValidationExpcetion = new JobValidationException(exception);
-            this.loggingBroker.LogError(jobValidationExpcetion);
+            var jobValidationException = new JobValidationException(exception);
+            this.loggingBroker.LogError(jobValidationException);
 
-            return jobValidationExpcetion;
+            return jobValidationException;
         }
 
         private JobDependencyException CreateAndLogDependencyException(Xeption exception)
@@ -59,7 +66,15 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return jobDependencyException;
         }
-        
+
+        private JobDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var jobDependencyValidationException = new JobDependencyValidationException(exception);
+            this.loggingBroker.LogError(jobDependencyValidationException);
+
+            return jobDependencyValidationException;
+        }
+
         private JobServiceException CreateAndLogServiceException(Xeption innerException)
         {
             var jobServiceException = new JobServiceException(innerException);
@@ -70,4 +85,3 @@ namespace CashOverflow.Services.Foundations.Jobs
     }
 }
 
-    
