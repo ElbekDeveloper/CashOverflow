@@ -17,6 +17,7 @@ namespace CashOverflow.Services.Foundations.Locations
 {
     public partial class LocationService
     {
+        private delegate IQueryable<Location> ReturningLocationsFunction();
         private delegate ValueTask<Location> ReturningLocationFunction();
 
         private IQueryable<Location> TryCatch(ReturningLocationsFunction returningLocationsFunction)
