@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
@@ -78,6 +79,39 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Salary someSalary = CreateRandomSalary();
+            var serviceException = new Exception();
+            var failedSalaryServiceException = new FailedSalaryServiceException(serviceException);
+            var salaryServiceException = new SalaryServiceException(failedSalaryServiceException);
+
+            var expectedSalaryServiceException = new SalaryServiceException(failedSalaryServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset()).
+                Throws(serviceException);
+
+            // when
+            ValueTask<Salary> addSalaryTask = this.salaryService.AddSalaryAsync(someSalary);
+
+            SalaryServiceException actualSalaryException = await Assert.ThrowsAsync<SalaryServiceException>(addSalaryTask.AsTask);
+
+            // then
+            actualSalaryException.Should().BeEquivalentTo(expectedSalaryServiceException);
+
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
+                expectedSalaryServiceException))), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+
         }
     }
 }
