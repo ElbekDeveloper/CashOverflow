@@ -84,8 +84,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 this.jobService.RemoveJobByIdAsync(someJobId);
 
             JobDependencyException actualJobDependencyException =
-                    await Assert.ThrowsAsync<JobDependencyException>(
-                        deleteJobTask.AsTask);
+                    await Assert.ThrowsAsync<JobDependencyException>(deleteJobTask.AsTask);
 
             // then
             actualJobDependencyException.Should().BeEquivalentTo(expectedJobDependencyException);

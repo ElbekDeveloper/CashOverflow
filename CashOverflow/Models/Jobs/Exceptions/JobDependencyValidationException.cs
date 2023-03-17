@@ -4,15 +4,13 @@
 // --------------------------------------------------------
 
 using Xeptions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
     public class JobDependencyValidationException : Xeption
     {
         public JobDependencyValidationException(Xeption innerException)
-            : base(message: "Job dependency validation error occurred, fix the errors and try again.", 
+            : base(message: "Job dependency validation error occurred, fix the errors and try again.",
                   innerException)
         { }
     }

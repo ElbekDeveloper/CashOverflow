@@ -23,7 +23,7 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 return await returningJobFunction();
             }
-            catch(InvalidJobException invalidJobException)
+            catch (InvalidJobException invalidJobException)
             {
                 throw CreateAndLogValidationException(invalidJobException);
             }
@@ -37,13 +37,13 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                 throw CreateAndLogDependencyException(failedJobStorageException);
             }
-            catch(DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 var lockedJobException = new LockedJobException(dbUpdateConcurrencyException);
 
                 throw CreateAndLogDependencyValidationException(lockedJobException);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 var failedJobServiceException = new FailedJobServiceException(exception);
 

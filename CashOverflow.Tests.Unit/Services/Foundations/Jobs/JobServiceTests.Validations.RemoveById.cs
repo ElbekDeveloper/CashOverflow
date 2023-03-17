@@ -31,7 +31,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 new JobValidationException(invalidJobException);
 
             // when
-            ValueTask<Job> removeJobByIdTask = 
+            ValueTask<Job> removeJobByIdTask =
                 this.jobService.RemoveJobByIdAsync(invalidJobId);
 
             JobValidationException actualJobValidationException =
