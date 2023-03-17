@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 
-namespace CashOverflow
+namespace CashOverflow.Services.Foundations.Languages
 {
     public interface ILanguageService
     {
