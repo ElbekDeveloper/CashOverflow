@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 using Xeptions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {

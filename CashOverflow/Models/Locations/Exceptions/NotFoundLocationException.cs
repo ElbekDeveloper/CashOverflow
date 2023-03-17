@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 using System;
-using Azure.Messaging;
 using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
