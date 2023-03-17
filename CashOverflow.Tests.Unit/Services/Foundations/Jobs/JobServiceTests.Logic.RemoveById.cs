@@ -19,8 +19,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         public async Task ShouldRemoveJobByIdAsync()
         {
             // given
-            Guid randomId = Guid.NewGuid();
-            Guid inputJobId = randomId;
+            Guid randomJobId = Guid.NewGuid();
+            Guid inputJobId = randomJobId;
             Job randomJob = CreateRandomJob();
             Job storageJob = randomJob;
             Job expectedInputJob = storageJob;
@@ -50,6 +50,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

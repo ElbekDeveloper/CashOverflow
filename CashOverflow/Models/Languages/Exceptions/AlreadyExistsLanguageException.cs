@@ -8,10 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Languages.Exceptions
 {
-    public class FailedLanguageServiceException : Xeption
+    public class AlreadyExistsLanguageException : Xeption
     {
-        public FailedLanguageServiceException(Exception innerException)
-            : base(message: "Failed language service exception occurred, contact support.", innerException)
+        public AlreadyExistsLanguageException(Exception innerException)
+            : base(message: "Already exists exception", innerException)
         { }
     }
 }

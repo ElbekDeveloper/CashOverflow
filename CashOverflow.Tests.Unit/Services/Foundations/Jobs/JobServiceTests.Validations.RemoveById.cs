@@ -16,7 +16,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
     public partial class JobServiceTests
     {
         [Fact]
-        private async Task ShouldThrowValidationExceptionOnRemoveIfIdIsInvalidAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnRemoveIfIdIsInvalidAndLogItAsync()
         {
             // given
             Guid invalidJobId = Guid.Empty;
@@ -31,7 +31,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 new JobValidationException(invalidJobException);
 
             // when
-            ValueTask<Job> removeJobByIdTask = 
+            ValueTask<Job> removeJobByIdTask =
                 this.jobService.RemoveJobByIdAsync(invalidJobId);
 
             JobValidationException actualJobValidationException =
@@ -39,7 +39,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                     removeJobByIdTask.AsTask);
 
             // then
-            actualJobValidationException.Should().BeEquivalentTo(actualJobValidationException);
+            actualJobValidationException.Should().BeEquivalentTo(expectedJobValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
@@ -50,14 +50,15 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
         [Fact]
-        private async Task ShouldThrowNotFoundExceptionOnRemoveIfTeamIsNotFoundAndLogItAsync()
+        public async Task ShouldThrowNotFoundExceptionOnRemoveIfJobIsNotFoundAndLogItAsync()
         {
             // given
-            Guid randomId = Guid.NewGuid();
-            Guid inputJobId = randomId;
+            Guid randomJobId = Guid.NewGuid();
+            Guid inputJobId = randomJobId;
             Job noJob = null;
 
             var notFoundJobException =
@@ -70,18 +71,18 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 broker.SelectJobByIdAsync(inputJobId)).ReturnsAsync(noJob);
 
             // when
-            ValueTask<Job> removeJobByIdAsync =
+            ValueTask<Job> removeJobByIdTask =
                 this.jobService.RemoveJobByIdAsync(inputJobId);
 
             JobValidationException actualJobValidationException =
                 await Assert.ThrowsAsync<JobValidationException>(
-                    removeJobByIdAsync.AsTask);
+                    removeJobByIdTask.AsTask);
 
             // then
             actualJobValidationException.Should().BeEquivalentTo(expectedJobValidationException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectJobByIdAsync(inputJobId), Times.Once);
+                broker.SelectJobByIdAsync(It.IsAny<Guid>()), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
@@ -89,7 +90,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
-
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
