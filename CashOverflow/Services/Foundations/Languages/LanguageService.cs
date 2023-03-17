@@ -51,7 +51,6 @@ namespace CashOverflow.Services.Foundations.Languages
                 ValidateStorageLanguage(maybeLanguage, languageId);
 
                 return maybeLanguage;
-
             });
     }
 }
