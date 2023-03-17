@@ -15,6 +15,7 @@ using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 {
@@ -28,28 +29,53 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         public LocationServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
 
             this.locationService = new LocationService(
                 storageBroker: this.storageBrokerMock.Object,
-                loggingBroker: this.loggingBrokerMock.Object,
-                dateTimeBroker: this.dateTimeBrokerMock.Object);
+                dateTimeBroker: this.dateTimeBrokerMock.Object,
+                loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        public static TheoryData<int> InvalidMinutes()
+        {
+            int minutesInFuture = GetRandomNumber();
+            int minutesInPast = GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                minutesInFuture,
+                minutesInPast
+            };
+        }
+
+        private string GetRandomString() =>
+            new MnemonicString().GetValue();
+
+        private SqlException CreateSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static DateTimeOffset GetRandomDateTime() =>
+        private static int GetRandomNegativeNumber() =>
+          -1 * new IntRange(min: 2, max: 9).GetValue();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
+
+        private DateTimeOffset GetRandomDatetimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static SqlException CreateSqlException() =>
-            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+        private Location CreateRandomLocation(DateTimeOffset dates) =>
+            CreateLocationFiller(dates).Create();
 
-        private static Location CreateRandomLocation() =>
-            CreateLocationFiller(GetRandomDateTime()).Create();
+        private Location CreateRandomLocation() =>
+            CreateLocationFiller(dates: GetRandomDatetimeOffset()).Create();
 
-        private static Filler<Location> CreateLocationFiller(DateTimeOffset dates)
+        private Filler<Location> CreateLocationFiller(DateTimeOffset dates)
         {
             var filler = new Filler<Location>();
 

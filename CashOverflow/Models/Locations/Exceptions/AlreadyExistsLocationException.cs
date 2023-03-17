@@ -8,10 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-    public class FailedLocationStorageException : Xeption
+    public class AlreadyExistsLocationException : Xeption
     {
-        public FailedLocationStorageException(Exception innerException)
-            : base(message: "Failed location storage exception occurred, contact support.", innerException)
+        public AlreadyExistsLocationException(Exception innerException)
+            : base(message: "Location already exists.", innerException)
         { }
     }
 }

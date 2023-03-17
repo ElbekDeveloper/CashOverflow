@@ -30,10 +30,18 @@ namespace CashOverflow.Services.Foundations.Locations
 
         private static void Validate((dynamic Rule, string Parameter) value)
         {
+            DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();//10:51:00
+            TimeSpan timeDifference = currentDate.Subtract(date); //-20
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
+
+        private void Validate(params (dynamic Rule, string Parameter)[] validations)
+        {
             var invalidLocationException = new InvalidLocationException();
 
             if (value.Rule.Condition)
-            {
+                {
                 invalidLocationException.AddData(
                     key: value.Parameter,
                     values: value.Rule.Message);

@@ -3,13 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-namespace CashOverflow.Models.Languages
+using Xeptions;
+
+namespace CashOverflow.Models.Locations.Exceptions
 {
-    public enum Type
+    public class NullLocationException : Xeption
     {
-        Other,
-        Frontend,
-        Backend,
-        FullStack
+        public NullLocationException()
+            : base(message: "Location is null.")
+        { }
     }
 }

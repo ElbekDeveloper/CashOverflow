@@ -17,7 +17,7 @@ namespace CashOverflow.Services.Foundations.Locations
 
         private readonly IStorageBroker storageBroker;
         private readonly IDateTimeBroker dateTimeBroker;
-        private readonly ILoggingBroker loggingBroker;    
+        private readonly ILoggingBroker loggingBroker;
 
         public LocationService(
             IStorageBroker storageBroker,
@@ -26,6 +26,7 @@ namespace CashOverflow.Services.Foundations.Locations
 
         {
             this.storageBroker = storageBroker;
+            this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
         }

@@ -11,6 +11,7 @@ namespace CashOverflow.Services.Foundations.Locations
 {
     public interface ILocationService
     {
+        ValueTask<Location> AddLocationAsync(Location location);
         ValueTask<Location> RetrieveLocationByIdAsync(Guid locationId);
     }
 }
