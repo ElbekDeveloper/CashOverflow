@@ -16,8 +16,8 @@ namespace CashOverflow.Services.Foundations.Jobs
     {
 
         private readonly IStorageBroker storageBroker;
-        private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
 
         public JobService(
             IStorageBroker storageBroker,
@@ -26,21 +26,34 @@ namespace CashOverflow.Services.Foundations.Jobs
 
         {
             this.storageBroker = storageBroker;
-            this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
+            this.dateTimeBroker = dateTimeBroker;
         }
 
         public ValueTask<Job> RetrieveJobByIdAsync(Guid jobId) =>
-            TryCatch(async () =>
-            {
-                ValidateJobId(jobId);
+           TryCatch(async () =>
+           {
+               ValidateJobId(jobId);
 
-                Job maybeJob =
-                    await storageBroker.SelectJobByIdAsync(jobId);
+               Job maybeJob =
+                   await storageBroker.SelectJobByIdAsync(jobId);
 
-                ValidateStorageJobExists(maybeJob, jobId);
+               ValidateStorageJobExists(maybeJob, jobId);
 
-                return maybeJob;
-            });
+               return maybeJob;
+           });
+
+        public ValueTask<Job> RemoveJobByIdAsync(Guid jobId) =>
+           TryCatch(async () =>
+           {
+               ValidateJobId(jobId);
+
+               Job maybeJob =
+                   await this.storageBroker.SelectJobByIdAsync(jobId);
+
+               ValidateStorageJobExists(maybeJob, jobId);
+
+               return await this.storageBroker.DeleteJobAsync(maybeJob);
+           });
     }
 }

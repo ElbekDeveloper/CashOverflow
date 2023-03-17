@@ -8,10 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public class NotFoundJobException : Xeption
+    public class LockedJobException : Xeption
     {
-        public NotFoundJobException(Guid jobId)
-            : base(message: $"Couldn't find job with id: {jobId}.")
+        public LockedJobException(Exception innerException)
+            : base(message: "Job is locked, please try again.", innerException)
         { }
     }
 }
