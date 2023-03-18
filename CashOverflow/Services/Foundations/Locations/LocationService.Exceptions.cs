@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Jobs.Exceptions;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.OpenApi.Validations;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Locations
@@ -35,7 +37,13 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 var failedLocationStorageException = new FailedLocationStorageException(sqlException);
 
-                throw CreateAndLogCriticaldependencyException(failedLocationStorageException);
+                throw CreateAndLogCriticalDependencyException(failedLocationStorageException);
+            }
+            catch(DuplicateKeyException dublicateKeyException)
+            {
+                var alreadyExistsLocationException = new AlreadyExistsLocationException(dublicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLocationException);
             }
         }
 
@@ -47,12 +55,20 @@ namespace CashOverflow.Services.Foundations.Locations
             return locationValidationException;
         }
 
-        private LocationDependencyException CreateAndLogCriticaldependencyException(Xeption exception)
+        private LocationDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
             var locationdependencyException = new LocationDependencyException(exception); 
             this.loggingBroker.LogCritical(locationdependencyException);
 
             return locationdependencyException;
+        }
+
+        private LocationDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var locationDependencyValidationException = new LocationDependencyValidationException(exception);
+            this.loggingBroker.LogError(locationDependencyValidationException);
+
+            return locationDependencyValidationException;
         }
     }
 }

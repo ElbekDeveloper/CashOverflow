@@ -80,6 +80,20 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 			this.loggingBrokerMock.VerifyNoOtherCalls();
 			this.storageBrokerMock.VerifyNoOtherCalls();
 		}
-    }
+
+		[Fact]
+		public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+		{
+			// given
+			Job someJob = new Job();
+			var serviceException = new Exception();
+
+
+			// when
+
+
+			// then
+		}
+        }
 }
 
