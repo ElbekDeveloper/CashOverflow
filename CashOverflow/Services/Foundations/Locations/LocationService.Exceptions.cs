@@ -67,6 +67,12 @@ namespace CashOverflow.Services.Foundations.Locations
 
                 throw CreateAndLogCriticalDependencyException(failedLocationServiceException);
             }
+            catch (Exception exception)
+            {
+                var failedLocationServiceException = new FailedLocationServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLocationServiceException);
+            }
         }
 
         private LocationValidationException CreateAndLogValidationException(Xeption exception)
