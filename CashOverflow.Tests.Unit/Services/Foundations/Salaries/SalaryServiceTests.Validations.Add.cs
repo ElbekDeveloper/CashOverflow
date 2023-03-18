@@ -95,7 +95,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         }
 
         [Theory]
-        [MemberData(nameof(InvalidMinutes))]
+        [MemberData(nameof(InvalidMinutes))] 
         public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
             int invalidMinutes)
         {
@@ -110,10 +110,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
                 key: nameof(Salary.CreatedDate),
                 values: "Date is not recent");
 
-            var expectedSalaryValidationException =
+            var expectedSalaryValidationException = 
                 new SalaryValidationException(invalidSalaryException);
 
-            this.dateTimeBrokerMock.Setup(broker =>
+            this.dateTimeBrokerMock.Setup(broker => 
                 broker.GetCurrentDateTimeOffset()).Returns(randomDate);
 
             // when
@@ -124,10 +124,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
             // then
             actualSalaryValidationException.Should().BeEquivalentTo(expectedSalaryValidationException);
-
+            
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once());
-
+           
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedSalaryValidationException))), Times.Once);
 

@@ -11,6 +11,6 @@ namespace CashOverflow.Models.Salaries.Exceptions
     {
         public SalaryDependencyValidationException(Xeption innerException)
             : base(message: "Salary dependency validation error occured, fix the errors and try again.", innerException)
-        { }
+        {}
     }
 }

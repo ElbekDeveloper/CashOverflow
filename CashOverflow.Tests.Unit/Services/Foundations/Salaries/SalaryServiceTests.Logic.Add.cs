@@ -37,7 +37,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             // then
             actualSalary.Should().BeEquivalentTo(expectedSalary);
 
-            this.dateTimeBrokerMock.Verify(broker =>
+            this.dateTimeBrokerMock.Verify(broker => 
                 broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
