@@ -11,20 +11,12 @@ namespace CashOverflow.Services.Foundations.Jobs
 {
     public partial class JobService
     {
-        private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
-        {
-            if (maybejob is null)
-            {
-                throw new NotFoundJobException(jobId);
-            }
-        }
-
-        private static void ValidateJobId(Guid jobId) =>
+        private void ValidateJobId(Guid jobId) =>
            Validate((Rule: IsInvalid(jobId), Parameter: nameof(Job.Id)));
 
-        private static dynamic IsInvalid(Guid jobId) => new
+        private static dynamic IsInvalid(Guid id) => new
         {
-            Condition = jobId == default,
+            Condition = id == default,
             Message = "Id is required"
         };
 
@@ -39,6 +31,14 @@ namespace CashOverflow.Services.Foundations.Jobs
             Condition = date == default,
             Message = "Value is required"
         };
+
+        private static void ValidateStorageJobExists(Job maybeJob, Guid jobId)
+        {
+            if (maybeJob is null)
+            {
+                throw new NotFoundJobException(jobId);
+            }
+        }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {

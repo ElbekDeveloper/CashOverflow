@@ -18,7 +18,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public void ShouldThrowCriticalDependencyExceptionOnRetrieveAllWhenSqlExceptionOccursAndLogIt()
         {
             // given
-            SqlException sqlException = CreateSqlException();
+            SqlException sqlException = GetSqlException();
 
             var failedStorageException =
                 new FailedLanguageStorageException(sqlException);
@@ -59,7 +59,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public void ShouldThrowServiceExceptionOnRetrieveAllIfServiceErrorOccursAndLogItAsync()
         {
             // given
-            string exceptionMessage = GetRandomString();
+            string exceptionMessage = GetRandomMessage();
             var serviceException = new Exception(exceptionMessage);
 
             var failedLanguageServiceException =
@@ -69,14 +69,16 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 new LanguageServiceException(failedLanguageServiceException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllLanguages()).Throws(serviceException);
+                broker.SelectAllLanguages())
+                    .Throws(serviceException);
 
             // when
             Action retrieveAllLanguagesAction = () =>
                 this.languageService.RetrieveAllLanguages();
 
             LanguageServiceException actualLanguageServiceException =
-                Assert.Throws<LanguageServiceException>(retrieveAllLanguagesAction);
+                Assert.Throws<LanguageServiceException>(
+                    retrieveAllLanguagesAction);
 
             // then
             actualLanguageServiceException.Should().BeEquivalentTo(expectedLanguageServiceException);

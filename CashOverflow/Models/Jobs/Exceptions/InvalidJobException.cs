@@ -10,7 +10,7 @@ namespace CashOverflow.Models.Jobs.Exceptions
     public class InvalidJobException : Xeption
     {
         public InvalidJobException()
-            : base(message: "Job is invalid.")
+            : base(message: "Job is invalid")
         { }
     }
 }

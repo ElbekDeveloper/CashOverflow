@@ -4,12 +4,10 @@
 // --------------------------------------------------------
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
@@ -17,7 +15,6 @@ namespace CashOverflow.Services.Foundations.Jobs
     public partial class JobService
     {
         private delegate ValueTask<Job> ReturningJobFunction();
-        private delegate IQueryable<Job> ReturningJobsFunction();
 
         private async ValueTask<Job> TryCatch(ReturningJobFunction returningJobFunction)
         {
@@ -25,9 +22,9 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 return await returningJobFunction();
             }
-            catch (InvalidJobException invalidJobException)
+            catch (InvalidJobException inalidJobException)
             {
-                throw CreateAndLogValidationException(invalidJobException);
+                throw CreateAndLogValidationException(inalidJobException);
             }
             catch (NotFoundJobException notFoundJobException)
             {
@@ -39,12 +36,6 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                 throw CreateAndLogDependencyException(failedJobStorageException);
             }
-            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
-            {
-                var lockedJobException = new LockedJobException(dbUpdateConcurrencyException);
-
-                throw CreateAndLogDependencyValidationException(lockedJobException);
-            }
             catch (Exception exception)
             {
                 var failedJobServiceException = new FailedJobServiceException(exception);
@@ -53,40 +44,12 @@ namespace CashOverflow.Services.Foundations.Jobs
             }
         }
 
-        private IQueryable<Job> TryCatch(ReturningJobsFunction returningJobsFunction)
-        {
-            try
-            {
-                return returningJobsFunction();
-            }
-            catch (SqlException sqlException)
-            {
-                var failedJobStorageException = new FailedJobStorageException(sqlException);
-
-                throw CreateAndLogCriticalDependencyException(failedJobStorageException);
-            }
-            catch (Exception serviceException)
-            {
-                var failedJobServiceException = new FailedJobServiceException(serviceException);
-
-                throw CreateAndLogServiceException(failedJobServiceException);
-            }
-        }
-
         private JobValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var jobValidationException = new JobValidationException(exception);
-            this.loggingBroker.LogError(jobValidationException);
+            var jobValidationExpcetion = new JobValidationException(exception);
+            this.loggingBroker.LogError(jobValidationExpcetion);
 
-            return jobValidationException;
-        }
-
-        private JobDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
-        {
-            var JobDependencyException = new JobDependencyException(exception);
-            this.loggingBroker.LogCritical(JobDependencyException);
-
-            return JobDependencyException;
+            return jobValidationExpcetion;
         }
 
         private JobDependencyException CreateAndLogDependencyException(Xeption exception)
@@ -95,14 +58,6 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.loggingBroker.LogCritical(jobDependencyException);
 
             return jobDependencyException;
-        }
-
-        private JobDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
-        {
-            var jobDependencyValidationException = new JobDependencyValidationException(exception);
-            this.loggingBroker.LogError(jobDependencyValidationException);
-
-            return jobDependencyValidationException;
         }
 
         private JobServiceException CreateAndLogServiceException(Xeption innerException)
