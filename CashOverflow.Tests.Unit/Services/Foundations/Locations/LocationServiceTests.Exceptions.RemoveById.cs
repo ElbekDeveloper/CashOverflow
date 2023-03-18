@@ -137,7 +137,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLocationByIdAsync(It.IsAny<Guid>()),
-                        Times.Once());
+                    Times.Once());
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
