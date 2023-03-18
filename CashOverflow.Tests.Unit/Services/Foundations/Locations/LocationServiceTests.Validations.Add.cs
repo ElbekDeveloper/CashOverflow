@@ -156,7 +156,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             invalidLocationException.AddData(
                 key: nameof(Location.CreatedDate),
-                values: $"$Date is not recent");
+                values: "Date is not recent");
 
             var expectedLocationValidationException = new LocationValidationException(invalidLocationException);
 
@@ -178,11 +178,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             broker.LogError(It.Is(SameExceptionAs(expectedLocationValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker => broker.InsertLocationAsync(It.IsAny<Location>()), Times.Never);
-
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
-            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
-

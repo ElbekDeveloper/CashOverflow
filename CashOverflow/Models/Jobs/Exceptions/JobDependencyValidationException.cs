@@ -8,11 +8,12 @@ using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-	public class JobDependencyValidationException:Xeption
-	{
-		public JobDependencyValidationException(Xeption innerException)
-			:base("Job dependency validation error occured,fix the errors and try again.", innerException)
-		{ }
-	}
+    public class JobDependencyValidationException : Xeption
+    {
+        public JobDependencyValidationException(Xeption innerException)
+            : base(message: "Job dependency validation error occurred, fix the errors and try again.",
+                  innerException)
+        { }
+    }
 }
 

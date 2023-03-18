@@ -42,9 +42,20 @@ namespace CashOverflow.Services.Foundations.Jobs
             }
         }
 
-        private static dynamic IsInvalid(Guid id) => new
+        private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
+	{
+            if (maybejob is null)
+            {
+                throw new NotFoundJobException(jobId);
+            }
+        }
+
+        private static void ValidateJobId(Guid jobId) =>
+           Validate((Rule: IsInvalid(jobId), Parameter: nameof(Job.Id)));
+
+        private static dynamic IsInvalid(Guid jobId) => new
         {
-            Condition = id == Guid.Empty,
+            Condition = jobId == default,
             Message = "Id is required"
         };
 
@@ -89,7 +100,7 @@ namespace CashOverflow.Services.Foundations.Jobs
             return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
-        private void Validate(params (dynamic Rule, string Parameter)[] validations)
+        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidJobException = new InvalidJobException();
 

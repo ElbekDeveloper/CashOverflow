@@ -4,19 +4,22 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
-	public partial class JobService
-	{
-		private delegate ValueTask<Job> ReturningJobFunction();
+    public partial class JobService
+    {
+        private delegate ValueTask<Job> ReturningJobFunction();
+        private delegate IQueryable<Job> ReturningJobsFunction();
 
 		private async ValueTask<Job> TryCatch(ReturningJobFunction returningJobFunction)
 		{
@@ -32,6 +35,10 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 throw CreateAndLogValidationException(invalidJobException);
             }
+            catch (NotFoundJobException notFoundJobException)
+            {
+                throw CreateAndLogValidationException(notFoundJobException);
+            }
             catch (SqlException sqlException)
             {
                 var failedJobStorageException = new FailedJobStorageException(sqlException);
@@ -44,9 +51,35 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsJobException);
             }
-            catch(Exception exception)
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedJobException = new LockedJobException(dbUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedJobException);
+            }
+            catch (Exception exception)
             {
                 var failedJobServiceException = new FailedJobServiceException(exception);
+
+                throw CreateAndLogServiceException(failedJobServiceException);
+            }
+            }
+
+        private IQueryable<Job> TryCatch(ReturningJobsFunction returningJobsFunction)
+        {
+            try
+            {
+                return returningJobsFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedJobStorageException = new FailedJobStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedJobStorageException);
+            }
+            catch (Exception serviceException)
+            {
+                var failedJobServiceException = new FailedJobServiceException(serviceException);
 
                 throw CreateAndLogServiceException(failedJobServiceException);
             }
@@ -62,10 +95,18 @@ namespace CashOverflow.Services.Foundations.Jobs
 
         private JobDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var jobdependencyException = new JobDependencyException(exception);
-            this.loggingBroker.LogCritical(jobdependencyException);
+            var jobDependencyException = new JobDependencyException(exception);
+            this.loggingBroker.LogCritical(jobDependencyException);
 
-            return jobdependencyException;
+            return jobDependencyException;
+        }
+
+        private JobDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var jobDependencyException = new JobDependencyException(exception);
+            this.loggingBroker.LogCritical(jobDependencyException);
+
+            return jobDependencyException;
         }
 
         private JobDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
@@ -75,7 +116,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return jobDependencyValidationException;
         }
-
+           
         private JobServiceException CreateAndLogServiceException(Xeption exception)
         {
             var jobServiceException = new JobServiceException(exception);
@@ -83,8 +124,6 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return jobServiceException;
         }
-        
-
     }
 }
 

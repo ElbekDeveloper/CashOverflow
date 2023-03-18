@@ -8,11 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public class AlreadyExistsJobException:Xeption
-	{
-		public AlreadyExistsJobException(Exception innerException)
-			: base(message: "Job already exists.", innerException)
-		{ }
-	}
+    public class LockedJobException : Xeption
+    {
+        public LockedJobException(Exception innerException)
+            : base(message: "Job is locked, please try again.", innerException)
+        { }
+    }
 }
-
