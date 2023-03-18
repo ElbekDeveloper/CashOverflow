@@ -36,9 +36,7 @@ namespace CashOverflow.Services.Foundations.Locations
             return await this.storageBroker.InsertLocationAsync(location);
         });
 
-        public IQueryable<Location> RetrieveAllLocations()
-        {
-            throw new System.NotImplementedException();
-        }
+        public IQueryable<Location> RetrieveAllLocations() =>
+            this.storageBroker.SelectAllLocations();
     }
 }
