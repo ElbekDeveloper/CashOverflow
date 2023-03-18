@@ -6,6 +6,8 @@
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
+using CashOverflow.Services.Foundations.Jobs;
+using CashOverflow.Services.Foundations.Locations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +36,7 @@ namespace CashOverflow
                     info: new OpenApiInfo { Title = "CashOverflow", Version = "v1" });
             });
             AddBrokers(services);
+            AddServices(services); 
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
@@ -59,6 +62,12 @@ namespace CashOverflow
             services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
+        }
+
+        private static void AddServices(IServiceCollection services)
+        {
+            services.AddTransient<ILocationService, LocationService>();
+            services.AddTransient<IJobService, JobService>();
         }
     }
 }
