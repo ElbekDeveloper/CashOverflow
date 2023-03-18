@@ -5,11 +5,13 @@
 
 using System;
 using System.Threading.Tasks;
+using CashOverflow.Models.Jobs.Exceptions;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Tynamix.ObjectFiller;
 using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
@@ -130,6 +132,49 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.loggingBrokerMock.Verify(broker =>
             broker.LogError(It.Is(SameExceptionAs(expectedLocationValidationException))), Times.Once);
+            this.storageBrokerMock.Verify(broker => broker.InsertLocationAsync(It.IsAny<Location>()), Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [MemberData(nameof(InvalidMinutes))]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
+            int invalidMinutes)
+        {
+            // given
+            DateTimeOffset randomDate = GetRandomDatetimeOffset();
+            DateTimeOffset invalidDateTime = randomDate.AddMinutes(invalidMinutes);
+            Location randomLocation = CreateRandomLocation(invalidDateTime);
+            Location invalidLocation = randomLocation;
+
+            var invalidLocationException = new InvalidLocationException();
+
+            invalidLocationException.AddData(
+                key: nameof(Location.CreatedDate),
+                values: $"$Date is not recent");
+
+            var expectedLocationValidationException = new LocationValidationException(invalidLocationException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+            broker.GetCurrentDateTimeOffset()).Returns(randomDate);
+
+            // when
+            ValueTask<Location> addLocationTask = this.locationService.AddLocationAsync(invalidLocation);
+
+            LocationValidationException actualLocationValidationException =
+                await Assert.ThrowsAsync <LocationValidationException>(addLocationTask.AsTask);
+
+            // then
+            actualLocationValidationException.Should().BeEquivalentTo(expectedLocationValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(),Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+            broker.LogError(It.Is(SameExceptionAs(expectedLocationValidationException))), Times.Once);
+
             this.storageBrokerMock.Verify(broker => broker.InsertLocationAsync(It.IsAny<Location>()), Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();

@@ -133,7 +133,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
 			this.loggingBrokerMock.Verify(broker =>
 			broker.LogError(It.Is(SameExceptionAs(expectedJobValidationException))), Times.Once);
-
 			this.storageBrokerMock.Verify(broker => broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
 
 			this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -145,6 +144,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 		[MemberData(nameof(InvalidMinutes))]
         public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
 			int invalidMinutes)
+
 		{
             // given
             DateTimeOffset randomDate = GetRandomDatetimeOffset();
@@ -158,7 +158,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 key: nameof(Job.CreatedDate),
                 values: $"Date is not recent");
 
-			var expectedLocationValidationException = new JobValidationException(invalidJobException);
+			var expectedJobValidationException = new JobValidationException(invalidJobException);
 
 			this.dateTimeBrokerMock.Setup(broker =>
 			broker.GetCurrentDateTimeOffset()).Returns(randomDate);
@@ -170,20 +170,19 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 				await Assert.ThrowsAsync<JobValidationException>(addJobTask.AsTask);
 
 			// then
-			actualJobValidationException.Should().BeEquivalentTo(expectedLocationValidationException);
+			actualJobValidationException.Should().BeEquivalentTo(expectedJobValidationException);
 
 			this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 
 			this.loggingBrokerMock.Verify(broker =>
-			broker.LogError(It.Is(SameExceptionAs(expectedLocationValidationException))), Times.Once);
+			broker.LogError(It.Is(SameExceptionAs(expectedJobValidationException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker => broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
-
-        }
+        } 
     }
 }
 

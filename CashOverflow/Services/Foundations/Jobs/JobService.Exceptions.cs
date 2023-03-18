@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
@@ -39,7 +40,6 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return jobValidationException;
         }
-
     }
 }
 
