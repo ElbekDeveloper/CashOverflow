@@ -36,7 +36,7 @@ namespace CashOverflow.Services.Foundations.Salaries
 
                 throw CreateAndLogCriticalDependencyException(failedSalaryStorageException);
             }
-            catch(DuplicateKeyException duplicateKeyException)
+            catch (DuplicateKeyException duplicateKeyException)
             {
                 var alreadyExistsSalaryException = new AlreadyExistsSalaryException(duplicateKeyException);
 

@@ -8,7 +8,6 @@ using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
-using Microsoft.AspNetCore.Components;
 using Microsoft.Data.SqlClient;
 using Moq;
 using Xunit;
@@ -56,8 +55,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             Salary someSalary = CreateRandomSalary();
             var duplicateKeyException = new DuplicateKeyException(someMessage);
             var alreadyExistSalaryException = new AlreadyExistsSalaryException(duplicateKeyException);
-            
-            var expectedSalaryDependencyValidationException = 
+
+            var expectedSalaryDependencyValidationException =
                 new SalaryDependencyValidationException(alreadyExistSalaryException);
 
             this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
@@ -72,7 +71,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             actualSalaryDependencyValidationException.Should()
                 .BeEquivalentTo(expectedSalaryDependencyValidationException);
 
-            this.dateTimeBrokerMock.Verify(broker =>  broker.GetCurrentDateTimeOffset(), Times.Once);
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
             this.loggingBrokerMock.Verify(brokers => brokers.LogError(It.Is(SameExceptionAs(
                 expectedSalaryDependencyValidationException))), Times.Once);
 
