@@ -16,10 +16,13 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
-namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
-    public partial class LanguageServiceTests {
+namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
+{
+    public partial class LanguageServiceTests
+    {
         [Fact]
-        public async Task ShouldThrowDependencyExceptionOnDeleteWhenSqlExceptionOccursAndLogItAsync() {
+        public async Task ShouldThrowDependencyExceptionOnDeleteWhenSqlExceptionOccursAndLogItAsync()
+        {
             //given
             Guid sameLanguageId = Guid.NewGuid();
             SqlException sqlException = CreateSqlException();
@@ -57,7 +60,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
         }
 
         [Fact]
-        public async Task ShouldThrowDependencyValidationExceptionOnRemoveIFDatabaseUpdateConcurrencyErrorOccursAndLogItAsync() {
+        public async Task ShouldThrowDependencyValidationExceptionOnRemoveIFDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
+        {
 
             // given
             Guid someLanguageId = Guid.NewGuid();
@@ -103,7 +107,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
         }
 
         [Fact]
-        public async Task ShouldThrowServiceExceptionOnRemoveIfExceptionOccursAndLogItAsync() {
+        public async Task ShouldThrowServiceExceptionOnRemoveIfExceptionOccursAndLogItAsync()
+        {
 
             // given
             Guid someLanguageId = Guid.NewGuid();

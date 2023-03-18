@@ -11,10 +11,13 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace CashOverflow.Tests.Unit.Services.Foundations.Locations {
-    public partial class LocationServiceTests {
+namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
+{
+    public partial class LocationServiceTests
+    {
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnAddIfInputIsNullAndLogItAsync() {
+        public async Task ShouldThrowValidationExceptionOnAddIfInputIsNullAndLogItAsync()
+        {
             // given
             Location nullLocation = null;
             var nullLocationException = new NullLocationException();
@@ -47,9 +50,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations {
         [InlineData("")]
         [InlineData("   ")]
         public async Task ShouldThrowValidationExceptionOnAddIfLocationIsInvalidAndLogItAsync(
-            string invalidText) {
+            string invalidText)
+        {
             // given
-            var invalidLocation = new Location {
+            var invalidLocation = new Location
+            {
                 Name = invalidText
             };
 
@@ -97,7 +102,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations {
         }
 
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotSameAsUpdatedDateAndLogItAsync() {
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotSameAsUpdatedDateAndLogItAsync()
+        {
             // given
             int randomMinutes = GetRandomNumber();
             DateTimeOffset randomDate = GetRandomDatetimeOffset();

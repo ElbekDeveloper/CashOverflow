@@ -8,8 +8,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 
-namespace CashOverflow.Brokers.Storages {
-    public partial interface IStorageBroker {
+namespace CashOverflow.Brokers.Storages
+{
+    public partial interface IStorageBroker
+    {
         ValueTask<Job> InsertJobAsync(Job job);
         IQueryable<Job> SelectAllJobs();
         ValueTask<Job> SelectJobByIdAsync(Guid jobId);

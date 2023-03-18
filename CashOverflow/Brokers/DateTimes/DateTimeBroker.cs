@@ -5,8 +5,10 @@
 
 using System;
 
-namespace CashOverflow.Brokers.DateTimes {
-    public class DateTimeBroker : IDateTimeBroker {
+namespace CashOverflow.Brokers.DateTimes
+{
+    public class DateTimeBroker : IDateTimeBroker
+    {
         public DateTimeOffset GetCurrentDateTimeOffset() =>
             DateTimeOffset.UtcNow;
     }

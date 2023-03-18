@@ -17,14 +17,17 @@ using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;
 
-namespace CashOverflow.Tests.Unit.Services.Foundations.Locations {
-    public partial class LocationServiceTests {
+namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
+{
+    public partial class LocationServiceTests
+    {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ILocationService locationService;
 
-        public LocationServiceTests() {
+        public LocationServiceTests()
+        {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
@@ -71,7 +74,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations {
         private Location CreateRandomLocation() =>
             CreateLocationFiller(dates: GetRandomDatetimeOffset()).Create();
 
-        private Filler<Location> CreateLocationFiller(DateTimeOffset dates) {
+        private Filler<Location> CreateLocationFiller(DateTimeOffset dates)
+        {
             var filler = new Filler<Location>();
 
             filler.Setup()

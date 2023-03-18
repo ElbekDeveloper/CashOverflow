@@ -83,7 +83,7 @@ namespace CashOverflow.Services.Foundations.Languages
                 throw CreateAndLogServiceException(failedLanguageServiceException);
             }
         }
-      
+
         private LanguageDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
             var languageDependencyException = new LanguageDependencyException(exception);

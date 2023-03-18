@@ -11,10 +11,13 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
-    public partial class LanguageServiceTests {
+namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
+{
+    public partial class LanguageServiceTests
+    {
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnRemoveIfInputIdIsNullAndLogItAsync() {
+        public async Task ShouldThrowValidationExceptionOnRemoveIfInputIdIsNullAndLogItAsync()
+        {
             // given
             Guid nullLanguageId = Guid.Empty;
             var invalidLanguageException = new InvalidLanguageException();
@@ -49,7 +52,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
         }
 
         [Fact]
-        public async Task ShouldThrowNotFoundExceptionOnRemoveIfLanguageIsNotFoundAndLogItAsync() {
+        public async Task ShouldThrowNotFoundExceptionOnRemoveIfLanguageIsNotFoundAndLogItAsync()
+        {
             //given
             Guid randomLanguageId = Guid.NewGuid();
             Guid inputLanguageId = randomLanguageId;

@@ -5,8 +5,10 @@
 
 using System;
 
-namespace CashOverflow.Models.Languages {
-    public class Language {
+namespace CashOverflow.Models.Languages
+{
+    public class Language
+    {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Type Type { get; set; }

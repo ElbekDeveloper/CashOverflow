@@ -9,24 +9,33 @@ using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks.SetupDotNetTaskV1s;
 
-namespace CashOverflow.Infrastructure.Build {
-    internal class Program {
-        static void Main(string[] args) {
-            var githubPipeline = new GithubPipeline {
+namespace CashOverflow.Infrastructure.Build
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            var githubPipeline = new GithubPipeline
+            {
                 Name = "Build & Test CashOverlow",
 
-                OnEvents = new Events {
-                    Push = new PushEvent {
+                OnEvents = new Events
+                {
+                    Push = new PushEvent
+                    {
                         Branches = new string[] { "master" }
                     },
 
-                    PullRequest = new PullRequestEvent {
+                    PullRequest = new PullRequestEvent
+                    {
                         Branches = new string[] { "master" }
                     }
                 },
 
-                Jobs = new Jobs {
-                    Build = new BuildJob {
+                Jobs = new Jobs
+                {
+                    Build = new BuildJob
+                    {
                         RunsOn = BuildMachines.WindowsLatest,
 
                         Steps = new List<GithubTask>
