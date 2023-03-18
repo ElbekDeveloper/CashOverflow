@@ -6,10 +6,12 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Services.Foundations.Salaries;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -31,6 +33,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private SqlException CreateSqlException() =>
+           (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
              actualException => actualException.SameExceptionAs(expectedException);
