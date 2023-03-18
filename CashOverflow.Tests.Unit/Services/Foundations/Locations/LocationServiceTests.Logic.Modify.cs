@@ -37,7 +37,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                     .ReturnsAsync(updatedLocation);
 
             //when
-            Location actualLocation = await 
+            Location actualLocation = await
                 this.locationService.ModifyLocationAsync(inputLocation);
 
             //then

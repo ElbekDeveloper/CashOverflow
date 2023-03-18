@@ -28,7 +28,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 this.locationService.ModifyLocationAsync(nullLocation);
 
             //then
-            await Assert.ThrowsAsync<LocationValidationException>(() => 
+            await Assert.ThrowsAsync<LocationValidationException>(() =>
                 modifyLocationTask.AsTask());
 
             this.loggingBrokerMock.Verify(broker =>
@@ -42,8 +42,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
-
-
         }
     }
 }

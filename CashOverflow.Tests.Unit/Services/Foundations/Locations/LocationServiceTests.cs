@@ -12,7 +12,6 @@ using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
 using CashOverflow.Services.Foundations.Locations;
 using Microsoft.Data.SqlClient;
-using Microsoft.Identity.Client;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
