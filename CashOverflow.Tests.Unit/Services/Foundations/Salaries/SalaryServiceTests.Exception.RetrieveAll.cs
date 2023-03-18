@@ -48,5 +48,39 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public void ShouldThrowServiceExceptionOnRetrieveAllWhenAllServiceErrorOccursAndLogIt()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            var serviceException = new Exception(exceptionMessage);
+
+            var failedSalaryServiceException =
+                new FailedSalaryServiceException(serviceException);
+
+            var expectedSalaryServiceException =
+                new SalaryServiceException(failedSalaryServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllSalaries()).Throws(serviceException);
+
+            // when
+            Action retrieveAllSalaryAction = () =>
+                this.salaryService.RetrieveAllSalaries();
+
+            // then
+            Assert.Throws<SalaryServiceException>(retrieveAllSalaryAction);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllSalaries(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedSalaryServiceException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

@@ -65,5 +65,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 99).GetValue();
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
     }
 }
