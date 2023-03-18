@@ -55,5 +55,47 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        private void ShouldThrowServiceExceptionOnRetrieveAllIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            var serviceException = new Exception(exceptionMessage);
+
+            var failedLocationServiceException =
+                new FailedLocationServiceException(serviceException);
+
+            var expectedLocationServiceException =
+                new LocationServiceException(failedLocationServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllLocations())
+                    .Throws(serviceException);
+
+            // when
+            Action retrieveAllLocationsActions = () =>
+                this.locationService.RetrieveAllLocations();
+
+            LocationServiceException actualLocationServiceException =
+                Assert.Throws<LocationServiceException>(
+                    retrieveAllLocationsActions);
+
+            // then
+            actualLocationServiceException.Should().BeEquivalentTo(expectedLocationServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllLocations(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLocationServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
