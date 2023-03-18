@@ -75,8 +75,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             values: "Date is required");
 
 			invalidLocationException.AddData(
-            key: nameof(Location.UpdatedDate),
-            values: "Date is required");
+                key: nameof(Location.UpdatedDate),
+                values: "Date is required");
 
             var expectedLocationValidationException =
                 new LocationValidationException(invalidLocationException);
