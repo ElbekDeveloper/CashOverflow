@@ -15,18 +15,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace CashOverflow {
-    public class Startup {
+namespace CashOverflow
+{
+    public class Startup
+    {
         public Startup(IConfiguration configuration) =>
             Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services) {
+        public void ConfigureServices(IServiceCollection services)
+        {
             services.AddDbContext<StorageBroker>();
             services.AddControllers();
 
-            services.AddSwaggerGen(config => {
+            services.AddSwaggerGen(config =>
+            {
                 config.SwaggerDoc(
                     name: "v1",
                     info: new OpenApiInfo { Title = "CashOverflow", Version = "v1" });
@@ -34,10 +38,14 @@ namespace CashOverflow {
 
             AddBrokers(services);
             AddFoundationServices(services);
+
+
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment) {
-            if (environment.IsDevelopment()) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            if (environment.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
             }
 
@@ -52,15 +60,15 @@ namespace CashOverflow {
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
 
-        private static void AddBrokers(IServiceCollection services) {
+        private static void AddBrokers(IServiceCollection services)
+        {
             services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         }
-
         private static void AddFoundationServices(IServiceCollection services)
         {
-            services.AddTransient<ILanguageService, LanguageService>();
+           
             services.AddTransient<ILocationService, LocationService>();
         }
     }

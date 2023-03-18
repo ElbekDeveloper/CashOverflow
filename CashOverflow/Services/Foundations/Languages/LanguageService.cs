@@ -29,7 +29,8 @@ namespace CashOverflow.Services.Foundations.Languages
             this.dateTimeBroker = dateTimeBroker;
         }
         public ValueTask<Language> AddLanguageAsync(Language language) =>
-       TryCatch(async () => {
+       TryCatch(async () =>
+       {
            ValidateLanguageOnAdd(language);
 
            return await this.storageBroker.InsertLanguageAsync(language);
@@ -39,7 +40,8 @@ namespace CashOverflow.Services.Foundations.Languages
             TryCatch(() => this.storageBroker.SelectAllLanguages());
 
         public ValueTask<Language> RemoveLanguageByIdAsync(Guid languageId) =>
-            TryCatch(async () => {
+            TryCatch(async () =>
+            {
                 ValidateLanguageId(languageId);
 
                 Language maybeLanguage = await this.storageBroker.
@@ -48,7 +50,7 @@ namespace CashOverflow.Services.Foundations.Languages
                 ValidateStorageLanguageExist(maybeLanguage, languageId);
 
                 return await this.storageBroker.DeleteLanguageAsync(maybeLanguage);
-        });
+            });
 
     }
 }

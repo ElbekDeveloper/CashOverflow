@@ -33,7 +33,6 @@ namespace CashOverflow.Services.Foundations.Languages
         private static void ValidateLanguageId(Guid languageId) =>
           Validate((Rule: IsInvalid(languageId), Parameter: (nameof(Language.Id))));
 
-
         private void ValidateLanguageNotNull(Language language)
         {
             if (language is null)
@@ -42,7 +41,7 @@ namespace CashOverflow.Services.Foundations.Languages
             }
         }
 
-        private dynamic IsInvalid(Guid id) => new
+        private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,
             Message = "Id is required"
@@ -81,17 +80,24 @@ namespace CashOverflow.Services.Foundations.Languages
             TimeSpan timeDifference = currentDate.Subtract(date);
 
             return timeDifference.TotalSeconds is > 60 or < 0;
-        private static void ValidateStorageLanguageExist(Language maybeLanguage, Guid languageId) {
-            if (maybeLanguage is null) {
+        }
+
+        private static void ValidateStorageLanguageExist(Language maybeLanguage, Guid languageId)
+        {
+            if (maybeLanguage is null)
+            {
                 throw new NotFoundLanguageException(languageId);
             }
         }
 
-        private static void Validate(params (dynamic Rule, string Parameter)[] validations) {
+        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
+        {
             var invalidLangageException = new InvalidLanguageException();
 
-            foreach ((dynamic rule, string parameter) in validations) {
-                if (rule.Condition) {
+            foreach ((dynamic rule, string parameter) in validations)
+            {
+                if (rule.Condition)
+                {
                     invalidLangageException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
