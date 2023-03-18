@@ -6,12 +6,12 @@
 using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Jobs.Exceptions
+namespace CashOverflow.Models.Locations.Exceptions
 {
-    public class NotFoundJobException : Xeption
+    public class AlreadyExistsLocationException : Xeption
     {
-        public NotFoundJobException(Guid jobId)
-            : base(message: $"Couldn't find job with id: {jobId}.")
+        public AlreadyExistsLocationException(Exception innerException)
+            : base(message: "Location already exists.", innerException)
         { }
     }
 }
