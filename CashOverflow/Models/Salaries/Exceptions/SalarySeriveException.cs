@@ -7,10 +7,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Salaries.Exceptions
 {
-    public class SalaryDependencyValidationException : Xeption
+    public class SalaryServiceException : Xeption
     {
-        public SalaryDependencyValidationException(Xeption innerException)
-            : base(message: "Salary dependency validation error occured, fix the errors and try again.", innerException)
+        public SalaryServiceException(Xeption innerException)
+            : base(message: "Salary service error occurred, contact support.", innerException)
         { }
     }
 }

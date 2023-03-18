@@ -7,7 +7,6 @@ using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Services.Foundations.Languages;
-using CashOverflow.Services.Foundations.Locations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -68,7 +67,6 @@ namespace CashOverflow
         private static void AddFoundationServices(IServiceCollection services)
         {
             services.AddTransient<ILanguageService, LanguageService>();
-            services.AddTransient<ILocationService, LocationService>();
         }
     }
 }
