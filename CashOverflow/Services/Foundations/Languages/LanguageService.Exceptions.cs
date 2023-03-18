@@ -19,26 +19,6 @@ namespace CashOverflow.Services.Foundations.Languages
         private delegate ValueTask<Language> ReturningLanguageFunction();
         private delegate IQueryable<Language> ReturningLanguagesFunction();
 
-        private IQueryable<Language> TryCatch(ReturningLanguagesFunction returningLanguageFunction)
-        {
-            try
-            {
-                return returningLanguageFunction();
-            }
-            catch (SqlException sqlException)
-            {
-                var failedLanguageStorageException = new FailedLanguageStorageException(sqlException);
-
-                throw CreateAndLogCriticalDependencyException(failedLanguageStorageException);
-            }
-            catch (Exception serviceException)
-            {
-                var failedLanguageServiceException = new FailedLanguageServiceException(serviceException);
-
-                throw CreateAndLogServiceException(failedLanguageServiceException);
-            }
-        }
-
         private async ValueTask<Language> TryCatch(ReturningLanguageFunction returningLanguageFunction)
         {
             try
@@ -72,6 +52,26 @@ namespace CashOverflow.Services.Foundations.Languages
             catch (Exception exception)
             {
                 var failedLanguageServiceException = new FailedLanguageServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLanguageServiceException);
+            }
+        }
+
+        private IQueryable<Language> TryCatch(ReturningLanguagesFunction returningLanguageFunction)
+        {
+            try
+            {
+                return returningLanguageFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedLanguageStorageException = new FailedLanguageStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedLanguageStorageException);
+            }
+            catch (Exception serviceException)
+            {
+                var failedLanguageServiceException = new FailedLanguageServiceException(serviceException);
 
                 throw CreateAndLogServiceException(failedLanguageServiceException);
             }
