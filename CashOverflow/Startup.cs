@@ -66,10 +66,5 @@ namespace CashOverflow
 
         private static void AddFoundationServices(IServiceCollection services) =>
             services.AddTransient<ILanguageService, LanguageService>();
-<<<<<<< HEAD
-=======
-            services.AddTransient<ISalaryService, SalaryService>();
-        }
->>>>>>> parent of 1abd699 (Merge branch 'master' into users/khabibulladev/foundations-salary-add)
     }
 }
