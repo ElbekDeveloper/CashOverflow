@@ -21,7 +21,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             //given
             Guid randomLanguageId = Guid.NewGuid();
             Guid inputLanguageId = randomLanguageId;
-            Language randomLanguage = CreateRandomLangauage();
+            Language randomLanguage = CreateRandomLanguage();
             Language persistedLanguage = randomLanguage;
             Language expectedLanguage = persistedLanguage.DeepClone();
 
