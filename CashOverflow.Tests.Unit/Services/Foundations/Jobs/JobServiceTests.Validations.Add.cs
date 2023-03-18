@@ -122,6 +122,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
 			var expectedJobValidationException = new JobValidationException(invalidJobException);
 
+			this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+				.Returns(randomDate);
+
 			// when
 			ValueTask<Job> actualJobTask = this.jobService.AddJobAsync(invalidJob);
 
@@ -131,6 +134,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 			// then
 			actualJobValidationException.Should().BeEquivalentTo(expectedJobValidationException);
 
+			this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 			this.loggingBrokerMock.Verify(broker =>
 			broker.LogError(It.Is(SameExceptionAs(expectedJobValidationException))), Times.Once);
 			this.storageBrokerMock.Verify(broker => broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);

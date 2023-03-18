@@ -119,6 +119,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 values: $"Date is not the same as {nameof(Location.UpdatedDate)}");
 
             var expectedLocationValidationException = new LocationValidationException(invalidLocationException);
+
             this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
                 .Returns(randomDate);
 
@@ -131,7 +132,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             // then
             actualLocationValidationException.Should().BeEquivalentTo(expectedLocationValidationException);
 
-            //this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
             this.loggingBrokerMock.Verify(broker =>
             broker.LogError(It.Is(SameExceptionAs(expectedLocationValidationException))), Times.Once);
             this.storageBrokerMock.Verify(broker => broker.InsertLocationAsync(It.IsAny<Location>()), Times.Never);
