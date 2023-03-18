@@ -3,13 +3,13 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Linq;
-using CashOverflow.Models.Languages;
+using System.Threading.Tasks;
+using CashOverflow.Models.Locations;
 
-namespace CashOverflow.Services.Foundations.Languages
+namespace CashOverflow.Services.Foundations.Locations
 {
-    public interface ILanguageService
+    public interface ILocationService
     {
-        IQueryable<Language> RetrieveAllLanguages();
+        ValueTask<Location> AddLocationAsync(Location location);
     }
 }

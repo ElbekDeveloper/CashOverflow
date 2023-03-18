@@ -4,46 +4,38 @@
 // --------------------------------------------------------
 
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
-using CashOverflow.Models.Languages;
-using CashOverflow.Services.Foundations.Languages;
+using CashOverflow.Models.Locations;
+using CashOverflow.Services.Foundations.Locations;
 using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;
 
-namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
+namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 {
-    public partial class LanguageServiceTests
+    public partial class LocationServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
-        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
-        private readonly ILanguageService languageService;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
+        private readonly ILocationService locationService;
 
-        public LanguageServiceTests()
+        public LocationServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
-            this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
+            this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
-            this.languageService = new LanguageService(
+            this.locationService = new LocationService(
                 storageBroker: this.storageBrokerMock.Object,
-                loggingBroker: this.loggingBrokerMock.Object,
-                dateTimeBroker: this.dateTimeBrokerMock.Object
-                );
-        }
-
-        private IQueryable<Language> CreateRandomLanguages()
-        {
-            return CreateLanguageFiller(dates: GetRandomDatetimeOffset())
-                .Create(count: GetRandomNumber()).AsQueryable();
+                dateTimeBroker: this.dateTimeBrokerMock.Object,
+                loggingBroker: this.loggingBrokerMock.Object);
         }
 
         public static TheoryData<int> InvalidMinutes()
@@ -61,9 +53,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         private string GetRandomString() =>
             new MnemonicString().GetValue();
 
-        private static int GetRandomNumber() =>
-            new IntRange(min: 2, max: 10).GetValue();
-
         private SqlException CreateSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
@@ -71,20 +60,23 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             actualException => actualException.SameExceptionAs(expectedException);
 
         private static int GetRandomNegativeNumber() =>
-         -1 * new IntRange(min: 2, max: 9).GetValue();
+          -1 * new IntRange(min: 2, max: 9).GetValue();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 9).GetValue();
 
         private DateTimeOffset GetRandomDatetimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private Language CreateRandomLanguage(DateTimeOffset dates) =>
-            CreateLanguageFiller(dates).Create();
+        private Location CreateRandomLocation(DateTimeOffset dates) =>
+            CreateLocationFiller(dates).Create();
 
-        private Language CreateRandomLanguage() =>
-            CreateLanguageFiller(GetRandomDatetimeOffset()).Create();
+        private Location CreateRandomLocation() =>
+            CreateLocationFiller(dates: GetRandomDatetimeOffset()).Create();
 
-        private Filler<Language> CreateLanguageFiller(DateTimeOffset dates)
+        private Filler<Location> CreateLocationFiller(DateTimeOffset dates)
         {
-            var filler = new Filler<Language>();
+            var filler = new Filler<Location>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(dates);

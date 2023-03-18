@@ -3,13 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-namespace CashOverflow.Models.Languages
+using Xeptions;
+
+namespace CashOverflow.Models.Locations.Exceptions
 {
-    public enum Type
+    public class InvalidLocationException : Xeption
     {
-        Other,
-        Frontend,
-        Backend,
-        FullStack
+        public InvalidLocationException()
+            : base(message: "Location is invalid.")
+        { }
     }
 }
