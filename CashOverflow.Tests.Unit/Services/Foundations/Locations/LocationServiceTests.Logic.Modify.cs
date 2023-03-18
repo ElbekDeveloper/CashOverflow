@@ -15,16 +15,13 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         {
             //given
             DateTimeOffset randomDate = GetRandomDatetimeOffset();
-            Location randomLocation = CreateRandomLocation(randomDate);
+            Location randomLocation = CreateRandomModifyLocation(randomDate);
             Location inputLocation = randomLocation;
             Location storageLocation = inputLocation.DeepClone();
             storageLocation.UpdatedDate = randomLocation.CreatedDate;
             Location updatedLocation = inputLocation;
             Location expectedLocation = updatedLocation.DeepClone();
             Guid locationId = inputLocation.Id;
-
-            this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffset()).Returns(randomDate);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLocationByIdAsync(locationId))
@@ -35,14 +32,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                     .ReturnsAsync(updatedLocation);
 
             //when
-            Location actualLocation =
-                await this.locationService.ModifyLocationAsync(inputLocation);
+            Location actualLocation = await 
+                this.locationService.ModifyLocationAsync(inputLocation);
 
             //then
             actualLocation.Should().BeEquivalentTo(expectedLocation);
-
-            this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLocationByIdAsync(locationId), Times.Once);

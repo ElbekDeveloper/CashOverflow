@@ -12,6 +12,7 @@ using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
 using CashOverflow.Services.Foundations.Locations;
 using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -73,6 +74,17 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         private Location CreateRandomLocation() =>
             CreateLocationFiller(dates: GetRandomDatetimeOffset()).Create();
+
+        private Location CreateRandomModifyLocation(DateTimeOffset randomDate)
+        {
+            int randomDayInPast = GetRandomNegativeNumber();
+            Location randomLocation = CreateRandomLocation();
+
+            randomLocation.CreatedDate = randomLocation.CreatedDate.AddDays(randomDayInPast);
+
+            return randomLocation;
+        }
+
 
         private Filler<Location> CreateLocationFiller(DateTimeOffset dates)
         {

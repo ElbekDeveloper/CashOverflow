@@ -33,19 +33,6 @@ namespace CashOverflow.Services.Foundations.Locations
         private void ValidateLocationOnModify(Location location)
         {
             ValidateLocationNotNull(location);
-
-          /*  Validate(
-                (Rule: IsInvalid(team.Id), Parameter: nameof(Team.Id)),
-                (Rule: IsInvalid(team.TeamName), Parameter: nameof(Team.TeamName)),
-                (Rule: IsInvalid(team.CreatedDate), Parameter: nameof(Team.CreatedDate)),
-                (Rule: IsInvalid(team.UpdatedDate), Parameter: nameof(Team.UpdatedDate)),
-                (Rule: IsNotRecent(team.UpdatedDate), Parameter: nameof(Team.UpdatedDate)),
-
-                (Rule: IsSame(
-                    firstDate: team.UpdatedDate,
-                    secondDate: team.CreatedDate,
-                    secondDateName: nameof(team.CreatedDate)),
-                Parameter: nameof(team.UpdatedDate)));*/
         }
 
         private static void ValidateLocationNotNull(Location location)
