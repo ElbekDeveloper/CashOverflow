@@ -3,12 +3,12 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
 using Xeptions;
 
 namespace CashOverflow.Models.Languages.Exceptions {
-    public class FailedLanguageStorageException : Xeption {
-        public FailedLanguageStorageException(Exception innerException)
-            : base(message: "Failed language storage error occured, contact support.", innerException) { }
+    public class LanguageDependencyValidationException : Xeption {
+
+        public LanguageDependencyValidationException(Xeption innerException)
+            : base(message: "Ticket dependency validation error occurred, fix the errors and try again.", innerException) { }
     }
 }

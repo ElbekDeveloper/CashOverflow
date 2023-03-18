@@ -26,8 +26,7 @@ namespace CashOverflow.Services.Foundations.Languages {
             catch (NotFoundLanguageException notFoundLanguageException) {
                 throw CreateAndLogValidationException(notFoundLanguageException);
             }
-            catch (SqlException sqlException) 
-            {
+            catch (SqlException sqlException) {
                 var failedLanguageStorageException = new FailedLanguageStorageException(sqlException);
                 throw CreateAndLogCriticalDependencyException(failedLanguageStorageException);
             }

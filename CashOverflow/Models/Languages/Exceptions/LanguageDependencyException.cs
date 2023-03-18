@@ -5,12 +5,9 @@
 
 using Xeptions;
 
-namespace CashOverflow.Models.Languages.Exceptions
-{
-    public class LanguageDependencyException : Xeption
-    {
+namespace CashOverflow.Models.Languages.Exceptions {
+    public class LanguageDependencyException : Xeption {
         public LanguageDependencyException(Xeption innerException)
-            :base(message:"Language dependency error occured, contact support.", innerException)
-        {}
+            : base(message: "Language dependency error occured, contact support.", innerException) { }
     }
 }

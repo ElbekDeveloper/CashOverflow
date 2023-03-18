@@ -28,7 +28,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
                 loggingBroker: loggingBrokerMock.Object);
         }
 
-        private static SqlException CreateSqlException()=>
+        private static SqlException CreateSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>

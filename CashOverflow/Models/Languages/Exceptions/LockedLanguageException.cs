@@ -7,8 +7,9 @@ using System;
 using Xeptions;
 
 namespace CashOverflow.Models.Languages.Exceptions {
-    public class FailedLanguageStorageException : Xeption {
-        public FailedLanguageStorageException(Exception innerException)
-            : base(message: "Failed language storage error occured, contact support.", innerException) { }
+    public class LockedLanguageException : Xeption {
+
+        public LockedLanguageException(Exception innerException)
+            : base(message: "Language is locked, please try again.", innerException) { }
     }
 }

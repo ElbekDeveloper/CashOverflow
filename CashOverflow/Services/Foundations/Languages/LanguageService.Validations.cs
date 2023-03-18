@@ -6,7 +6,6 @@
 using System;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
-using Microsoft.Data.SqlClient;
 
 namespace CashOverflow.Services.Foundations.Languages {
     public partial class LanguageService {
