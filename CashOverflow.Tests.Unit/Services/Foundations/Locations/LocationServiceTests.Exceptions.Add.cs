@@ -93,7 +93,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
 			var expectedLocationServiceException =
 				new LocationServiceException(failedLocationServiceException);
-
+			 
 			this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
 				.Throws(serviceException);
 
