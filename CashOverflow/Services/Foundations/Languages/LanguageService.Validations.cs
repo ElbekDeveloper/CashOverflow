@@ -30,6 +30,17 @@ namespace CashOverflow.Services.Foundations.Languages
                     Parameter: nameof(Language.CreatedDate)));
         }
 
+        private void ValidateStorageLanguage(Language maybeTicket, Guid languageId)
+        {
+            if (maybeTicket is null)
+            {
+                throw new NotFoundLanguageException(languageId);
+            }
+        }
+
+        private void ValidateLanguageId(Guid languageId) =>
+             Validate((Rule: IsInvalid(languageId), Parameter: nameof(Language.Id)));
+
         private void ValidateLanguageNotNull(Language language)
         {
             if (language is null)
