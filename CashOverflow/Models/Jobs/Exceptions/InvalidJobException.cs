@@ -5,12 +5,12 @@
 
 using Xeptions;
 
-namespace CashOverflow.Models.Languages.Exceptions
+namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public class InvalidLanguageException : Xeption
+    public class InvalidJobException : Xeption
     {
-        public InvalidLanguageException()
-            : base(message: "Language is invalid")
+        public InvalidJobException()
+            : base(message: "Job is invalid.")
         { }
     }
 }

@@ -6,12 +6,12 @@
 using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Languages.Exceptions
+namespace CashOverflow.Models.Jobs.Exceptions
 {
-    public class LanguageServiceException : Xeption
+    public class LockedJobException : Xeption
     {
-        public LanguageServiceException(Xeption innerException)
-            : base(message: "Language service error occurred, contact support.", innerException)
+        public LockedJobException(Exception innerException)
+            : base(message: "Job is locked, please try again.", innerException)
         { }
     }
 }

@@ -6,12 +6,12 @@
 using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Languages.Exceptions
+namespace CashOverflow.Models.Locations.Exceptions
 {
-    public class LanguageServiceException : Xeption
+    public class AlreadyExistsLocationException : Xeption
     {
-        public LanguageServiceException(Xeption innerException)
-            : base(message: "Language service error occurred, contact support.", innerException)
+        public AlreadyExistsLocationException(Exception innerException)
+            : base(message: "Location already exists.", innerException)
         { }
     }
 }

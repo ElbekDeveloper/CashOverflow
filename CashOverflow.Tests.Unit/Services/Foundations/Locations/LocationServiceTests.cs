@@ -5,14 +5,17 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
 using CashOverflow.Services.Foundations.Locations;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations {
     public partial class LocationServiceTests {
@@ -32,10 +35,31 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations {
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
+        public static TheoryData<int> InvalidMinutes()
+        {
+            int minutesInFuture = GetRandomNumber();
+            int minutesInPast = GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                minutesInFuture,
+                minutesInPast
+            };
+        }
+
+        private string GetRandomString() =>
+            new MnemonicString().GetValue();
+
+        private SqlException CreateSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private int GetRandomNumber() =>
+        private static int GetRandomNegativeNumber() =>
+          -1 * new IntRange(min: 2, max: 9).GetValue();
+
+        private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
         private DateTimeOffset GetRandomDatetimeOffset() =>
@@ -55,7 +79,5 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations {
 
             return filler;
         }
-
-
     }
 }

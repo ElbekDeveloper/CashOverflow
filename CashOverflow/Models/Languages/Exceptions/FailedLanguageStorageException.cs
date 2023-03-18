@@ -6,9 +6,12 @@
 using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Languages.Exceptions {
-    public class FailedLanguageStorageException : Xeption {
+namespace CashOverflow.Models.Languages.Exceptions
+{
+    public class FailedLanguageStorageException : Xeption
+    {
         public FailedLanguageStorageException(Exception innerException)
-            : base(message: "Failed language storage error occured, contact support.", innerException) { }
+            : base(message: "Failed language storage exception occurred, contact support", innerException)
+        { }
     }
 }

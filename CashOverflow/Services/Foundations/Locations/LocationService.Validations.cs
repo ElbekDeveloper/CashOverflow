@@ -7,9 +7,12 @@ using System;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 
-namespace CashOverflow.Services.Foundations.Locations {
-    public partial class LocationService {
-        private static void ValidateLocationOnAdd(Location location) {
+namespace CashOverflow.Services.Foundations.Locations
+{
+    public partial class LocationService
+    {
+        private void ValidateLocationOnAdd(Location location)
+        {
             ValidateLocationNotNull(location);
 
             Validate(
@@ -17,6 +20,7 @@ namespace CashOverflow.Services.Foundations.Locations {
                 (Rule: IsInvalid(location.Name), Parameter: nameof(Location.Name)),
                 (Rule: IsInvalid(location.CreatedDate), Parameter: nameof(Location.CreatedDate)),
                 (Rule: IsInvalid(location.UpdatedDate), Parameter: nameof(Location.UpdatedDate)),
+                (Rule: IsNotRecent(location.CreatedDate), Parameter: nameof(Location.CreatedDate)),
 
                 (Rule: IsInvalid(
                     firstDate: location.CreatedDate,
@@ -55,7 +59,22 @@ namespace CashOverflow.Services.Foundations.Locations {
             Message = "Date is required"
         };
 
-        private static void Validate(params (dynamic Rule, string Parameter)[] validations) {
+        private dynamic IsNotRecent(DateTimeOffset date) => new
+        {
+            Condition = IsDateNotRecent(date),
+            Message = "Date is not recent"
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset date)//10:51:20
+        {
+            DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();//10:51:00
+            TimeSpan timeDifference = currentDate.Subtract(date); //-20
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
+
+        private void Validate(params (dynamic Rule, string Parameter)[] validations)
+        {
             var invalidLocationException = new InvalidLocationException();
 
             foreach ((dynamic rule, string parameter) in validations) {
