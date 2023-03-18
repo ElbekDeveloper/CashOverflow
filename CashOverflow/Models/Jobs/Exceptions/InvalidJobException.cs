@@ -12,8 +12,7 @@ namespace CashOverflow.Models.Jobs.Exceptions
 	{
 		public InvalidJobException()
 			:base(message:"Job is invalid")
-		{
-		}
+		{ }
 	}
 }
 

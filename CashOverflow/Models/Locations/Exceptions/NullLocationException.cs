@@ -12,7 +12,6 @@ namespace CashOverflow.Models.Locations.Exceptions
 	{
 		public NullLocationException():base(message:"Location is null.")
 		{}
-
 	}
 }
 

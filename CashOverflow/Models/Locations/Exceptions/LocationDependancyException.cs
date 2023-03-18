@@ -12,8 +12,7 @@ namespace CashOverflow.Models.Locations.Exceptions
 	{
 		public LocationDependancyException(Xeption innerException)
 			:base("Location dependancy exception occured, contact support",innerException)
-		{
-		}
+		{}
 	}
 }
 

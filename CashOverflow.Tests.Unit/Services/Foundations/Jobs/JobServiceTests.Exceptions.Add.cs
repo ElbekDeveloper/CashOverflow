@@ -22,7 +22,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 			// given
 			Job someJob = CreateRandomJob();
 			SqlException sqlException = CreateSqlException();
-			FailedJobStorageException failedJobStorageException = new FailedJobStorageException(sqlException);
+			var failedJobStorageException = new FailedJobStorageException(sqlException);
 			var expectedJobDependancyException = new JobDependancyException(failedJobStorageException);
 
 			this.dateTimeBrokerMock.Setup(broker =>
