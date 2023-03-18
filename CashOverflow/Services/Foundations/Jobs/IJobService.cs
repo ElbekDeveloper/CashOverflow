@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 
@@ -12,8 +11,6 @@ namespace CashOverflow.Services.Foundations.Jobs
 {
     public interface IJobService
     {
-        IQueryable<Job> RetrieveAllJobs();
         ValueTask<Job> RetrieveJobByIdAsync(Guid jobId);
-        ValueTask<Job> RemoveJobByIdAsync(Guid jobId);
     }
 }

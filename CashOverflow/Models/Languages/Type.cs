@@ -10,6 +10,6 @@ namespace CashOverflow.Models.Languages
         Other,
         Frontend,
         Backend,
-        FullStack
+        Fullstack
     }
 }
