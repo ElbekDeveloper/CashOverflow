@@ -41,7 +41,7 @@ namespace CashOverflow.Services.Foundations.Salaries
             var createAndLogServiceException =
                 new SalaryServiceException(exception);
 
-            this.loggingBroker.LogCritical(createAndLogServiceException);
+            this.loggingBroker.LogError(createAndLogServiceException);
 
             throw createAndLogServiceException;
         }
