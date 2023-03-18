@@ -28,6 +28,7 @@ namespace CashOverflow.Services.Foundations.Languages
             this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
         }
+
         public ValueTask<Language> AddLanguageAsync(Language language) =>
        TryCatch(async () =>
        {
@@ -51,6 +52,5 @@ namespace CashOverflow.Services.Foundations.Languages
 
                 return await this.storageBroker.DeleteLanguageAsync(maybeLanguage);
             });
-
     }
 }
