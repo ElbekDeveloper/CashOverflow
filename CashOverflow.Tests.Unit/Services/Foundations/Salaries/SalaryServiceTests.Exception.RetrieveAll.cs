@@ -3,12 +3,12 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using CashOverflow.Models.Salaries.Exceptions;
+using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
 using Xunit;
-using CashOverflow.Models.Salaries.Exceptions;
-using System;
-using FluentAssertions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 {
