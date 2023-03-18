@@ -8,11 +8,11 @@ using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-	public class LocationDependencyException:Xeption
+	public class LocationDependencyValidationException:Xeption
 	{
-		public LocationDependencyException(Xeption innerException)
-			:base("Location dependency exception occured, contact support",innerException)
-		{}
+		public LocationDependencyValidationException(Xeption innerException)
+			: base(message: "Location dependency validation error occured,fix the errors and try again.", innerException)
+		{ }
 	}
 }
 

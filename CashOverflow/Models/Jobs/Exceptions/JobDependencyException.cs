@@ -8,11 +8,11 @@ using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-	public class JobDependancyException:Xeption
+	public class JobDependencyException:Xeption
 	{
-		public JobDependancyException(Xeption innerException)
-			:base("Job dependancy exception occured, contact support",innerException)
-		{}
+		public JobDependencyException(Xeption innerException)
+			:base("Job dependency exception occured, contact support",innerException)
+		{ }
 	}
 }
 

@@ -118,8 +118,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 key: nameof(Location.CreatedDate),
                 values: $"Date is not the same as {nameof(Location.UpdatedDate)}");
 
-            LocationValidationException expectedLocationValidationException =
-                new LocationValidationException(invalidLocationException);
+            var expectedLocationValidationException = new LocationValidationException(invalidLocationException);
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Returns(randomDate);
 
             // when
             ValueTask<Location> addLocationTask = this.locationService.AddLocationAsync(invalidLocation);
@@ -130,6 +131,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             // then
             actualLocationValidationException.Should().BeEquivalentTo(expectedLocationValidationException);
 
+            //this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
             this.loggingBrokerMock.Verify(broker =>
             broker.LogError(It.Is(SameExceptionAs(expectedLocationValidationException))), Times.Once);
             this.storageBrokerMock.Verify(broker => broker.InsertLocationAsync(It.IsAny<Location>()), Times.Never);

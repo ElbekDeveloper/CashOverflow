@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
+using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -17,13 +18,13 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 	public partial class LocationServiceTests
 	{
 		[Fact]
-		public async Task ShouldThrowCriticalDependencyExceptionOnAddIfDependancyErrorOccursAndLogItAsync()
+		public async Task ShouldThrowCriticalDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync()
 		{
 			// given
 			Location someLocation = CreateRandomLocation();
 			SqlException sqlException = CreateSqlException();
 			var failedLocationStorageException = new FailedLocationStorageException(sqlException);
-			var expecteLocationDependancyException = new LocationDependancyException(failedLocationStorageException);
+			var expecteLocationdependencyException = new LocationDependencyException(failedLocationStorageException);
 
 			this.dateTimeBrokerMock.Setup(broker =>
 			broker.GetCurrentDateTimeOffset()).Throws(sqlException);
@@ -31,16 +32,51 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 			// when
 			ValueTask<Location> addLocationTask = this.locationService.AddLocationAsync(someLocation);
 
-			LocationDependancyException actualLocationDependancyException =
-				await Assert.ThrowsAsync<LocationDependancyException>(addLocationTask.AsTask);
+			LocationDependencyException actualLocationdependencyException =
+				await Assert.ThrowsAsync<LocationDependencyException>(addLocationTask.AsTask);
 
             // then
-            actualLocationDependancyException.Should().BeEquivalentTo(expecteLocationDependancyException);
+            actualLocationdependencyException.Should().BeEquivalentTo(expecteLocationdependencyException);
 
 			this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 
 			this.loggingBrokerMock.Verify(broker =>
-			broker.LogCritical(It.Is(SameExceptionAs(expecteLocationDependancyException))), Times.Once);
+			broker.LogCritical(It.Is(SameExceptionAs(expecteLocationdependencyException))), Times.Once);
+
+			this.dateTimeBrokerMock.VerifyNoOtherCalls();
+			this.loggingBrokerMock.VerifyNoOtherCalls();
+			this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+		[Fact]
+		public async Task ShouldThrowDependencyValidationExceptionOnAddIfDublicateKeyErrorOccursAndLogItAsync()
+		{
+			// given
+			string someMessage = GetRandomString();
+			Location someLocation = CreateRandomLocation();
+			var duplicateKeyException = new DuplicateKeyException(someMessage);
+			var  alreadyExistsLocationException = new AlreadyExistsLocationException(duplicateKeyException);
+
+			var expectedLocationDependencyValidationException =
+				new LocationDependencyValidationException(alreadyExistsLocationException);
+
+			this.dateTimeBrokerMock.Setup(broker =>
+			broker.GetCurrentDateTimeOffset()).Throws(duplicateKeyException);
+
+			// when
+			ValueTask<Location> addLocationTask = this.locationService.AddLocationAsync(someLocation);
+
+			LocationDependencyValidationException actualLocationDependencyValidationException =
+				await Assert.ThrowsAsync<LocationDependencyValidationException>(addLocationTask.AsTask);
+
+			// then
+			actualLocationDependencyValidationException.Should().
+				BeEquivalentTo(expectedLocationDependencyValidationException);
+
+			this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+
+			this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
+				expectedLocationDependencyValidationException))), Times.Once);
 
 			this.dateTimeBrokerMock.VerifyNoOtherCalls();
 			this.loggingBrokerMock.VerifyNoOtherCalls();

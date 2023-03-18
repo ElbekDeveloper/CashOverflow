@@ -35,7 +35,7 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 var failedLocationStorageException = new FailedLocationStorageException(sqlException);
 
-                throw CreateAndLogCriticalDependancyException(failedLocationStorageException);
+                throw CreateAndLogCriticaldependencyException(failedLocationStorageException);
             }
         }
 
@@ -47,12 +47,12 @@ namespace CashOverflow.Services.Foundations.Locations
             return locationValidationException;
         }
 
-        private LocationDependancyException CreateAndLogCriticalDependancyException(Xeption exception)
+        private LocationDependencyException CreateAndLogCriticaldependencyException(Xeption exception)
         {
-            var locationDependancyException = new LocationDependancyException(exception); 
-            this.loggingBroker.LogCritical(locationDependancyException);
+            var locationdependencyException = new LocationDependencyException(exception); 
+            this.loggingBroker.LogCritical(locationdependencyException);
 
-            return locationDependancyException;
+            return locationdependencyException;
         }
     }
 }

@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using FluentAssertions;
@@ -18,10 +19,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         public async Task ShouldAddLocationAsync()
         {
             // given
-            Location randomLocation = CreateRandomLocation();
+            DateTimeOffset randomDateTime = GetRandomDatetimeOffset();
+            Location randomLocation = CreateRandomLocation(randomDateTime);
             Location inputLocation = randomLocation;
             Location persistedLocation = inputLocation;
             Location expectedLocation = persistedLocation.DeepClone();
+
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Returns(randomDateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertLocationAsync(inputLocation)).ReturnsAsync(persistedLocation);
@@ -32,6 +37,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             // then
             actualLocation.Should().BeEquivalentTo(expectedLocation);
+
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLocationAsync(inputLocation), Times.Once);

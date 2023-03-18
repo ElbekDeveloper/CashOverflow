@@ -4,16 +4,15 @@
 // --------------------------------------------------------
 
 using System;
-using Azure.Messaging;
 using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-	public class JobValidationException:Xeption
+	public class JobDependencyValidationException:Xeption
 	{
-		public JobValidationException(Xeption innerException)
-			: base(message: " Job validation error occured,fix the error and try again.", innerException)
-		{ } 
+		public JobDependencyValidationException(Xeption innerException)
+			:base("Job dependency validation error occured,fix the errors and try again.", innerException)
+		{ }
 	}
 }
 

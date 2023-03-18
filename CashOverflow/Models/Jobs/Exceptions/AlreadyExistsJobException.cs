@@ -4,16 +4,15 @@
 // --------------------------------------------------------
 
 using System;
-using Azure.Messaging;
 using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-	public class JobValidationException:Xeption
+	public class AlreadyExistsJobException:Xeption
 	{
-		public JobValidationException(Xeption innerException)
-			: base(message: " Job validation error occured,fix the error and try again.", innerException)
-		{ } 
+		public AlreadyExistsJobException(Exception innerException)
+			: base(message: "Job already exists.", innerException)
+		{ }
 	}
 }
 
