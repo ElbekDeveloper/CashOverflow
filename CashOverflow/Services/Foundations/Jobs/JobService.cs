@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
@@ -29,6 +30,9 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
         }
+
+        public IQueryable<Job> RetrieveAllJobs() =>
+            TryCatch(() => this.storageBroker.SelectAllJobs());
 
         public ValueTask<Job> RetrieveJobByIdAsync(Guid jobId) =>
            TryCatch(async () =>
