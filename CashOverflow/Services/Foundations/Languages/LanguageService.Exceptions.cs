@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
@@ -45,6 +46,12 @@ namespace CashOverflow.Services.Foundations.Languages
 
                 throw CreateAndDependencyValidationException(lockedTeamException);
             }
+            catch (Exception serviceException)
+            {
+                var failedLanguageServiceException = new FailedLanguageServiceException(serviceException);
+
+                throw CreateAndLogServiceException(failedLanguageServiceException);
+            }
         }
         private LanguageValidationException CreateAndLogValidationException(Xeption exception)
         {
@@ -68,6 +75,15 @@ namespace CashOverflow.Services.Foundations.Languages
             this.loggingBroker.LogError(languageDependencyValidationException);
 
             return languageDependencyValidationException;
+        }
+
+        private LanguageServiceException CreateAndLogServiceException(
+           Exception exception)
+        {
+            var languageServiceException = new LanguageServiceException(exception);
+            this.loggingBroker.LogError(languageServiceException);
+
+            return languageServiceException;
         }
     }
 }
