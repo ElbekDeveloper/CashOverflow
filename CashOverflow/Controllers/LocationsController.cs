@@ -8,7 +8,6 @@ using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using CashOverflow.Services.Foundations.Locations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage;
 using RESTFulSense.Controllers;
 
 namespace CashOverflow.Controllers
@@ -31,20 +30,20 @@ namespace CashOverflow.Controllers
 
                 return Created(addedLocation);
             }
-            catch(LocationValidationException locationValidationException)
+            catch (LocationValidationException locationValidationException)
             {
                 return BadRequest(locationValidationException.InnerException);
             }
-            catch(LocationDependencyValidationException locationDependencyValidationException)
+            catch (LocationDependencyValidationException locationDependencyValidationException)
                 when (locationDependencyValidationException.InnerException is AlreadyExistsLocationException)
             {
                 return Conflict(locationDependencyValidationException.InnerException);
             }
-            catch(LocationDependencyException locationDependencyException)
+            catch (LocationDependencyException locationDependencyException)
             {
                 return InternalServerError(locationDependencyException.InnerException);
             }
-            catch(LocationServiceException locationServiceException)
+            catch (LocationServiceException locationServiceException)
             {
                 return InternalServerError(locationServiceException.InnerException);
             }
