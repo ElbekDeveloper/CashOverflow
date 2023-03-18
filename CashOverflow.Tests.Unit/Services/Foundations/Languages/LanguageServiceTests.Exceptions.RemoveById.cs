@@ -98,5 +98,45 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages {
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
 
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveIfExceptionOccursAndLogItAsync() {
+
+            // given
+            Guid someLanguageId = Guid.NewGuid();
+            var serviceException = new Exception();
+
+            var failedLanguageServiceException =
+                new FailedLanguageServiceException(serviceException);
+
+            var expectedLanguageServiceException =
+                new LanguageServiceException(failedLanguageServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLanguageByIdAsync(It.IsAny<Guid>())).
+                    ThrowsAsync(serviceException);
+            // when
+            ValueTask<Language> removeLanguageByIdTask =
+                this.languageService.RemoveLanguageByIdAsync(someLanguageId);
+
+            LanguageServiceException actualLanguageServiceException =
+                await Assert.ThrowsAsync<LanguageServiceException>(
+                    removeLanguageByIdTask.AsTask);
+
+            // then
+            actualLanguageServiceException.Should().BeEquivalentTo(
+                expectedLanguageServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLanguageByIdAsync(It.IsAny<Guid>()), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLanguageServiceException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
