@@ -51,7 +51,7 @@ namespace CashOverflow.Services.Foundations.Salaries
             var salaryDependencyException =
                 new SalaryDependencyException(xeption);
 
-            this.loggingBroker.LogError(salaryDependencyException);
+            this.loggingBroker.LogCritical(salaryDependencyException);
 
             throw salaryDependencyException;
         }
