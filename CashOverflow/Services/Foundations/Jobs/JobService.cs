@@ -47,6 +47,11 @@ namespace CashOverflow.Services.Foundations.Jobs
                return maybeJob;
            });
 
+        public ValueTask<Job> ModifyJobAsync(Job job)
+        {
+            throw new NotImplementedException();
+        }
+
         public ValueTask<Job> RemoveJobByIdAsync(Guid jobId) =>
            TryCatch(async () =>
            {
@@ -59,5 +64,6 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                return await this.storageBroker.DeleteJobAsync(maybeJob);
            });
+
     }
 }

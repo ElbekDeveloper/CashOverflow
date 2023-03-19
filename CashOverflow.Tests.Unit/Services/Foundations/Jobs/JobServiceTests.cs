@@ -63,6 +63,22 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         private static SqlException CreateSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
+        private static int GetRandomNegativeNumber() =>
+            -1 * new IntRange(min: 2, max: 10).GetValue();
+
+        private static Job CreateRandomModifyJob(DateTimeOffset dates)
+        {
+            int randomDaysInPast = GetRandomNegativeNumber();
+            Job randomJob = CreateRandomJob(dates);
+
+            randomJob.CreatedDate = randomJob.CreatedDate.AddDays(randomDaysInPast);
+
+            return randomJob;
+        }
+
+        private static Job CreateRandomJob(DateTimeOffset dates) =>
+           CreateJobFiller(dates).Create();
+
         private static Job CreateRandomJob() =>
             CreateJobFiller(GetRandomDateTime()).Create();
 
