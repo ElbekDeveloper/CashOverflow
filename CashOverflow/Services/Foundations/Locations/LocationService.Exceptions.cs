@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
@@ -16,6 +17,7 @@ namespace CashOverflow.Services.Foundations.Locations
     public partial class LocationService
     {
         private delegate ValueTask<Location> ReturningLocationFunction();
+        private delegate IQueryable<Location> ReturningLocationsFunction();
 
         private async ValueTask<Location> TryCatch(ReturningLocationFunction returningLocationFunction)
         {
@@ -42,6 +44,28 @@ namespace CashOverflow.Services.Foundations.Locations
                 var alreadyExistsLocationException = new AlreadyExistsLocationException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLocationException);
+            }
+            catch (Exception exception)
+            {
+                var failedLocationServiceException = new FailedLocationServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLocationServiceException);
+            }
+
+        }
+
+        private IQueryable<Location> TryCatch(ReturningLocationsFunction returningLocationsFunction)
+        {
+            try
+            {
+                return returningLocationsFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedLocationServiceException =
+                    new FailedLocationStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedLocationServiceException);
             }
             catch (Exception exception)
             {
