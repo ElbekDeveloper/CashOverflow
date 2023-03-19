@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
@@ -69,6 +70,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         private DateTimeOffset GetRandomDatetimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private IQueryable<Location> CreateRandomLocations()
+        {
+            return CreateLocationFiller(GetRandomDatetimeOffset())
+                .Create(count: GetRandomNumber()).AsQueryable();
+        }
 
         private Location CreateRandomLocation(DateTimeOffset dates) =>
          CreateLocationFiller(dates).Create();
