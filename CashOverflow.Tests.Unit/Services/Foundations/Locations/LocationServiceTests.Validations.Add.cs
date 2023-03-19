@@ -72,7 +72,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 key: nameof(Location.CreatedDate),
                 values: "Date is required");
 
-            invalidLocationException.AddData(
+			invalidLocationException.AddData(
                 key: nameof(Location.UpdatedDate),
                 values: "Date is required");
 
@@ -106,7 +106,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         {
             // given
             int randomMinutes = GetRandomNumber();
-            DateTimeOffset randomDate = GetRandomDatetimeOffset();
+            DateTimeOffset randomDate = GetRandomDateTimeOffset();
             Location randomLocation = CreateRandomLocation(randomDate);
             Location invalidLocation = randomLocation;
             invalidLocation.UpdatedDate = randomDate.AddMinutes(randomMinutes);
@@ -148,7 +148,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             int invalidMinutes)
         {
             // given
-            DateTimeOffset randomDate = GetRandomDatetimeOffset();
+            DateTimeOffset randomDate = GetRandomDateTimeOffset();
             DateTimeOffset invalidDateTime = randomDate.AddMinutes(invalidMinutes);
             Location randomLocation = CreateRandomLocation(invalidDateTime);
             Location invalidLocation = randomLocation;

@@ -19,7 +19,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         public async Task ShouldAddLocationAsync()
         {
             // given
-            DateTimeOffset randomDateTime = GetRandomDatetimeOffset();
+            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
             Location randomLocation = CreateRandomLocation(randomDateTime);
             Location inputLocation = randomLocation;
             Location persistedLocation = inputLocation;

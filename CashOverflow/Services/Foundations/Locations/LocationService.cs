@@ -16,8 +16,8 @@ namespace CashOverflow.Services.Foundations.Locations
     public partial class LocationService : ILocationService
     {
         private readonly IStorageBroker storageBroker;
-        private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
 
         public LocationService(
             IStorageBroker storageBroker,
@@ -53,5 +53,18 @@ namespace CashOverflow.Services.Foundations.Locations
 
                 return maybeLocation;
             });
+
+        public ValueTask<Location> RemoveLocationByIdAsync(Guid locationId) =>
+        TryCatch(async () =>
+        {
+            ValidateLocationById(locationId);
+
+            Location someLocation = 
+                await this.storageBroker.SelectLocationByIdAsync(locationId);
+
+            ValidateStorageLocation(someLocation, locationId);
+
+            return await this.storageBroker.DeleteLocationAsync(someLocation);
+        });
     }
 }
