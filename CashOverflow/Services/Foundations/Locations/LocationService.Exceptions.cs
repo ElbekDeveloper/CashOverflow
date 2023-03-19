@@ -10,6 +10,8 @@ using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Locations
@@ -48,6 +50,12 @@ namespace CashOverflow.Services.Foundations.Locations
                 var alreadyExistsLocationException = new AlreadyExistsLocationException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLocationException);
+            }
+            catch (DbUpdateException databaseUpdateException)
+            {
+                var failedLocationStorageException = new FailedLocationStorageException(databaseUpdateException);
+
+                throw CreateAndLogDependencyException(failedLocationStorageException);
             }
             catch (Exception exception)
             {

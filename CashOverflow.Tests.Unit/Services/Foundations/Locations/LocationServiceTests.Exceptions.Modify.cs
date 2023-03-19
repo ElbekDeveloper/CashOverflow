@@ -106,13 +106,13 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 expectedLocationDependencyException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLanguageByIdAsync(locationId), Times.Once);
+                broker.SelectLocationByIdAsync(locationId), Times.Once);
 
             this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(), Times.Once);
+                broker.GetCurrentDateTimeOffset(), Times.Never);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(
+                broker.LogCritical(It.Is(SameExceptionAs(
                     expectedLocationDependencyException))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
