@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 using Xunit;
 
@@ -15,7 +16,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
     public partial class SalaryServiceTests
     {
         [Fact]
-        public void ShouldRetrieveAllSalaries()
+        public async Task ShouldAddSalaryAsync()
         {
             // given 
             DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
