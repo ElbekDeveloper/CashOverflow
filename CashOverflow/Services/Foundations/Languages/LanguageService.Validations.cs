@@ -22,7 +22,7 @@ namespace CashOverflow.Services.Foundations.Languages
                 (Rule: IsInvalid(language.UpdatedDate), Parameter: nameof(Language.UpdatedDate)),
                 (Rule: IsNotRecent(language.CreatedDate), Parameter: nameof(Language.CreatedDate)),
 
-                (Rule: IsInvalid(
+                (Rule: IsNotSame(
                     firstDate: language.CreatedDate,
                     secondDate: language.UpdatedDate,
                     secondDateName: nameof(Language.UpdatedDate)),
@@ -49,13 +49,13 @@ namespace CashOverflow.Services.Foundations.Languages
             }
         }
 
-        private dynamic IsInvalid(Guid id) => new
+        private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,
             Message = "Id is required"
         };
 
-        private dynamic IsInvalid(
+        private dynamic IsNotSame(
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
             string secondDateName) => new
@@ -90,21 +90,28 @@ namespace CashOverflow.Services.Foundations.Languages
             return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
-        private void Validate(params (dynamic Rule, string Parameter)[] validations)
+        private static void ValidateStorageLanguageExist(Language maybeLanguage, Guid languageId)
         {
-            var invalidLanguageException = new InvalidLanguageException();
+            if (maybeLanguage is null)
+            {
+                throw new NotFoundLanguageException(languageId);
+            }
+        }
+
+        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
+        {
+            var invalidLangageException = new InvalidLanguageException();
 
             foreach ((dynamic rule, string parameter) in validations)
             {
                 if (rule.Condition)
                 {
-                    invalidLanguageException.UpsertDataList(
+                    invalidLangageException.UpsertDataList(
                         key: parameter,
                         value: rule.Message);
                 }
             }
-
-            invalidLanguageException.ThrowIfContainsErrors();
+            invalidLangageException.ThrowIfContainsErrors();
         }
     }
 }
