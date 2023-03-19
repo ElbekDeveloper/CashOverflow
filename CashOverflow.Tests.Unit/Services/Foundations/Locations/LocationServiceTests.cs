@@ -77,7 +77,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         private IQueryable<Location> CreateRandomLocations()
         {
-            return CreateLocationFiller(GetRandomDatetimeOffset())
+            return CreateLocationFiller(GetRandomDateTimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
         }
 

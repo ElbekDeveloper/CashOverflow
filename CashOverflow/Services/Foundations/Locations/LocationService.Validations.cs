@@ -49,14 +49,6 @@ namespace CashOverflow.Services.Foundations.Locations
             }
         }
 
-        public void ValidateStorageLocation(Location maybeLocation, Guid locationId)
-        {
-            if (maybeLocation is null)
-            {
-                throw new NotFoundLocationException(locationId);
-            }
-        }
-
         public void ValidateLocationById(Guid locationId) =>
            Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
 
