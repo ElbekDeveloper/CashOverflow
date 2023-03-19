@@ -26,7 +26,7 @@ namespace CashOverflow.Services.Foundations.Jobs
                 (Rule: IsInvalid(
                    firstDate: job.CreatedDate,
                    secondDate: job.UpdatedDate,
-                   secondDateName: nameof(job.UpdatedDate)),
+                   secondDateName: nameof(Job.UpdatedDate)),
 
                  Parameter: nameof(Job.CreatedDate)));
         }
