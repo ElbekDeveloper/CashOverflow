@@ -31,7 +31,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLanguageByIdAsync(It.IsAny<Guid>()))
-                .ThrowsAsync(sqlException);
+                    .ThrowsAsync(sqlException);
 
             //when
             ValueTask<Language> removeLanguageByIdTask =
@@ -49,7 +49,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs
-                (expectedLanguageDependencyException))), Times.Once());
+                    (expectedLanguageDependencyException))), Times.Once());
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

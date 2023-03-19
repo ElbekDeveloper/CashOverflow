@@ -43,7 +43,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             actualLanguage.Should().BeEquivalentTo(expectedLanguage);
 
             this.storageBrokerMock.Verify(broker =>
-            broker.SelectLanguageByIdAsync(inputLanguageId), Times.Once());
+                broker.SelectLanguageByIdAsync(inputLanguageId), Times.Once());
 
             this.storageBrokerMock.Verify(broker =>
             broker.DeleteLanguageAsync(expectedInputLanguage), Times.Once());
