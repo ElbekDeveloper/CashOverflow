@@ -101,7 +101,7 @@ namespace CashOverflow.Services.Foundations.Locations
             var locationDependencyException = new LocationDependencyException(exception);
             this.loggingBroker.LogCritical(locationDependencyException);
 
-            return locationdependencyException;
+            return locationDependencyException;
         }
 
         private LocationDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
