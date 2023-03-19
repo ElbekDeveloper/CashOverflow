@@ -65,7 +65,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         }
 
         [Fact]
-        public async Task ShouldThrowDependencyExceptionOnDeleteWhenSqlExceptionOccursAndLogItAsync()
+        public async Task ShouldThrowDependencyExceptionOnRemoveWhenSqlExceptionOccursAndLogItAsync()
         {
             // given
             Guid someLocationId = Guid.NewGuid();

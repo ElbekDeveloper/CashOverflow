@@ -62,7 +62,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         }
 
         [Fact]
-        public async Task ShouldThrowNotFoundExceptionOnRemoveLocationByIdIsNotFounfAndLogItAsync()
+        public async Task ShouldThrowNotFoundExceptionOnRemoveLocationByIdIsNotFoundAndLogItAsync()
         {
             // given
             Guid inputLocationId = Guid.NewGuid();

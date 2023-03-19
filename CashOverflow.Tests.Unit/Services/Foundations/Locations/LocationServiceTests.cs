@@ -69,7 +69,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             CreateLocationFiller(dates: GetRandomDateTimeOffset()).Create();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
-            new DateTimeRange(earliestDate: new DateTime()).GetValue();
+            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
         private Location CreateRandomLocation(DateTimeOffset dates) =>
             CreateLocationFiller(dates).Create();
