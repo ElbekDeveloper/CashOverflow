@@ -8,10 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-    public class LocationValidationException : Xeption
+    public class NotFoundLocationException : Xeption
     {
-        public LocationValidationException(Xeption innerException)
-            : base(message: "Location validation error occurred, fix the errors and try again.", innerException)
+        public NotFoundLocationException(Guid locationId)
+            : base(message: $"Couldn't find location with id: {locationId}.")
         { }
     }
 }

@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
@@ -20,23 +21,37 @@ namespace CashOverflow.Services.Foundations.Locations
 
         public LocationService(
             IStorageBroker storageBroker,
-               IDateTimeBroker dateTimeBroker,
-            ILoggingBroker loggingBroker)
+            ILoggingBroker loggingBroker,
+            IDateTimeBroker dateTimeBroker)
+
         {
             this.storageBroker = storageBroker;
-            this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
+            this.dateTimeBroker = dateTimeBroker;
         }
 
         public ValueTask<Location> AddLocationAsync(Location location) =>
-        TryCatch(async () =>
-        {
-            ValidateLocationOnAdd(location);
+            TryCatch(async () =>
+            {
+                ValidateLocationOnAdd(location);
 
-            return await this.storageBroker.InsertLocationAsync(location);
-        });
+                return await this.storageBroker.InsertLocationAsync(location);
+            });
 
         public IQueryable<Location> RetrieveAllLocations() =>
             TryCatch(() => this.storageBroker.SelectAllLocations());
+
+        public ValueTask<Location> RetrieveLocationByIdAsync(Guid locationId) =>
+            TryCatch(async () =>
+            {
+                ValidateLocationId(locationId);
+
+                Location maybeLocation =
+                    await this.storageBroker.SelectLocationByIdAsync(locationId);
+
+                ValidateStorageLocation(maybeLocation, locationId);
+
+                return maybeLocation;
+            });
     }
 }

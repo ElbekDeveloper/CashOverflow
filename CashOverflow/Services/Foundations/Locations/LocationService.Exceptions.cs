@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------
+// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
@@ -25,13 +25,17 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 return await returningLocationFunction();
             }
+            catch (InvalidLocationException invalidLocationException)
+            {
+                throw CreateAndLogValidationException(invalidLocationException);
+            }
             catch (NullLocationException nullLocationException)
             {
                 throw CreateAndLogValidationException(nullLocationException);
             }
-            catch (InvalidLocationException invalidLocationException)
+            catch (NotFoundLocationException notFoundLocationException)
             {
-                throw CreateAndLogValidationException(invalidLocationException);
+                throw CreateAndLogValidationException(notFoundLocationException);
             }
             catch (SqlException sqlException)
             {
@@ -83,9 +87,19 @@ namespace CashOverflow.Services.Foundations.Locations
             return locationValidationException;
         }
 
+        private LocationDependencyException CreateAndLogDependencyException(Xeption xeption)
+        {
+            var locationDependencyException = new LocationDependencyException(xeption);
+
+            this.loggingBroker.LogCritical(locationDependencyException);
+
+            return locationDependencyException;
+        }
+
         private LocationDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
             var locationDependencyException = new LocationDependencyException(exception);
+
             this.loggingBroker.LogCritical(locationDependencyException);
 
             return locationDependencyException;
@@ -102,9 +116,11 @@ namespace CashOverflow.Services.Foundations.Locations
         private LocationServiceException CreateAndLogServiceException(Xeption exception)
         {
             var locationServiceException = new LocationServiceException(exception);
+
             this.loggingBroker.LogError(locationServiceException);
 
             return locationServiceException;
         }
     }
 }
+
