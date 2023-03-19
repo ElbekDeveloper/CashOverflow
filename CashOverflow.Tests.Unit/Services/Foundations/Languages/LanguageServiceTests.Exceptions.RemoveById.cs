@@ -59,7 +59,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         [Fact]
         public async Task ShouldThrowDependencyValidationExceptionOnRemoveIFDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
         {
-
             // given
             Guid someLanguageId = Guid.NewGuid();
 
@@ -100,13 +99,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
-
         }
 
         [Fact]
         public async Task ShouldThrowServiceExceptionOnRemoveIfExceptionOccursAndLogItAsync()
         {
-
             // given
             Guid someLanguageId = Guid.NewGuid();
             var serviceException = new Exception();
