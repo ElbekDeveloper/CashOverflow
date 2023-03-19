@@ -69,20 +69,20 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
-        private DateTimeOffset GetRandomDatetimeOffset() =>
+        private Location CreateRandomLocation() =>
+            CreateLocationFiller(dates: GetRandomDateTimeOffset()).Create();
+
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
         private IQueryable<Location> CreateRandomLocations()
         {
-            return CreateLocationFiller(GetRandomDatetimeOffset())
+            return CreateLocationFiller(GetRandomDateTimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
         }
 
         private Location CreateRandomLocation(DateTimeOffset dates) =>
             CreateLocationFiller(dates).Create();
-
-        private Location CreateRandomLocation() =>
-            CreateLocationFiller(dates: GetRandomDatetimeOffset()).Create();
 
         private Filler<Location> CreateLocationFiller(DateTimeOffset dates)
         {

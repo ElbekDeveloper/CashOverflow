@@ -10,6 +10,7 @@ using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Locations
@@ -48,6 +49,13 @@ namespace CashOverflow.Services.Foundations.Locations
                 var alreadyExistsLocationException = new AlreadyExistsLocationException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLocationException);
+            }
+            catch (DbUpdateConcurrencyException databaseUpdateConcurrencyException)
+            {
+                var lockedLocationException =
+                    new LockedLocationException(databaseUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedLocationException);
             }
             catch (Exception exception)
             {
@@ -107,7 +115,9 @@ namespace CashOverflow.Services.Foundations.Locations
 
         private LocationDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {
-            var locationDependencyValidationException = new LocationDependencyValidationException(exception);
+            var locationDependencyValidationException =
+                new LocationDependencyValidationException(exception);
+
             this.loggingBroker.LogError(locationDependencyValidationException);
 
             return locationDependencyValidationException;

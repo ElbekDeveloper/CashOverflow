@@ -8,10 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-    public class NotFoundLocationException : Xeption
+    public class LockedLocationException : Xeption
     {
-        public NotFoundLocationException(Guid locationId)
-            : base(message: $"Couldn't find location with id: {locationId}.")
-        { }
+        public LockedLocationException(Exception innerException)
+            : base(message: "Locked Location record error, contact support.", innerException)
+        {}
     }
 }
