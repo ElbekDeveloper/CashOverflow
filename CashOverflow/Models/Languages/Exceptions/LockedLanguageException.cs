@@ -8,10 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Languages.Exceptions
 {
-    public class FailedLanguageServiceException : Xeption
+    public class LockedLanguageException : Xeption
     {
-        public FailedLanguageServiceException(Exception innerException)
-            : base(message: "Failed language service error occured, please contact support", innerException)
+        public LockedLanguageException(Exception innerException)
+            : base(message: "Language is locked, please try again.", innerException)
         { }
     }
 }
