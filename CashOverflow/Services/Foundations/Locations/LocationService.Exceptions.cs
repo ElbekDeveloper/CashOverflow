@@ -1,9 +1,10 @@
-﻿// --------------------------------------------------------
+// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
@@ -16,6 +17,7 @@ namespace CashOverflow.Services.Foundations.Locations
     public partial class LocationService
     {
         private delegate ValueTask<Location> ReturningLocationFunction();
+        private delegate IQueryable<Location> ReturningLocationsFunction();
 
         private async ValueTask<Location> TryCatch(ReturningLocationFunction returningLocationFunction)
         {
@@ -23,13 +25,17 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 return await returningLocationFunction();
             }
+            catch (InvalidLocationException invalidLocationException)
+            {
+                throw CreateAndLogValidationException(invalidLocationException);
+            }
             catch (NullLocationException nullLocationException)
             {
                 throw CreateAndLogValidationException(nullLocationException);
             }
-            catch (InvalidLocationException invalidLocationException)
+            catch (NotFoundLocationException notFoundLocationException)
             {
-                throw CreateAndLogValidationException(invalidLocationException);
+                throw CreateAndLogValidationException(notFoundLocationException);
             }
             catch (SqlException sqlException)
             {
@@ -49,6 +55,28 @@ namespace CashOverflow.Services.Foundations.Locations
 
                 throw CreateAndLogServiceException(failedLocationServiceException);
             }
+
+        }
+
+        private IQueryable<Location> TryCatch(ReturningLocationsFunction returningLocationsFunction)
+        {
+            try
+            {
+                return returningLocationsFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedLocationServiceException =
+                    new FailedLocationStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedLocationServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedLocationServiceException = new FailedLocationServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLocationServiceException);
+            }
         }
 
         private LocationValidationException CreateAndLogValidationException(Xeption exception)
@@ -59,9 +87,19 @@ namespace CashOverflow.Services.Foundations.Locations
             return locationValidationException;
         }
 
+        private LocationDependencyException CreateAndLogDependencyException(Xeption xeption)
+        {
+            var locationDependencyException = new LocationDependencyException(xeption);
+
+            this.loggingBroker.LogCritical(locationDependencyException);
+
+            return locationDependencyException;
+        }
+
         private LocationDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
             var locationDependencyException = new LocationDependencyException(exception);
+
             this.loggingBroker.LogCritical(locationDependencyException);
 
             return locationDependencyException;
@@ -78,9 +116,11 @@ namespace CashOverflow.Services.Foundations.Locations
         private LocationServiceException CreateAndLogServiceException(Xeption exception)
         {
             var locationServiceException = new LocationServiceException(exception);
+
             this.loggingBroker.LogError(locationServiceException);
 
             return locationServiceException;
         }
     }
 }
+
