@@ -3,12 +3,12 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using CashOverflow.Models.Languages;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CashOverflow.Models.Languages;
 
-namespace CashOverflow.Services.Foundations.Languages
+namespace CashOverflow
 {
     public interface ILanguageService
     {

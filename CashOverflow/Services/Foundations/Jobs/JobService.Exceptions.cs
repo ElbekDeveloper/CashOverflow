@@ -3,14 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
@@ -33,7 +33,7 @@ namespace CashOverflow.Services.Foundations.Jobs
             catch (InvalidJobException invalidJobException)
             {
                 throw CreateAndLogValidationException(invalidJobException);
-            }
+            } 
             catch (NotFoundJobException notFoundJobException)
             {
                 throw CreateAndLogValidationException(notFoundJobException);
@@ -107,7 +107,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return jobDependencyException;
         }
-
+ 
         private JobDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {
             var jobDependencyValidationException = new JobDependencyValidationException(exception);

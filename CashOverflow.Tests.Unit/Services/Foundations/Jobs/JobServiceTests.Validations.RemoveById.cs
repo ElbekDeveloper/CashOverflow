@@ -3,12 +3,12 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using FluentAssertions;
 using Moq;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs

@@ -38,7 +38,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 storageBroker: this.storageBrokerMock.Object,
                 dateTimeBroker: this.dateTimeBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
-
         }
 
         public static TheoryData InvalidMinutes()
@@ -58,7 +57,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             return CreateJobFiller(dates: GetRandomDatetimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
         }
-
+        
         private string GetRandomString() =>
             new MnemonicString().GetValue();
 
@@ -80,7 +79,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
         private static int GetRandomNegativeNumber() =>
             -1 * new IntRange(min: 2, max: 9).GetValue();
-
 
         private Job CreateRandomJob(DateTimeOffset dates) =>
             CreateJobFiller(dates).Create();

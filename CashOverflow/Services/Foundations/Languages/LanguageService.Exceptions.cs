@@ -3,13 +3,13 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Languages
@@ -110,5 +110,5 @@ namespace CashOverflow.Services.Foundations.Languages
 
             return languageServiceException;
         }
-    }
+}
 }
