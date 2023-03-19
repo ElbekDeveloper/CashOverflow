@@ -48,7 +48,15 @@ namespace CashOverflow.Services.Foundations.Locations
 
             ValidateStorageLocation(maybeLocation, locationId);
 
+<<<<<<< Updated upstream
             return maybeLocation;
         });
+=======
+                return maybeLocation;
+            });
+
+        public IQueryable<Location> RetrieveAllLocations() =>
+            TryCatch(() => this.storageBroker.SelectAllLocations());
+>>>>>>> Stashed changes
     }
 }
