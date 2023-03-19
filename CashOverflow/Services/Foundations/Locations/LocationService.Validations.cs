@@ -7,6 +7,7 @@ using System;
 using System.Data;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
@@ -43,9 +44,6 @@ namespace CashOverflow.Services.Foundations.Locations
                 );
         }
 
-        private static void ValidateLocationId(Guid locationId) =>
-            Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
-
         private static void ValidateStorageLocation(Location maybeLocation, Guid locationId)
         {
             if (maybeLocation is null)
@@ -54,6 +52,44 @@ namespace CashOverflow.Services.Foundations.Locations
             }
         }
 
+        private static void ValidateLocationId(Guid locationId) =>
+            Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
+
+        private static dynamic IsNotSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not same as {secondDateName}"
+            };
+
+        private static dynamic IsSame(
+           DateTimeOffset firstDate,
+           DateTimeOffset secondDate,
+           string secondDateName) => new
+           {
+               Condition = firstDate != default && firstDate == secondDate,
+               Message = $"Date is same as {secondDateName}"
+           };
+
+        private static void ValidateAginstStorageLocationOnModify(Location inputLocation, Location storageLocation)
+        {
+            ValidateStorageLocation(storageLocation, inputLocation.Id);
+
+            Validate(
+                (Rule: IsNotSame(
+                    firstDate: inputLocation.CreatedDate,
+                    secondDate: storageLocation.CreatedDate,
+                    secondDateName: nameof(Location.CreatedDate)),
+                Parameter: nameof(Location.CreatedDate)),
+
+                (Rule: IsSame(
+                    firstDate: inputLocation.UpdatedDate,
+                    secondDate: storageLocation.UpdatedDate,
+                    secondDateName: nameof(Location.UpdatedDate)),
+                Parameter: nameof(Location.UpdatedDate)));
+        }
 
         private static void ValidateLocationNotNull(Location location)
         {

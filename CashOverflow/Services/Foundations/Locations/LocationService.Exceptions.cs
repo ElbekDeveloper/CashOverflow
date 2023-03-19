@@ -55,7 +55,6 @@ namespace CashOverflow.Services.Foundations.Locations
 
                 throw CreateAndLogServiceException(failedLocationServiceException);
             }
-
         }
 
         private IQueryable<Location> TryCatch(ReturningLocationsFunction returningLocationsFunction)

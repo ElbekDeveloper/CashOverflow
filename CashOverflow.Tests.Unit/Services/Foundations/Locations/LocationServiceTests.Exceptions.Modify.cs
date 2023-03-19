@@ -3,11 +3,13 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
+using Microsoft.VisualBasic;
 using Moq;
 using Xunit;
 
@@ -19,14 +21,17 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         public async Task ShouldThrowCriticalDependencyExceptionOnModifyIfSqlErrorOccursAndLogItAsync()
         {
             //given
-            Location someLocation = CreateRandomLocation();
+            DateTimeOffset someDateTime = GetRandomDateTime();
+            Location randomLocation = CreateRandomLocation(someDateTime);
+            Location someLocation = randomLocation;
+            Guid locationId = someLocation.Id;
             SqlException sqlException = CreateSqlException();
 
-            var failedLocationStorageException =
+            var failedLocationException =
                 new FailedLocationStorageException(sqlException);
 
             var expectedLocationDependencyException =
-                new LocationDependencyException(failedLocationStorageException);
+                new LocationDependencyException(failedLocationException);
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset())
@@ -41,25 +46,23 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                     modifyLocationTask.AsTask);
 
             //then
-            actualLocationDependencyException.Should()
-                .BeEquivalentTo(expectedLocationDependencyException);
+            actualLocationDependencyException.Should().BeEquivalentTo(
+                expectedLocationDependencyException);
 
             this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(),Times.Once);
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(locationId), Times.Never);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
-                    expectedLocationDependencyException))),Times.Once);
+                    expectedLocationDependencyException))),Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.UpdateLocationAsync(It.IsAny<Location>()),
-                    Times.Never);
+                broker.SelectLocationByIdAsync(locationId), Times.Never);
 
-            this.storageBrokerMock.Verify(broker =>
-                broker.SelectLocationByIdAsync(someLocation.Id),
-                    Times.Never);
-
-            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
