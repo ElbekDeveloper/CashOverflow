@@ -3,15 +3,17 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 
-namespace CashOverflow
+namespace CashOverflow.Services.Foundations.Languages
 {
     public interface ILanguageService
     {
         ValueTask<Language> AddLanguageAsync(Language language);
         IQueryable<Language> RetrieveAllLanguages();
+        ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId);
     }
 }

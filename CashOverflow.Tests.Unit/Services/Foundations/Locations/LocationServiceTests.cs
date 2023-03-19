@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
@@ -38,6 +39,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
+        private static DateTimeOffset GetRandomDateTime() =>
+            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
         public static TheoryData<int> InvalidMinutes()
         {
             int minutesInFuture = GetRandomNumber();
@@ -60,7 +64,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             actualException => actualException.SameExceptionAs(expectedException);
 
         private static int GetRandomNegativeNumber() =>
-          -1 * new IntRange(min: 2, max: 9).GetValue();
+            -1 * new IntRange(min: 2, max: 9).GetValue();
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
@@ -70,6 +74,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private IQueryable<Location> CreateRandomLocations()
+        {
+            return CreateLocationFiller(GetRandomDatetimeOffset())
+                .Create(count: GetRandomNumber()).AsQueryable();
+        }
 
         private Location CreateRandomLocation(DateTimeOffset dates) =>
             CreateLocationFiller(dates).Create();

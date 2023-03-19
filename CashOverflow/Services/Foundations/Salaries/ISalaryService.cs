@@ -3,14 +3,13 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using Xeptions;
+using System.Linq;
+using CashOverflow.Models.Salaries;
 
-namespace CashOverflow.Models.Jobs.Exceptions
+namespace CashOverflow.Services.Foundations.Salaries
 {
-    public class InvalidJobException : Xeption
+    public interface ISalaryService
     {
-        public InvalidJobException()
-            : base(message: "Job is invalid.")
-        { }
+        IQueryable<Salary> RetrieveAllSalaries();
     }
 }

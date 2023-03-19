@@ -6,12 +6,12 @@
 using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Jobs.Exceptions
+namespace CashOverflow.Models.Salaries.Exceptions
 {
-    public class NotFoundJobException : Xeption
+    public class SalaryServiceException : Xeption
     {
-        public NotFoundJobException(Guid jobId)
-            : base(message: $"Couldn't find job with id: {jobId}.")
+        public SalaryServiceException(Exception innerException)
+            : base(message: "Salary service error occured, contact support", innerException)
         { }
     }
 }

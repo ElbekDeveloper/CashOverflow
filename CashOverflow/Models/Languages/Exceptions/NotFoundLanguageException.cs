@@ -6,12 +6,12 @@
 using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Jobs.Exceptions
+namespace CashOverflow.Models.Languages.Exceptions
 {
-    public class NotFoundJobException : Xeption
+    public class NotFoundLanguageException : Xeption
     {
-        public NotFoundJobException(Guid jobId)
-            : base(message: $"Couldn't find job with id: {jobId}.")
+        public NotFoundLanguageException(Guid someLanguageId)
+            : base(message: $"Couldn't find language with id: {someLanguageId}.")
         { }
     }
 }

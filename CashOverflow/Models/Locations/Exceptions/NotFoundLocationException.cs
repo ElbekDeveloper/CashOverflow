@@ -11,7 +11,7 @@ namespace CashOverflow.Models.Locations.Exceptions
     public class NotFoundLocationException : Xeption
     {
         public NotFoundLocationException(Guid locationId)
-            : base (message: $"Couldn't find location with id: {locationId}.")
+            : base(message: $"Couldn't find location with id: {locationId}.")
         { }
     }
 }

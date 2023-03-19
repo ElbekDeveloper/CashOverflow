@@ -3,15 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Jobs.Exceptions
+namespace CashOverflow.Models.Salaries.Exceptions
 {
-    public class NotFoundJobException : Xeption
+    public class NullSalaryException : Xeption
     {
-        public NotFoundJobException(Guid jobId)
-            : base(message: $"Couldn't find job with id: {jobId}.")
+        public NullSalaryException()
+            : base(message: "Salary is null.")
         { }
     }
 }

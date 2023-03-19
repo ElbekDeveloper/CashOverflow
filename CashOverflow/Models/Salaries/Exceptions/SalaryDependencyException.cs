@@ -6,12 +6,12 @@
 using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Jobs.Exceptions
+namespace CashOverflow.Models.Salaries.Exceptions
 {
-    public class NotFoundJobException : Xeption
+    public class SalaryDependencyException : Xeption
     {
-        public NotFoundJobException(Guid jobId)
-            : base(message: $"Couldn't find job with id: {jobId}.")
+        public SalaryDependencyException(Exception innerException)
+            : base(message: "Salary dependency error occurred, contact support.", innerException)
         { }
     }
 }
