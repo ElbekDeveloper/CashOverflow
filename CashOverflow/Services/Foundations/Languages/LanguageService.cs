@@ -5,7 +5,6 @@
 
 using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
@@ -19,10 +18,11 @@ namespace CashOverflow.Services.Foundations.Languages
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
         private readonly IDateTimeBroker dateTimeBroker;
+
         public LanguageService(
-          IStorageBroker storageBroker,
-          ILoggingBroker loggingBroker,
-          IDateTimeBroker dateTimeBroker)
+            IStorageBroker storageBroker,
+            ILoggingBroker loggingBroker,
+            IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
@@ -40,18 +40,31 @@ namespace CashOverflow.Services.Foundations.Languages
         public IQueryable<Language> RetrieveAllLanguages() =>
             TryCatch(() => this.storageBroker.SelectAllLanguages());
 
+        public ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId) =>
+        TryCatch(async () =>
+        {
+            ValidateLanguageId(languageId);
+
+            Language maybeLanguage =
+                await this.storageBroker.SelectLanguageByIdAsync(languageId);
+
+            ValidateStorageLanguage(maybeLanguage, languageId);
+
+            return maybeLanguage;
+        });
+
         public ValueTask<Language> ModifyLanguageAsync(Language language) =>
             TryCatch(async () =>
-            {
-                ValidateLanguageOnModify(language);
+        {
+            ValidateLanguageOnModify(language);
 
-                var maybeLanguage =
-                    await this.storageBroker.SelectLanguageByIdAsync(language.Id);
+            var maybeLanguage =
+                await this.storageBroker.SelectLanguageByIdAsync(language.Id);
 
-                ValidateAgainstStorageLanguageOnModify(inputLanguage: language, storageLanguage: maybeLanguage);
+            ValidateAgainstStorageLanguageOnModify(inputLanguage: language, storageLanguage: maybeLanguage);
 
-                return await this.storageBroker.UpdateLanguageAsync(language);
+            return await this.storageBroker.UpdateLanguageAsync(language);
 
-            });
+        });
     }
 }

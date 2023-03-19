@@ -44,5 +44,15 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(" ")]
+        [InlineData("  ")]
+        public async Task ShouldThrowValidationExceptionOnModifyIfLanguageIsInvalidAndLogItAsync(
+            string invalidString)
+        {
+
+        }
     }
 }
