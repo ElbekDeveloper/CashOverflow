@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
@@ -10,7 +11,7 @@ namespace CashOverflow.Models.Locations.Exceptions
     public class LocationDependencyException : Xeption
     {
         public LocationDependencyException(Xeption innerException)
-            : base("Location dependency exception occured, contact support", innerException)
+            : base(message: "Location dependency error occurred, contact support.", innerException)
         { }
     }
 }

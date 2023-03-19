@@ -14,7 +14,6 @@
     <None Remove="Models\Jobs\Exceptions\" />
     <None Remove="Services\Foundations\Jobs\" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="EFxceptions" Version="0.4.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />

@@ -40,16 +40,19 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         }
 
-        public static TheoryData InvalidMinutes()
+        private static DateTimeOffset GetRandomDateTime() =>
+            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        public static TheoryData<int> InvalidMinutes()
         {
             int minutesInFuture = GetRandomNumber();
             int minutesInPast = GetRandomNegativeNumber();
 
             return new TheoryData<int>
-        {
+            {
             minutesInFuture,
             minutesInPast
-        };
+            };
         }
 
         private string GetRandomString() =>
@@ -62,7 +65,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             actualException => actualException.SameExceptionAs(expectedException);
 
         private static int GetRandomNegativeNumber() =>
-           -1 * new IntRange(min: 2, max: 9).GetValue();
+            -1 * new IntRange(min: 2, max: 9).GetValue();
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();

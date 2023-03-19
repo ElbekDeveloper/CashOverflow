@@ -6,13 +6,12 @@
 using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Locations.Exceptions
+namespace CashOverflow.Models.Salaries.Exceptions
 {
-    public class LocationServiceException : Xeption
+    public class SalaryServiceException : Xeption
     {
-        public LocationServiceException(Xeption innerException)
-            : base(message: "Location service error occured, contact support.", innerException)
+        public SalaryServiceException(Exception innerException)
+            : base(message: "Salary service error occured, contact support", innerException)
         { }
     }
 }
-

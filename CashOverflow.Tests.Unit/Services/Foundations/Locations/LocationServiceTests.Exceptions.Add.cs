@@ -38,7 +38,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             // then
             actualLocationdependencyException.Should().BeEquivalentTo(expecteLocationdependencyException);
 
-            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+            this.dateTimeBrokerMock.Verify(broker => 
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
             broker.LogCritical(It.Is(SameExceptionAs(expecteLocationdependencyException))), Times.Once);

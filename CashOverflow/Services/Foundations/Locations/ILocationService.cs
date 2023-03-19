@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using CashOverflow.Models.Locations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,5 +14,7 @@ namespace CashOverflow.Services.Foundations.Locations
     {
         ValueTask<Location> AddLocationAsync(Location location);
         IQueryable<Location> RetrieveAllLocations();
+        ValueTask<Location> RetrieveLocationByIdAsync(Guid locationId);
+
     }
 }
