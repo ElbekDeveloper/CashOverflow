@@ -7,7 +7,7 @@ using System;
 
 namespace CashOverflow.Models.Locations
 {
-    public class Salary
+    public class Location
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
