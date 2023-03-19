@@ -55,7 +55,7 @@ namespace CashOverflow.Services.Foundations.Languages
             Message = "Id is required"
         };
 
-        private dynamic IsInvalid(
+        private dynamic IsNotSame(
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
             string secondDateName) => new
