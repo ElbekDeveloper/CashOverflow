@@ -3,12 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using CashOverflow.Services.Foundations.Locations;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace CashOverflow.Controllers
 {
@@ -38,6 +40,26 @@ namespace CashOverflow.Controllers
                 when (locationDependencyValidationException.InnerException is AlreadyExistsLocationException)
             {
                 return Conflict(locationDependencyValidationException.InnerException);
+            }
+            catch (LocationDependencyException locationDependencyException)
+            {
+                return InternalServerError(locationDependencyException.InnerException);
+            }
+            catch (LocationServiceException locationServiceException)
+            {
+                return InternalServerError(locationServiceException.InnerException);
+            }
+        }
+
+        [HttpGet]
+        [EnableQuery]
+        public ActionResult<IQueryable<Location>> GetAllLocations()
+        {
+            try
+            {
+                IQueryable<Location> allLocations = this.locationService.RetrieveAllLocations();
+
+                return Ok(allLocations);
             }
             catch (LocationDependencyException locationDependencyException)
             {
