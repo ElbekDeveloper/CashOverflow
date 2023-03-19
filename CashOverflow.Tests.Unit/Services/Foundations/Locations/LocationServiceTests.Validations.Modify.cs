@@ -70,11 +70,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             invalidLocationException.AddData(
                 key: nameof(Location.CreatedDate),
-                values: "Value is required");
+                values: "Date is required");
             
             invalidLocationException.AddData(
                 key: nameof(Location.UpdatedDate),
-                values: "Value is required");
+                values: "Date is required");
 
             var expectedLocationValidationException =
                 new LocationValidationException(invalidLocationException);
@@ -94,7 +94,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 expectedLocationValidationException);
 
             this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(),Times.Once);
+                broker.GetCurrentDateTimeOffset(),Times.Never);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedLocationValidationException))),
