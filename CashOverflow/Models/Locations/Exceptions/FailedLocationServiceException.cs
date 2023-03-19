@@ -8,12 +8,12 @@ using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-	public class FailedLocationServiceException:Xeption
-	{
-		public FailedLocationServiceException(Exception innerException)
-			:base(message:"Failed location service error occured,contact support.",innerException )
-		{
-		}
-	}
+    public class FailedLocationServiceException : Xeption
+    {
+        public FailedLocationServiceException(Exception innerException)
+            : base(message: "Failed location service error occured,contact support.", innerException)
+        {
+        }
+    }
 }
 

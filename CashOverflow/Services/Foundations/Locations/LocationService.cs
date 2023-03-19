@@ -3,15 +3,12 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Linq;
-using System;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
-using CashOverflow.Models.Locations.Exceptions;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
@@ -31,7 +28,7 @@ namespace CashOverflow.Services.Foundations.Locations
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public  ValueTask<Location> AddLocationAsync(Location location) =>
+        public ValueTask<Location> AddLocationAsync(Location location) =>
         TryCatch(async () =>
         {
             ValidateLocationOnAdd(location);
@@ -41,8 +38,5 @@ namespace CashOverflow.Services.Foundations.Locations
 
         public IQueryable<Location> RetrieveAllLocations() =>
             TryCatch(() => this.storageBroker.SelectAllLocations());
-     
-
-       
     }
 }

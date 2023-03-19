@@ -3,10 +3,9 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Linq;
-using System;
-using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CashOverflow.Services.Foundations.Locations
 {

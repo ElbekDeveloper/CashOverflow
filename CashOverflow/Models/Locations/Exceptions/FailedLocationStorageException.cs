@@ -8,11 +8,11 @@ using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-	public class FailedLocationStorageException:Xeption
-	{
-		public FailedLocationStorageException(Exception innerException)
-			:base("Failed location storage exception occured, contact support.",innerException)
-		{ }
-	}
+    public class FailedLocationStorageException : Xeption
+    {
+        public FailedLocationStorageException(Exception innerException)
+            : base("Failed location storage exception occured, contact support.", innerException)
+        { }
+    }
 }
 

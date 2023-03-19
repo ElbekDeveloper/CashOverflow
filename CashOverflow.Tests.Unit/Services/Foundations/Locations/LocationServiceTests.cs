@@ -3,18 +3,17 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Locations;
 using CashOverflow.Services.Foundations.Locations;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Moq;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;
@@ -26,18 +25,18 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-		private ILocationService locationService;
+        private ILocationService locationService;
 
         public LocationServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
-            this.dateTimeBrokerMock = new Mock<IDateTimeBroker> ();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.locationService = new LocationService(
-				storageBroker:this.storageBrokerMock.Object ,
-                dateTimeBroker:this.dateTimeBrokerMock.Object,
-                loggingBroker:this.loggingBrokerMock.Object);
+                storageBroker: this.storageBrokerMock.Object,
+                dateTimeBroker: this.dateTimeBrokerMock.Object,
+                loggingBroker: this.loggingBrokerMock.Object);
 
         }
 
@@ -63,7 +62,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             actualException => actualException.SameExceptionAs(expectedException);
 
         private static int GetRandomNegativeNumber() =>
-           -1* new IntRange(min: 2, max: 9).GetValue();
+           -1 * new IntRange(min: 2, max: 9).GetValue();
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
@@ -87,8 +86,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         {
             var filler = new Filler<Location>();
 
-			filler.Setup().
-				OnType<DateTimeOffset>().Use(dates);
+            filler.Setup().
+                OnType<DateTimeOffset>().Use(dates);
 
             return filler;
         }

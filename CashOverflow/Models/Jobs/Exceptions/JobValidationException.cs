@@ -3,12 +3,10 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
-using Azure.Messaging;
 using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
-{	
+{
     public class JobValidationException : Xeption
     {
         public JobValidationException(Xeption innerException)

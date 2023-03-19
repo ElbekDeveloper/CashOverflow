@@ -3,15 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using EFxceptions.Models.Exceptions;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
@@ -21,17 +20,17 @@ namespace CashOverflow.Services.Foundations.Jobs
         private delegate ValueTask<Job> ReturningJobFunction();
         private delegate IQueryable<Job> ReturningJobsFunction();
 
-		private async ValueTask<Job> TryCatch(ReturningJobFunction returningJobFunction)
-		{
-			try
-			{
-				return await returningJobFunction();
-			}
-			catch (NullJobException nullJobException)
+        private async ValueTask<Job> TryCatch(ReturningJobFunction returningJobFunction)
+        {
+            try
             {
-              throw  CreateAndLogValidationException(nullJobException);
+                return await returningJobFunction();
             }
-            catch(InvalidJobException invalidJobException)
+            catch (NullJobException nullJobException)
+            {
+                throw CreateAndLogValidationException(nullJobException);
+            }
+            catch (InvalidJobException invalidJobException)
             {
                 throw CreateAndLogValidationException(invalidJobException);
             }
@@ -45,7 +44,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                 throw CreateAndLogCriticalDependencyException(failedJobStorageException);
             }
-            catch(DuplicateKeyException duplicateKeyException)
+            catch (DuplicateKeyException duplicateKeyException)
             {
                 var alreadyExistsJobException = new AlreadyExistsJobException(duplicateKeyException);
 
@@ -63,7 +62,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                 throw CreateAndLogServiceException(failedJobServiceException);
             }
-            }
+        }
 
         private IQueryable<Job> TryCatch(ReturningJobsFunction returningJobsFunction)
         {
@@ -116,7 +115,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return jobDependencyValidationException;
         }
-           
+
         private JobServiceException CreateAndLogServiceException(Xeption exception)
         {
             var jobServiceException = new JobServiceException(exception);

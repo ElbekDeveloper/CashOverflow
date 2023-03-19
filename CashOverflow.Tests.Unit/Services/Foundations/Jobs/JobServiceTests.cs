@@ -3,10 +3,6 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
@@ -14,6 +10,10 @@ using CashOverflow.Models.Jobs;
 using CashOverflow.Services.Foundations.Jobs;
 using Microsoft.Data.SqlClient;
 using Moq;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;

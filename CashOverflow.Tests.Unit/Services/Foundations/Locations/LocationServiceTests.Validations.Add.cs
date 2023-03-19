@@ -3,15 +3,12 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
-using System.Threading.Tasks;
-using CashOverflow.Models.Jobs.Exceptions;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore.Query;
 using Moq;
-using Tynamix.ObjectFiller;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
@@ -74,7 +71,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             key: nameof(Location.CreatedDate),
             values: "Date is required");
 
-			invalidLocationException.AddData(
+            invalidLocationException.AddData(
                 key: nameof(Location.UpdatedDate),
                 values: "Date is required");
 
@@ -168,12 +165,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             ValueTask<Location> addLocationTask = this.locationService.AddLocationAsync(invalidLocation);
 
             LocationValidationException actualLocationValidationException =
-                await Assert.ThrowsAsync <LocationValidationException>(addLocationTask.AsTask);
+                await Assert.ThrowsAsync<LocationValidationException>(addLocationTask.AsTask);
 
             // then
             actualLocationValidationException.Should().BeEquivalentTo(expectedLocationValidationException);
 
-            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(),Times.Once);
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
             broker.LogError(It.Is(SameExceptionAs(expectedLocationValidationException))), Times.Once);

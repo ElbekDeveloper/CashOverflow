@@ -3,12 +3,9 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
+using System;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
@@ -43,7 +40,7 @@ namespace CashOverflow.Services.Foundations.Jobs
         }
 
         private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
-	{
+        {
             if (maybejob is null)
             {
                 throw new NotFoundJobException(jobId);

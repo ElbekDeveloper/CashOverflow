@@ -3,15 +3,13 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using CashOverflow.Models.Jobs.Exceptions;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
-using Microsoft.OpenApi.Validations;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Locations
@@ -31,23 +29,23 @@ namespace CashOverflow.Services.Foundations.Locations
             {
                 throw CreateAndLogValidationException(nullLocationException);
             }
-            catch(InvalidLocationException invalidLocationException)
+            catch (InvalidLocationException invalidLocationException)
             {
                 throw CreateAndLogValidationException(invalidLocationException);
             }
-            catch(SqlException sqlException)
+            catch (SqlException sqlException)
             {
                 var failedLocationStorageException = new FailedLocationStorageException(sqlException);
 
                 throw CreateAndLogCriticalDependencyException(failedLocationStorageException);
             }
-            catch(DuplicateKeyException dublicateKeyException)
+            catch (DuplicateKeyException dublicateKeyException)
             {
                 var alreadyExistsLocationException = new AlreadyExistsLocationException(dublicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLocationException);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 FailedLocationServiceException failedLocationServiceException = new FailedLocationServiceException(exception);
 
@@ -87,7 +85,7 @@ namespace CashOverflow.Services.Foundations.Locations
 
         private LocationDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var locationdependencyException = new LocationDependencyException(exception); 
+            var locationdependencyException = new LocationDependencyException(exception);
             this.loggingBroker.LogCritical(locationdependencyException);
 
             return locationdependencyException;
@@ -106,7 +104,7 @@ namespace CashOverflow.Services.Foundations.Locations
             var locationServiceException = new LocationServiceException(exception);
             this.loggingBroker.LogError(locationServiceException);
 
-            return locationServiceException; 
+            return locationServiceException;
         }
     }
 }

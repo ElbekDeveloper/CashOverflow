@@ -8,11 +8,11 @@ using Xeptions;
 
 namespace CashOverflow.Models.Jobs.Exceptions
 {
-	public class FailedJobStorageException:Xeption
-	{
-		public FailedJobStorageException(Exception innerException)
-			:base("Failed location storage exception occured, contact support.",innerException)
-		{ }
-	}
+    public class FailedJobStorageException : Xeption
+    {
+        public FailedJobStorageException(Exception innerException)
+            : base("Failed location storage exception occured, contact support.", innerException)
+        { }
+    }
 }
 

@@ -3,12 +3,12 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using CashOverflow.Services.Foundations.Locations;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
+using System.Threading.Tasks;
 
 namespace CashOverflow.Controllers
 {

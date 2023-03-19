@@ -3,18 +3,16 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
-using System.Data;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 
 namespace CashOverflow.Services.Foundations.Locations
 {
     public partial class LocationService
     {
         private void ValidateLocationOnAdd(Location location)
-	{
+        {
             ValidateLocationNotNull(location);
 
             Validate(
@@ -56,10 +54,10 @@ namespace CashOverflow.Services.Foundations.Locations
               DateTimeOffset firstDate,
               DateTimeOffset secondDate,
               string secondDateName) => new
-      {
-          Condition = firstDate != secondDate,
-          Message = $"Date is not the same as {secondDateName}"
-      };
+              {
+                  Condition = firstDate != secondDate,
+                  Message = $"Date is not the same as {secondDateName}"
+              };
 
         private static dynamic IsInvalid(DateTimeOffset date) => new
         {

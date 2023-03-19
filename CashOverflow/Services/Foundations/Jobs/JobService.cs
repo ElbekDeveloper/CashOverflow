@@ -3,22 +3,20 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
-using System.Linq.Expressions;
-using System.Linq;
-using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Jobs;
-using CashOverflow.Models.Jobs.Exceptions;
-using CashOverflow.Models.Locations;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
-	public partial class JobService:IJobService
-	{
+    public partial class JobService : IJobService
+    {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
         private readonly IDateTimeBroker dateTimeBroker;
@@ -36,7 +34,7 @@ namespace CashOverflow.Services.Foundations.Jobs
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        public ValueTask<Job> AddJobAsync(Job job) => 
+        public ValueTask<Job> AddJobAsync(Job job) =>
             TryCatch(async () =>
         {
             ValidateJobOnAdd(job);

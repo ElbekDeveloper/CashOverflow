@@ -3,16 +3,15 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Reflection;
 using Xeptions;
 
 namespace CashOverflow.Models.Locations.Exceptions
 {
-	public class InvalidLocationException:Xeption
-	{
-		public InvalidLocationException()
-			: base(message:"Location is invalid.")
-		{}
-	}
+    public class InvalidLocationException : Xeption
+    {
+        public InvalidLocationException()
+            : base(message: "Location is invalid.")
+        { }
+    }
 }
 
