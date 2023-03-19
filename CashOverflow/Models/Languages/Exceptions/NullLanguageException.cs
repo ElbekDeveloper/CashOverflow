@@ -5,7 +5,7 @@
 
 using Xeptions;
 
-namespace CashOverflow.Models.Languages
+namespace CashOverflow.Models.Languages.Exceptions
 {
     public class NullLanguageException : Xeption
     {
