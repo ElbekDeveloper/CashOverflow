@@ -10,8 +10,8 @@ namespace CashOverflow.Models.Languages.Exceptions
 {
     public class LockedLanguageException : Xeption
     {
-
         public LockedLanguageException(Exception innerException)
-            : base(message: "Language is locked, please try again.", innerException) { }
+            : base(message: "Language is locked, please try again.", innerException)
+        { }
     }
 }
