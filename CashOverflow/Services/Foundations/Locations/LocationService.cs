@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
@@ -34,5 +35,8 @@ namespace CashOverflow.Services.Foundations.Locations
 
             return await this.storageBroker.InsertLocationAsync(location);
         });
+
+        public IQueryable<Location> RetrieveAllLocations() =>
+            TryCatch(() => this.storageBroker.SelectAllLocations());
     }
 }
