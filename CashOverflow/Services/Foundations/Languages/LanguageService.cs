@@ -38,19 +38,19 @@ namespace CashOverflow.Services.Foundations.Languages
         });
 
         public IQueryable<Language> RetrieveAllLanguages() =>
-            TryCatch(() => this.storageBroker.SelectAllLanguages());
+        TryCatch(() => this.storageBroker.SelectAllLanguages());
 
         public ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId) =>
-            TryCatch(async () =>
-            {
-                ValidateLanguageId(languageId);
+        TryCatch(async () =>
+        {
+            ValidateLanguageId(languageId);
 
-                Language maybeLanguage =
-                    await this.storageBroker.SelectLanguageByIdAsync(languageId);
+            Language maybeLanguage =
+                await this.storageBroker.SelectLanguageByIdAsync(languageId);
 
-                ValidateStorageLanguage(maybeLanguage, languageId);
+            ValidateStorageLanguage(maybeLanguage, languageId);
 
-                return maybeLanguage;
-            });
+            return maybeLanguage;
+        });
     }
 }

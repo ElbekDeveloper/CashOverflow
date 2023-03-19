@@ -46,7 +46,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
-                    expectedJobDependencyException))),Times.Once);
+                    expectedJobDependencyException))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
