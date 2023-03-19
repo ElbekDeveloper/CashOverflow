@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 using System.Linq;
-using System.Threading.Tasks;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Salaries;
@@ -21,9 +20,6 @@ namespace CashOverflow.Services.Foundations.Salaries
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
         }
-
-        public async ValueTask<Salary> AddSalaryAsync(Salary salary) =>
-            await this.storageBroker.InsertSalaryAsync(salary);
 
         public IQueryable<Salary> RetrieveAllSalaries() =>
             TryCatch(() => this.storageBroker.SelectAllSalaries());

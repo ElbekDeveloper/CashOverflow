@@ -50,6 +50,15 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             CreateSalaryFiller(dates: GetRandomDatetimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
 
+        private DateTimeOffset GetRandomDatetimeOffset() =>
+            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 99).GetValue();
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
         private Filler<Salary> CreateSalaryFiller(DateTimeOffset dates)
         {
             var filler = new Filler<Salary>();
@@ -59,14 +68,5 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 
             return filler;
         }
-
-        private DateTimeOffset GetRandomDatetimeOffset() =>
-            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
-
-        private static int GetRandomNumber() =>
-            new IntRange(min: 2, max: 99).GetValue();
-
-        private static string GetRandomString() =>
-            new MnemonicString().GetValue();
     }
 }
