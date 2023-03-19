@@ -103,7 +103,6 @@ namespace CashOverflow.Services.Foundations.Languages
         private LanguageDependencyValidationException CreateAndDependencyValidationException(Xeption exception)
         {
             var languageDependencyValidationException = new LanguageDependencyValidationException(exception);
-
             this.loggingBroker.LogError(languageDependencyValidationException);
 
             return languageDependencyValidationException;
@@ -112,7 +111,6 @@ namespace CashOverflow.Services.Foundations.Languages
         private LanguageServiceException CreateAndLogServiceException(Xeption exception)
         {
             var languageServiceException = new LanguageServiceException(exception);
-
             this.loggingBroker.LogError(languageServiceException);
 
             return languageServiceException;

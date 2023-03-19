@@ -22,7 +22,7 @@ namespace CashOverflow.Services.Foundations.Languages
                 (Rule: IsInvalid(language.UpdatedDate), Parameter: nameof(Language.UpdatedDate)),
                 (Rule: IsNotRecent(language.CreatedDate), Parameter: nameof(Language.CreatedDate)),
 
-                (Rule: IsInvalid(
+                (Rule: IsNotSame(
                     firstDate: language.CreatedDate,
                     secondDate: language.UpdatedDate,
                     secondDateName: nameof(Language.UpdatedDate)),

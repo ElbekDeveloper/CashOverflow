@@ -30,12 +30,12 @@ namespace CashOverflow.Services.Foundations.Languages
         }
 
         public ValueTask<Language> AddLanguageAsync(Language language) =>
-            TryCatch(async () =>
-            {
-                ValidateLanguageOnAdd(language);
+        TryCatch(async () =>
+        {
+            ValidateLanguageOnAdd(language);
 
-                return await this.storageBroker.InsertLanguageAsync(language);
-            });
+            return await this.storageBroker.InsertLanguageAsync(language);
+        });
 
         public IQueryable<Language> RetrieveAllLanguages() =>
         TryCatch(() => this.storageBroker.SelectAllLanguages());
@@ -54,16 +54,16 @@ namespace CashOverflow.Services.Foundations.Languages
             });
 
         public ValueTask<Language> RemoveLanguageByIdAsync(Guid languageId) =>
-            TryCatch(async () =>
-            {
-                ValidateLanguageId(languageId);
+        TryCatch(async () =>
+        {
+            ValidateLanguageId(languageId);
 
-                Language maybeLanguage = await this.storageBroker.
-                    SelectLanguageByIdAsync(languageId);
+            Language maybeLanguage = await this.storageBroker.
+                SelectLanguageByIdAsync(languageId);
 
-                ValidateStorageLanguageExist(maybeLanguage, languageId);
+            ValidateStorageLanguageExist(maybeLanguage, languageId);
 
-                return await this.storageBroker.DeleteLanguageAsync(maybeLanguage);
-            });
+            return await this.storageBroker.DeleteLanguageAsync(maybeLanguage);
+        });
     }
 }

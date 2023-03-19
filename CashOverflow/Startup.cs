@@ -38,8 +38,6 @@ namespace CashOverflow
 
             AddBrokers(services);
             AddFoundationServices(services);
-
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
@@ -66,6 +64,7 @@ namespace CashOverflow
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         }
+        
         private static void AddFoundationServices(IServiceCollection services)
         {
             services.AddTransient<ILanguageService, LanguageService>();
