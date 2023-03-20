@@ -73,10 +73,15 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             invalidLocationException.AddData(
                 key: nameof(Location.CreatedDate),
                 values: "Date is required");
-            
+
             invalidLocationException.AddData(
                 key: nameof(Location.UpdatedDate),
-                values: "Date is required");
+                    values: new[]
+                    {
+                        "Date is required",
+                        "Date is not recent"
+                    }
+                );
 
             var expectedLocationValidationException =
                 new LocationValidationException(invalidLocationException);
@@ -96,7 +101,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 expectedLocationValidationException);
 
             this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(),Times.Never);
+                broker.GetCurrentDateTimeOffset(),Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedLocationValidationException))),
@@ -145,7 +150,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(),
-                    Times.Never);
+                    Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
@@ -197,10 +202,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
-                   expectedLocationValidationException))), Times.Once);
+                    expectedLocationValidationException))), 
+                        Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLocationByIdAsync(It.IsAny<Guid>()), Times.Never);
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()), 
+                    Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

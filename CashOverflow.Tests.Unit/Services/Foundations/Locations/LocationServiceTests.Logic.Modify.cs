@@ -28,6 +28,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             Location expectedLocation = updatedLocation.DeepClone();
             Guid locationId = inputLocation.Id;
 
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDate);
+
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLocationByIdAsync(locationId))
                     .ReturnsAsync(storageLocation);
@@ -49,10 +52,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.storageBrokerMock.Verify(broker =>
                 broker.UpdateLocationAsync(inputLocation), Times.Once);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
-
         }
     }
 }

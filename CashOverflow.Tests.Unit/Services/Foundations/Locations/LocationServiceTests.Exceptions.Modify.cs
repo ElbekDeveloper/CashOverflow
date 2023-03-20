@@ -58,7 +58,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
-                    expectedLocationDependencyException))),Times.Never);
+                    expectedLocationDependencyException))),Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLocationByIdAsync(locationId), Times.Never);
@@ -109,7 +109,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 broker.SelectLocationByIdAsync(locationId), Times.Once);
 
             this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(), Times.Never);
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
