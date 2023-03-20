@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
@@ -52,7 +53,50 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public async Task ShouldThrowValidationExceptionOnModifyIfLanguageIsInvalidAndLogItAsync(
             string invalidString)
         {
+            //given
+            var invalidLanguage = new Language
+            {
+                Name = invalidString
+            };
 
+            var invalidLanguageException = new InvalidLanguageException();
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.Id),
+                values: "Id is required");
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.Name),
+                values: "Language name is required");
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.Type),
+                values: "Type is required");
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.CreatedDate),
+                values: "Value is required");
+
+            invalidLanguageException.AddData(
+                key:nameof(Language.UpdatedDate),
+                 "Value is required",
+                "Date is not recent",
+                $"Date is the same as {nameof(Language.CreatedDate)}");
+
+            var excpectedLanguageValidationException =
+                new LanguageValidationException(invalidLanguageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(GetRandomDatetimeOffset); 
+
+            //when
+            ValueTask<Language>modifyLanguageTask = this.languageService.ModifyLanguageAsync(invalidLanguage);
+
+            LanguageValidationException actualLanguageValidationException =
+
+
+
+            //then
         }
     }
 }
