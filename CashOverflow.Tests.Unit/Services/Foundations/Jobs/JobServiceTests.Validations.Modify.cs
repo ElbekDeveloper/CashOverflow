@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
@@ -20,7 +21,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             // given
             Job nullJob = null;
             var nullJobException = new NullJobException();
-            
+
             var expectedJobValidationException =
                 new JobValidationException(nullJobException);
 
@@ -103,6 +104,52 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedJobValidationException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotSameAsCreatedDateAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTime = GetRandomDateTime();
+            Job randomJob = CreateRandomJob(randomDateTime);
+            Job invalidJob = randomJob;
+            var invalidJobException = new InvalidJobException();
+
+            invalidJobException.AddData(
+                key: nameof(Job.UpdatedDate),
+                values: $"Date is the same as {nameof(Job.CreatedDate)}");
+
+            var expectedJobValidationException =
+                new JobValidationException(invalidJobException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+
+            // when
+            ValueTask<Job> modifyJobTask =
+                this.jobService.ModifyJobAsync(invalidJob);
+
+            JobValidationException actualJobValidationException =
+                 await Assert.ThrowsAsync<JobValidationException>(
+                    modifyJobTask.AsTask);
+
+            // then
+            actualJobValidationException.Should()
+                .BeEquivalentTo(expectedJobValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(invalidJob.Id), Times.Never);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobValidationException))), Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
