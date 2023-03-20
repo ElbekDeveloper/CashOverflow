@@ -93,8 +93,17 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             return randomLocation;
         }
+        public static TheoryData MinutsBeforeOrAfter()
+        {
+            int randomNumber = GetRandomNumber();
+            int randomNegativeNumber = GetRandomNegativeNumber();
 
-
+            return new TheoryData<int>
+            {
+                randomNumber,
+                randomNegativeNumber
+            };
+        }
         private Filler<Location> CreateLocationFiller(DateTimeOffset dates)
         {
             var filler = new Filler<Location>();
