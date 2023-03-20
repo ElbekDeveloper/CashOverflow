@@ -28,6 +28,10 @@ namespace CashOverflow.Services.Foundations.Salaries
             {
                 throw CreateAndLogValidationException(nullSalaryException);
             }
+            catch (InvalidSalaryException invalidSalaryException)
+            {
+                throw CreateAndLogValidationException(invalidSalaryException);
+            }
         }
 
         private IQueryable<Salary> TryCatch(ReturningSalariesFunction returningSalaryFunction)
