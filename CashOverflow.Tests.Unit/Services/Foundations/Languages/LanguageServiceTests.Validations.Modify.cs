@@ -93,10 +93,23 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             ValueTask<Language>modifyLanguageTask = this.languageService.ModifyLanguageAsync(invalidLanguage);
 
             LanguageValidationException actualLanguageValidationException =
-
-
+                await Assert.ThrowsAsync<LanguageValidationException>(modifyLanguageTask.AsTask);
 
             //then
+            actualLanguageValidationException.Should().BeEquivalentTo(excpectedLanguageValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(excpectedLanguageValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLanguageAsync(It.IsAny<Language>()), Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
