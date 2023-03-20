@@ -10,8 +10,8 @@ using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using CashOverflow.Services.Foundations.Locations;
 using Microsoft.AspNetCore.Mvc;
-using RESTFulSense.Controllers;
 using Microsoft.AspNetCore.OData.Query;
+using RESTFulSense.Controllers;
 
 namespace CashOverflow.Controllers
 {

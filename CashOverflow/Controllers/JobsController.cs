@@ -3,13 +3,13 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
+using CashOverflow.Models.Jobs;
+using CashOverflow.Models.Jobs.Exceptions;
 using CashOverflow.Services.Foundations.Jobs;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
-using CashOverflow.Models.Jobs;
-using CashOverflow.Models.Jobs.Exceptions;
 
 namespace CashOverflow.Controllers
 {
