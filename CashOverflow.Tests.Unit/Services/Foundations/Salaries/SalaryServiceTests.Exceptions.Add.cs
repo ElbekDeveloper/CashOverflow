@@ -37,9 +37,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             actualLocationDependencyException.Should().BeEquivalentTo(expectedSalaryDependencyException);
 
             this.dateTimeBrokerMock.Verify(broker =>
-            broker.GetCurrentDateTimeOffset(), Times.Once);
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
-            this.loggingBrokerMock.Verify(broker => broker.LogCritical(It.Is(SameExceptionAs(expectedSalaryDependencyException))), Times.Once);
+            this.loggingBrokerMock.Verify(broker => 
+                broker.LogCritical(It.Is(SameExceptionAs(expectedSalaryDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

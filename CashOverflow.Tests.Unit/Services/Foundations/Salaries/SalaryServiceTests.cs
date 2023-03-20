@@ -67,11 +67,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             CreateSalaryFiller(dates: GetRandomDateTimeOffset()).Create();
 
         private IQueryable<Salary> CreateRandomSalaries() =>
-            CreateSalaryFiller(dates: GetRandomDatetimeOffset())
+            CreateSalaryFiller(dates: GetRandomDateTimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
-
-        private DateTimeOffset GetRandomDatetimeOffset() =>
-            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
         private static int GetRandomNegativeNumber() =>
             -1 * new IntRange(min: 2, max: 9).GetValue();

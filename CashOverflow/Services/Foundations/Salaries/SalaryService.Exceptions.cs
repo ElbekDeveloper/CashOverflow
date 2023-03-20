@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Xeptions;
 
@@ -31,6 +32,12 @@ namespace CashOverflow.Services.Foundations.Salaries
             catch (InvalidSalaryException invalidSalaryException)
             {
                 throw CreateAndLogValidationException(invalidSalaryException);
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsSalaryException = new AlreadyExistsSalaryException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsSalaryException);
             }
         }
 
@@ -80,6 +87,14 @@ namespace CashOverflow.Services.Foundations.Salaries
             this.loggingBroker.LogCritical(salaryDependencyException);
 
             throw salaryDependencyException;
+        }
+
+        private SalaryDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var salaryDependencyValidationException = new SalaryDependencyValidationException(exception);
+            this.loggingBroker.LogError(salaryDependencyValidationException);
+
+            return salaryDependencyValidationException;
         }
     }
 }
