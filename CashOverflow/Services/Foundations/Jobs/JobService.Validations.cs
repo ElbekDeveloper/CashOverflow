@@ -14,11 +14,23 @@ namespace CashOverflow.Services.Foundations.Jobs
         private void ValidateJobOnModify(Job job)
         {
             ValidateJobNotNull(job);
+            Validate(
+                (Rule: IsInvalid(job.Id), Parameter: nameof(Job.Id)),
+                (Rule: IsInvalid(job.Title), Parameter: nameof(Job.Title)),
+                (Rule: IsInvalid(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
+                (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)),
+                (Rule: IsNotRecent(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)),
+
+                (Rule: IsSame(
+                    firstDate: job.UpdatedDate,
+                    secondDate: job.CreatedDate,
+                    secondDateName: nameof(job.CreatedDate)),
+                    Parameter: nameof(job.UpdatedDate)));
         }
 
-        private void ValidateJobNotNull(Job job) 
+        private void ValidateJobNotNull(Job job)
         {
-            if(job is null)
+            if (job is null)
             {
                 throw new NullJobException();
             }
@@ -52,6 +64,29 @@ namespace CashOverflow.Services.Foundations.Jobs
             Condition = date == default,
             Message = "Value is required"
         };
+
+        private static dynamic IsSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate == secondDate,
+                Message = $"Date is the same as {secondDateName}"
+            };
+
+        private dynamic IsNotRecent(DateTimeOffset date) => new
+        {
+            Condition = IsDateNotRecent(date),
+            Message = "Date is not recent."
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset date)
+        {
+            DateTimeOffset currentDateTime = this.dateTimeBroker.GetCurrentDateTimeOffset();
+            TimeSpan timeDifference = currentDateTime.Subtract(date);
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {

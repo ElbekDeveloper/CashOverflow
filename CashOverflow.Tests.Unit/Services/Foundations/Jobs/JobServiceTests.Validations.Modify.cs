@@ -63,7 +63,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             invalidJobException.AddData(
                 key: nameof(Job.Title),
-                values: "Title is required");
+                values: "Text is required");
 
             invalidJobException.AddData(
                 key: nameof(Job.CreatedDate),
@@ -84,7 +84,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
 
             this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTime())
+                broker.GetCurrentDateTimeOffset())
                     .Returns(GetRandomDateTime);
 
             // when
