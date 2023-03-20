@@ -29,7 +29,6 @@ namespace CashOverflow
         {
             services.AddControllers();
             services.AddDbContext<StorageBroker>();
-            services.AddControllers();
 
             services.AddSwaggerGen(config =>
             {
