@@ -18,7 +18,8 @@ namespace CashOverflow.Services.Foundations.Salaries
         private ILoggingBroker loggingBroker;
         private IDateTimeBroker dateTimeBroker;
 
-        public SalaryService(IStorageBroker storageBroker, ILoggingBroker loggingBroker, IDateTimeBroker dateTimeBroker)
+        public SalaryService(IStorageBroker storageBroker,
+            ILoggingBroker loggingBroker, IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
