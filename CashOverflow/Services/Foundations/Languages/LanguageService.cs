@@ -54,14 +54,14 @@ namespace CashOverflow.Services.Foundations.Languages
         });
 
         public ValueTask<Language> ModifyLanguageAsync(Language language) =>
-            TryCatch(async () =>
-            {
-                ValidateLanguageOnModify(language);
+        TryCatch(async () =>
+        {
+            ValidateLanguageOnModify(language);
 
-                var maybeLanguage =
-                    await this.storageBroker.SelectLanguageByIdAsync(language.Id);
+            var maybeLanguage =
+                await this.storageBroker.SelectLanguageByIdAsync(language.Id);
 
-                ValidateAgainstStorageLanguageOnModify(inputLanguage: language, storageLanguage: maybeLanguage);
+            ValidateAgainstStorageLanguageOnModify(inputLanguage: language, storageLanguage: maybeLanguage);
 
                 return await this.storageBroker.UpdateLanguageAsync(language);
             });
