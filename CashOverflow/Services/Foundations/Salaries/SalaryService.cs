@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
-using CashOverflow.Models.Locations;
 using CashOverflow.Models.Salaries;
 
 namespace CashOverflow.Services.Foundations.Salaries
@@ -26,13 +25,8 @@ namespace CashOverflow.Services.Foundations.Salaries
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public ValueTask<Salary> AddSalaryAsync(Salary salary) =>
-        TryCatch(async () =>
-        {
-            ValidateSalaryOnAdd(salary);
-
-            return await this.storageBroker.InsertSalaryAsync(salary);
-        });
+        public async ValueTask<Salary> AddSalaryAsync(Salary salary) =>
+            await storageBroker.InsertSalaryAsync(salary);
 
         public IQueryable<Salary> RetrieveAllSalaries() =>
             TryCatch(() => this.storageBroker.SelectAllSalaries());
