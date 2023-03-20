@@ -53,7 +53,6 @@ namespace CashOverflow.Controllers
         }
 
         [HttpGet]
-        [EnableQuery]
         public ActionResult<IQueryable<Location>> GetAllLocations()
         {
             try
