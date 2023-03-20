@@ -5,12 +5,12 @@
 
 using Xeptions;
 
-namespace CashOverflow.Models.Locations.Exceptions
+namespace CashOverflow.Models.Salaries.Exceptions
 {
-    public class NullLocationException : Xeption
+    public class NullSalaryException : Xeption
     {
-        public NullLocationException()
-            : base(message: "Location is null.") 
+        public NullSalaryException()
+            : base(message: "Salary is null.")
         { }
     }
 }

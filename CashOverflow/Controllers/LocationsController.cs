@@ -3,7 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
@@ -60,6 +60,43 @@ namespace CashOverflow.Controllers
                 IQueryable<Location> allLocations = this.locationService.RetrieveAllLocations();
 
                 return Ok(allLocations);
+            }
+            catch (LocationDependencyException locationDependencyException)
+            {
+                return InternalServerError(locationDependencyException.InnerException);
+            }
+            catch (LocationServiceException locationServiceException)
+            {
+                return InternalServerError(locationServiceException.InnerException);
+            }
+        }
+
+        [HttpDelete("{locationId}")]
+        public async ValueTask<ActionResult<Location>> DeleteLocationByIdAsync(Guid locationId)
+        {
+            try
+            {
+                Location deletedLocation = await this.locationService.RemoveLocationByIdAsync(locationId);
+
+                return Ok(deletedLocation);
+            }
+            catch (LocationValidationException locationValidationException)
+                when (locationValidationException.InnerException is NotFoundLocationException)
+            {
+                return NotFound(locationValidationException.InnerException);
+            }
+            catch (LocationValidationException locationValidationException)
+            {
+                return BadRequest(locationValidationException.InnerException);
+            }
+            catch (LocationDependencyValidationException locationDependencyValidationException)
+                when (locationDependencyValidationException.InnerException is LockedLocationException)
+            {
+                return Locked(locationDependencyValidationException.InnerException);
+            }
+            catch (LocationDependencyValidationException locationDependencyValidationException)
+            {
+                return BadRequest(locationDependencyValidationException.InnerException);
             }
             catch (LocationDependencyException locationDependencyException)
             {

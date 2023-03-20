@@ -10,7 +10,6 @@
     <EmbeddedResource Remove="Brokers\Salaries\**" />
     <None Remove="Brokers\Salaries\**" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="EFxceptions" Version="0.4.5" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.12" />

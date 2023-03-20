@@ -3,14 +3,13 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using Xeptions;
+using System.Linq;
+using CashOverflow.Models.Salaries;
 
-namespace CashOverflow.Models.Locations.Exceptions
+namespace CashOverflow.Services.Foundations.Salaries
 {
-    public class NullLocationException : Xeption
+    public interface ISalaryService
     {
-        public NullLocationException()
-            : base(message: "Location is null.") 
-        { }
+        IQueryable<Salary> RetrieveAllSalaries();
     }
 }

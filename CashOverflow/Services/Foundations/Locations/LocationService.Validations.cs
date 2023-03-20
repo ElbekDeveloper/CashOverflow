@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------
+// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
@@ -13,7 +13,7 @@ namespace CashOverflow.Services.Foundations.Locations
     {
         private void ValidateLocationOnAdd(Location location)
         {
-            ValidateLocationNotNull(location);
+            ValidateLocationNotNull(location);      
 
             Validate(
                 (Rule: IsInvalid(location.Id), Parameter: nameof(Location.Id)),
@@ -27,7 +27,18 @@ namespace CashOverflow.Services.Foundations.Locations
                     secondDate: location.UpdatedDate,
                     secondDateName: nameof(Location.UpdatedDate)),
 
-                Parameter: nameof(Location.CreatedDate)));
+                 Parameter: nameof(Location.CreatedDate)));
+        }
+
+        private static void ValidateLocationId(Guid locationId) =>
+            Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
+
+        private static void ValidateStorageLocation(Location maybeLocation, Guid locationId)
+        {
+            if (maybeLocation is null)
+            {
+                throw new NotFoundLocationException(locationId);
+            }
         }
 
         private static void ValidateLocationNotNull(Location location)
@@ -38,9 +49,12 @@ namespace CashOverflow.Services.Foundations.Locations
             }
         }
 
+        public void ValidateLocationById(Guid locationId) =>
+           Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
+
         private static dynamic IsInvalid(Guid id) => new
         {
-            Condition = id == Guid.Empty,
+            Condition = id == default,
             Message = "Id is required"
         };
 
@@ -71,15 +85,15 @@ namespace CashOverflow.Services.Foundations.Locations
             Message = "Date is not recent"
         };
 
-        private bool IsDateNotRecent(DateTimeOffset date)//10:51:20
+        private bool IsDateNotRecent(DateTimeOffset date)
         {
-            DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();//10:51:00
-            TimeSpan timeDifference = currentDate.Subtract(date); //-20
+            DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();
+            TimeSpan timeDifference = currentDate.Subtract(date);
 
             return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
-        private void Validate(params (dynamic Rule, string Parameter)[] validations)
+        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidLocationException = new InvalidLocationException();
 
