@@ -7,12 +7,9 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
-using System;
 using CashOverflow.Services.Foundations.Jobs;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
-using CashOverflow.Models.Jobs;
-using CashOverflow.Models.Jobs.Exceptions;
 
 namespace CashOverflow.Controllers
 {
@@ -27,23 +24,14 @@ namespace CashOverflow.Controllers
 
         [HttpGet("{jobId}")]
         public async ValueTask<ActionResult<Job>> GetJobByIdAsync(Guid jobId)
-        [HttpDelete("{jobId}")]
-        public async ValueTask<ActionResult<Job>> DeleteJobByIdAsync(Guid jobId)
         {
             try
             {
                 return await this.jobService.RetrieveJobByIdAsync(jobId);
-                Job deletedJob =
-                    await this.jobService.RemoveJobByIdAsync(jobId);
-
-                return Ok(deletedJob);
             }
             catch (JobDependencyException jobDependencyException)
-            catch (JobValidationException jobValidationException)
-                when (jobValidationException.InnerException is NotFoundJobException)
             {
                 return InternalServerError(jobDependencyException.InnerException);
-                return NotFound(jobValidationException.InnerException);
             }
             catch (JobValidationException jobValidationException)
                 when (jobValidationException.InnerException is InvalidJobException)
@@ -52,6 +40,34 @@ namespace CashOverflow.Controllers
             }
             catch (JobValidationException jobValidationException)
                 when (jobValidationException.InnerException is NotFoundJobException)
+            {
+                return NotFound(jobValidationException.InnerException);
+            }
+            catch (JobServiceException jobServiceException)
+            {
+                return InternalServerError(jobServiceException.InnerException);
+            }
+        }
+
+        [HttpDelete("{jobId}")]
+        public async ValueTask<ActionResult<Job>> DeleteJobByIdAsync(Guid jobId)
+        {
+            try
+            {
+                Job deletedJob =
+                    await this.jobService.RemoveJobByIdAsync(jobId);
+
+                return Ok(deletedJob);
+            }
+            catch (JobValidationException jobValidationException)
+                when (jobValidationException.InnerException is NotFoundJobException)
+            {
+                return NotFound(jobValidationException.InnerException);
+            }
+            catch (JobValidationException jobValidationException)
+            {
+                return BadRequest(jobValidationException.InnerException);
+            }
             catch (JobDependencyValidationException jobDependencyValidationException)
                 when (jobDependencyValidationException.InnerException is LockedJobException)
             {
@@ -63,7 +79,6 @@ namespace CashOverflow.Controllers
             }
             catch (JobDependencyException jobDependencyException)
             {
-                return NotFound(jobValidationException.InnerException);
                 return InternalServerError(jobDependencyException.InnerException);
             }
             catch (JobServiceException jobServiceException)
