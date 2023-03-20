@@ -14,7 +14,7 @@ namespace CashOverflow.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SalariesController : RESTFulController
+    public class SalariesController :RESTFulController
     {
         private readonly ISalaryService salaryService;
 
@@ -38,6 +38,6 @@ namespace CashOverflow.Controllers
             {
                 return InternalServerError(salaryServiceException.InnerException);
             }
-        }
+        }       
     }
 }
