@@ -15,11 +15,15 @@ namespace CashOverflow.Services.Foundations.Salaries
 {
     public partial class SalaryService : ISalaryService
     {
-        private IStorageBroker storageBroker;
-        private ILoggingBroker loggingBroker;
-        private IDateTimeBroker dateTimeBroker;
+        private readonly IStorageBroker storageBroker;
+        private readonly ILoggingBroker loggingBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
 
-        public SalaryService(IStorageBroker storageBroker, ILoggingBroker loggingBroker, IDateTimeBroker dateTimeBroker)
+        public SalaryService(
+            IStorageBroker storageBroker, 
+            ILoggingBroker loggingBroker,
+            IDateTimeBroker dateTimeBroker)
+
         {
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;

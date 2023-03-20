@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CashOverflow.Models.Locations.Exceptions;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
 using EFxceptions.Models.Exceptions;
@@ -25,19 +26,35 @@ namespace CashOverflow.Services.Foundations.Salaries
             {
                 return await returningSalaryFunction();
             }
+            catch (InvalidSalaryException invalidSalaryException)
+            {
+                throw CreateAndLogValidationException(invalidSalaryException);
+            }
             catch (NullSalaryException nullSalaryException)
             {
                 throw CreateAndLogValidationException(nullSalaryException);
             }
-            catch (InvalidSalaryException invalidSalaryException)
+            catch (NotFoundSalaryException notFoundSalaryException)
             {
-                throw CreateAndLogValidationException(invalidSalaryException);
+                throw CreateAndLogValidationException(notFoundSalaryException);
+            }
+            catch (SqlException sqlException)
+            {
+                var failedSalaryStorageException = new FailedSalaryStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedSalaryStorageException);
             }
             catch (DuplicateKeyException duplicateKeyException)
             {
                 var alreadyExistsSalaryException = new AlreadyExistsSalaryException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsSalaryException);
+            }
+            catch (Exception exception)
+            {
+                var failedSalaryServiceException = new FailedSalaryServiceException(exception);
+
+                throw CreateAndLogServiceException(failedSalaryServiceException) ;
             }
         }
 
@@ -61,22 +78,13 @@ namespace CashOverflow.Services.Foundations.Salaries
             }
         }
 
-        private SalaryValidationException CreateAndLogValidationException(Xeption exception)
+        private SalaryDependencyException CreateAndLogDependencyException(Xeption xeption)
         {
-            var salaryValidationException = new SalaryValidationException(exception);
-            this.loggingBroker.LogError(salaryValidationException);
+            var salaryDependencyException = new SalaryDependencyException(xeption);
 
-            return salaryValidationException;
-        }
+            this.loggingBroker.LogCritical(salaryDependencyException);
 
-        private SalaryServiceException CreateAndLogServiceException(Xeption exception)
-        {
-            var createAndLogServiceException =
-                new SalaryServiceException(exception);
-
-            this.loggingBroker.LogError(createAndLogServiceException);
-
-            throw createAndLogServiceException;
+            return salaryDependencyException;
         }
 
         private SalaryDependencyException CreateAndLogCriticalDependencyException(Xeption xeption)
@@ -96,5 +104,27 @@ namespace CashOverflow.Services.Foundations.Salaries
 
             return salaryDependencyValidationException;
         }
+
+        private SalaryValidationException CreateAndLogValidationException(Xeption exception)
+        {
+            var salaryValidationException = new SalaryValidationException(exception);
+            this.loggingBroker.LogError(salaryValidationException);
+
+            return salaryValidationException;
+        }
+
+        private SalaryServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var createAndLogServiceException =
+                new SalaryServiceException(exception);
+
+            this.loggingBroker.LogError(createAndLogServiceException);
+
+            throw createAndLogServiceException;
+        }
+
+        
+
+        
     }
 }
