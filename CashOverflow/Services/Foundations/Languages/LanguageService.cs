@@ -64,7 +64,6 @@ namespace CashOverflow.Services.Foundations.Languages
                 ValidateAgainstStorageLanguageOnModify(inputLanguage: language, storageLanguage: maybeLanguage);
 
                 return await this.storageBroker.UpdateLanguageAsync(language);
-
             });
     }
 }

@@ -67,19 +67,15 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             invalidLanguageException.AddData(
                 key: nameof(Language.Name),
-                values: "Language name is required");
-
-            invalidLanguageException.AddData(
-                key: nameof(Language.Type),
-                values: "Type is required");
+                values: "Text is required");
 
             invalidLanguageException.AddData(
                 key: nameof(Language.CreatedDate),
-                values: "Value is required");
+                values: "Date is required");
 
             invalidLanguageException.AddData(
                 key:nameof(Language.UpdatedDate),
-                 "Value is required",
+                "Date is required",
                 "Date is not recent",
                 $"Date is the same as {nameof(Language.CreatedDate)}");
 
