@@ -63,9 +63,8 @@ namespace CashOverflow.Services.Foundations.Languages
                         firstDate: inputLanguage.UpdatedDate,
                         secondDate: storageLanguage.UpdatedDate,
                         secondDateName: nameof(Language.UpdatedDate)),
-                    Parameter: nameof(Language.UpdatedDate)));
+                        Parameter: nameof(Language.UpdatedDate)));
         }
-
 
         private static void ValidateStorageLanguage(Language maybeLanguage, Guid languageId)
         {
