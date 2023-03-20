@@ -10,6 +10,7 @@ using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Languages
@@ -47,7 +48,13 @@ namespace CashOverflow.Services.Foundations.Languages
             {
                 var alreadyExistsLanguageException = new AlreadyExistsLanguageException(duplicateKeyException);
 
-                throw CreateAndLogDependencyValidationException(alreadyExistsLanguageException);
+                throw CreateAndDependencyValidationException(alreadyExistsLanguageException);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedTeamException = new LockedLanguageException(dbUpdateConcurrencyException);
+
+                throw CreateAndDependencyValidationException(lockedTeamException);
             }
             catch (Exception exception)
             {
@@ -77,13 +84,12 @@ namespace CashOverflow.Services.Foundations.Languages
             }
         }
 
-        private LanguageDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        private LanguageDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var languageDependencyValidationException = new LanguageDependencyValidationException(exception);
+            var languageDependencyException = new LanguageDependencyException(exception);
+            this.loggingBroker.LogCritical(languageDependencyException);
 
-            this.loggingBroker.LogError(languageDependencyValidationException);
-
-            return languageDependencyValidationException;
+            return languageDependencyException;
         }
 
         private LanguageValidationException CreateAndLogValidationException(Xeption exception)
@@ -91,21 +97,20 @@ namespace CashOverflow.Services.Foundations.Languages
             var languageValidationException = new LanguageValidationException(exception);
             this.loggingBroker.LogError(languageValidationException);
 
-            return languageValidationException;
+            throw languageValidationException;
         }
 
-        private LanguageDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        private LanguageDependencyValidationException CreateAndDependencyValidationException(Xeption exception)
         {
-            var LanguageDependencyException = new LanguageDependencyException(exception);
-            this.loggingBroker.LogCritical(LanguageDependencyException);
+            var languageDependencyValidationException = new LanguageDependencyValidationException(exception);
+            this.loggingBroker.LogError(languageDependencyValidationException);
 
-            return LanguageDependencyException;
+            return languageDependencyValidationException;
         }
 
         private LanguageServiceException CreateAndLogServiceException(Xeption exception)
         {
             var languageServiceException = new LanguageServiceException(exception);
-
             this.loggingBroker.LogError(languageServiceException);
 
             return languageServiceException;

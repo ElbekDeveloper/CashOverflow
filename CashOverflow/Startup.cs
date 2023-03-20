@@ -64,8 +64,8 @@ namespace CashOverflow
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         }
-
-        private static void AddServices(IServiceCollection services)
+        
+        private static void AddFoundationServices(IServiceCollection services)
         {
             services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<IJobService, JobService>();

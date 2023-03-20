@@ -62,7 +62,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                 throw CreateAndLogServiceException(failedJobServiceException);
             }
-        }
+            }
 
         private IQueryable<Job> TryCatch(ReturningJobsFunction returningJobsFunction)
         {

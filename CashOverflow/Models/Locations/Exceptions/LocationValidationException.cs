@@ -11,7 +11,7 @@ namespace CashOverflow.Models.Locations.Exceptions
     public class LocationValidationException : Xeption
     {
         public LocationValidationException(Xeption innerException)
-            : base(message: "Location validation error occured,fix the error and try again.", innerException)
+            : base(message: "Location validation error occurred, fix the errors and try again.", innerException) 
         { }
     }
 }
