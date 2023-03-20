@@ -25,8 +25,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             Salary persistedSalary = inputSalary;
             Salary expectedSalary = persistedSalary.DeepClone();
 
-            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
-                .Returns(randomDateTime);
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertSalaryAsync(inputSalary)).ReturnsAsync(persistedSalary);

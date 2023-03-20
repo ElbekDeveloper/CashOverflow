@@ -6,7 +6,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CashOverflow.Models.Locations.Exceptions;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
 using EFxceptions.Models.Exceptions;
@@ -34,10 +33,6 @@ namespace CashOverflow.Services.Foundations.Salaries
             {
                 throw CreateAndLogValidationException(nullSalaryException);
             }
-            catch (NotFoundSalaryException notFoundSalaryException)
-            {
-                throw CreateAndLogValidationException(notFoundSalaryException);
-            }
             catch (SqlException sqlException)
             {
                 var failedSalaryStorageException = new FailedSalaryStorageException(sqlException);
@@ -54,7 +49,7 @@ namespace CashOverflow.Services.Foundations.Salaries
             {
                 var failedSalaryServiceException = new FailedSalaryServiceException(exception);
 
-                throw CreateAndLogServiceException(failedSalaryServiceException) ;
+                throw CreateAndLogServiceException(failedSalaryServiceException);
             }
         }
 
@@ -122,9 +117,5 @@ namespace CashOverflow.Services.Foundations.Salaries
 
             throw createAndLogServiceException;
         }
-
-        
-
-        
     }
 }

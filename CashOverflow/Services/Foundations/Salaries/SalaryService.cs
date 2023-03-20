@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
-using CashOverflow.Models.Locations;
 using CashOverflow.Models.Salaries;
 
 namespace CashOverflow.Services.Foundations.Salaries
@@ -20,7 +19,7 @@ namespace CashOverflow.Services.Foundations.Salaries
         private readonly IDateTimeBroker dateTimeBroker;
 
         public SalaryService(
-            IStorageBroker storageBroker, 
+            IStorageBroker storageBroker,
             ILoggingBroker loggingBroker,
             IDateTimeBroker dateTimeBroker)
 

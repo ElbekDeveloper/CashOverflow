@@ -128,10 +128,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once());
 
-            this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(expectedSalaryValidationException))), Times.Once);
+            this.loggingBrokerMock.Verify(broker => broker.LogError
+                (It.Is(SameExceptionAs(expectedSalaryValidationException))), Times.Once);
 
-            this.storageBrokerMock.Verify(broker => broker.InsertSalaryAsync(It.IsAny<Salary>()), Times.Never);
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertSalaryAsync(It.IsAny<Salary>()), Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

@@ -3,15 +3,15 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using CashOverflow.Models.Salaries.Exceptions;
+using System;
+using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
+using CashOverflow.Models.Salaries.Exceptions;
+using EFxceptions.Models.Exceptions;
+using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
-using System.Threading.Tasks;
 using Xunit;
-using FluentAssertions;
-using EFxceptions.Models.Exceptions;
-using System;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 {
@@ -26,8 +26,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             var faildSalaryStorageException = new FailedSalaryStorageException(sqlException);
             var expectedSalaryDependencyException = new SalaryDependencyException(faildSalaryStorageException);
 
-            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
-               .Throws(sqlException);
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset()).Throws(sqlException);
 
             // when
             ValueTask<Salary> addSalaryTask = this.salaryService.AddSalaryAsync(someSalary);
@@ -41,7 +40,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
 
-            this.loggingBrokerMock.Verify(broker => 
+            this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(expectedSalaryDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -61,11 +60,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             var expectedSalaryDependencyValidationException =
                 new SalaryDependencyValidationException(alreadyExistSalaryException);
 
-            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
-                .Throws(duplicateKeyException);
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Throws(duplicateKeyException);
 
             // when
             ValueTask<Salary> addSalaryTask = this.salaryService.AddSalaryAsync(someSalary);
+
             SalaryDependencyValidationException actualSalaryDependencyValidationException =
                 await Assert.ThrowsAsync<SalaryDependencyValidationException>(addSalaryTask.AsTask);
 
@@ -73,9 +73,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             actualSalaryDependencyValidationException.Should()
                 .BeEquivalentTo(expectedSalaryDependencyValidationException);
 
-            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
-            this.loggingBrokerMock.Verify(brokers => brokers.LogError(It.Is(SameExceptionAs(
-                expectedSalaryDependencyValidationException))), Times.Once);
+            this.dateTimeBrokerMock.Verify(broker => 
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(brokers =>
+                brokers.LogError(It.Is(SameExceptionAs(expectedSalaryDependencyValidationException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -93,8 +95,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             var expectedSalaryServiceException =
                 new SalaryServiceException(failedSalaryServiceException);
 
-            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
-                .Throws(serviceException);
+            this.dateTimeBrokerMock.Setup(broker => 
+                broker.GetCurrentDateTimeOffset()).Throws(serviceException);
 
             // when
             ValueTask<Salary> addSalaryTask = this.salaryService.AddSalaryAsync(someSalary);
@@ -105,10 +107,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             // then
             actualSalaryServiceException.Should().BeEquivalentTo(expectedSalaryServiceException);
 
-            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
-            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
-                expectedSalaryServiceException))), Times.Once);
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedSalaryServiceException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
