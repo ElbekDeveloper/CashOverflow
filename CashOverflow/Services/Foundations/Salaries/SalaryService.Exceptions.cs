@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
 using Microsoft.Data.SqlClient;
@@ -14,9 +15,22 @@ namespace CashOverflow.Services.Foundations.Salaries
 {
     public partial class SalaryService
     {
-        private delegate IQueryable<Salary> ReturningSalaryFunction();
+        private delegate ValueTask<Salary> ReturningSalaryFunction();
+        private delegate IQueryable<Salary> ReturningSalariesFunction();
 
-        private IQueryable<Salary> TryCatch(ReturningSalaryFunction returningSalaryFunction)
+        private async ValueTask<Salary> TryCatch(ReturningSalaryFunction returningSalaryFunction)
+        {
+            try
+            {
+                return await returningSalaryFunction();
+            }
+            catch (NullSalaryException nullSalaryException)
+            {
+                throw CreateAndLogValidationException(nullSalaryException);
+            }
+        }
+
+        private IQueryable<Salary> TryCatch(ReturningSalariesFunction returningSalaryFunction)
         {
             try
             {
@@ -34,6 +48,14 @@ namespace CashOverflow.Services.Foundations.Salaries
 
                 throw CreateAndLogServiceException(failedSalaryServiceException);
             }
+        }
+
+        private SalaryValidationException CreateAndLogValidationException(Xeption exception)
+        {
+            var salaryValidationException = new SalaryValidationException(exception);
+            this.loggingBroker.LogError(salaryValidationException);
+
+            return salaryValidationException;
         }
 
         private SalaryServiceException CreateAndLogServiceException(Xeption exception)
