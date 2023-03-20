@@ -12,6 +12,6 @@ namespace CashOverflow.Models.Locations.Exceptions
     {
         public LockedLocationException(Exception innerException)
             : base(message: "Locked Location record error, contact support.", innerException)
-        {}
+        { }
     }
 }

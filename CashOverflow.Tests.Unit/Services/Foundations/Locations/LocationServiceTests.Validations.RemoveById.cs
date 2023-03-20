@@ -3,13 +3,13 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using Moq;
-using System.Threading.Tasks;
 using System;
-using Xunit;
+using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
+using Moq;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 {
