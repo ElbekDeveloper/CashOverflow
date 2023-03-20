@@ -155,5 +155,52 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(InvalidSeconds))]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync(int minutes)
+        {
+            // given
+            DateTimeOffset dateTime = GetRandomDateTime();
+            Job randomJob = CreateRandomJob(dateTime);
+            Job inputJob = randomJob;
+            inputJob.UpdatedDate = dateTime.AddMinutes(minutes);
+            var invalidJobException = new InvalidJobException();
+
+            invalidJobException.AddData(
+                key: nameof(Job.UpdatedDate),
+                values: "Date is not recent.");
+
+            var expectedJobValidatonException =
+                new JobValidationException(invalidJobException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(dateTime);
+
+            // when
+            ValueTask<Job> modifyJobTask =
+                this.jobService.ModifyJobAsync(inputJob);
+
+            JobValidationException actualJobValidationException =
+                await Assert.ThrowsAsync<JobValidationException>(
+                    modifyJobTask.AsTask);
+
+            // then
+            actualJobValidationException.Should().BeEquivalentTo(expectedJobValidatonException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobValidatonException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(It.IsAny<Guid>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
