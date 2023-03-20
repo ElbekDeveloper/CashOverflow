@@ -19,8 +19,7 @@ namespace CashOverflow.Services.Foundations.Salaries
                 (Rule: IsInvalid(salary.Id), Parameter: nameof(Salary.Id)),
                 (Rule: IsInvalid(salary.Amount), Parameter: nameof(Salary.Amount)),
                 (Rule: IsInvalid(salary.Experience), Parameter: nameof(Salary.Experience)),
-                (Rule: IsInvalid(salary.CreatedDate), Parameter: nameof(Salary.CreatedDate)),
-                (Rule: IsNotRecent(date: salary.CreatedDate), Parameter: nameof(Salary.CreatedDate)));
+                (Rule: IsInvalid(salary.CreatedDate), Parameter: nameof(Salary.CreatedDate)));
         }
         private static void ValidateSalaryNotNull(Salary salary)
         {

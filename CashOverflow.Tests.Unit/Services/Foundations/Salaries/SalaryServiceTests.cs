@@ -16,6 +16,7 @@ using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 {
@@ -36,6 +37,18 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object,
                 dateTimeBroker: this.dateTimeBrokerMock.Object);
+        }
+
+        public static TheoryData<int> InvalidMinutes()
+        {
+            int minutesInFuture = GetRandomNumber();
+            int minutesInPast = GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                minutesInFuture,
+                minutesInPast
+            };
         }
 
         private SqlException CreateSqlException() =>
@@ -60,8 +73,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
         private DateTimeOffset GetRandomDatetimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
+        private static int GetRandomNegativeNumber() =>
+            -1 * new IntRange(min: 2, max: 9).GetValue();
+
         private static int GetRandomNumber() =>
-            new IntRange(min: 2, max: 99).GetValue();
+            new IntRange(min: 2, max: 9).GetValue();
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
