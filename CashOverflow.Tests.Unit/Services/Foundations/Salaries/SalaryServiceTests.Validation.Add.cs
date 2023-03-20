@@ -3,8 +3,9 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-namespace CashOverflow.Brokers.Storages
+namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
 {
-    public partial interface IStorageBroker 
-    { }
+    public class SalaryServiceTests
+    {
+    }
 }
