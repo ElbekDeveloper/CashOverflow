@@ -37,7 +37,7 @@ namespace CashOverflow
                     info: new OpenApiInfo { Title = "CashOverflow", Version = "v1" });
             });
             AddBrokers(services);
-            AddServices(services);
+            AddFoundationServices(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
