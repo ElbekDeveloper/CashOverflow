@@ -36,6 +36,11 @@ namespace CashOverflow.Services.Foundations.Jobs
             }
         }
 
+        private static void ValidateAgainstStorageJobOnModify(Job inputJob, Job storageJob)
+        {
+            ValidateStorageJobExists(storageJob, inputJob.Id);
+        }
+
         private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
         {
             if (maybejob is null)

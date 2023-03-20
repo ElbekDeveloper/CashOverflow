@@ -53,7 +53,9 @@ namespace CashOverflow.Services.Foundations.Jobs
                 ValidateJobOnModify(job);
 
                 Job maybeJob =
-                await this.storageBroker.SelectJobByIdAsync(job.Id);
+                    await this.storageBroker.SelectJobByIdAsync(job.Id);
+
+                ValidateAgainstStorageJobOnModify(inputJob: job, storageJob: maybeJob);
 
                 return await this.storageBroker.UpdateJobAsync(job);
             });
