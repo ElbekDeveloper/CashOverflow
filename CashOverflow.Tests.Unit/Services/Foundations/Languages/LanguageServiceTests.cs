@@ -81,6 +81,16 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
         private Language CreateRandomLanguage() =>
             CreateLanguageFiller(GetRandomDatetimeOffset()).Create();
+        
+        private Language CreateRandomModifyLanguage(DateTimeOffset dates)
+        {
+            int randomdaysInPast = GetRandomNegativeNumber();
+            Language randomLanguage = CreateRandomLanguage(dates);
+
+            randomLanguage.CreatedDate = randomLanguage.CreatedDate.AddDays(randomdaysInPast);
+
+            return randomLanguage;
+        }
 
         private Filler<Language> CreateLanguageFiller(DateTimeOffset dates)
         {
