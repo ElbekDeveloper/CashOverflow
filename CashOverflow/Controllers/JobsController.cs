@@ -3,7 +3,10 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
+using CashOverflow.Models.Jobs;
+using CashOverflow.Models.Jobs.Exceptions;
 using System;
 using CashOverflow.Services.Foundations.Jobs;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +27,23 @@ namespace CashOverflow.Controllers
 
         [HttpGet("{jobId}")]
         public async ValueTask<ActionResult<Job>> GetJobByIdAsync(Guid jobId)
+        [HttpDelete("{jobId}")]
+        public async ValueTask<ActionResult<Job>> DeleteJobByIdAsync(Guid jobId)
         {
             try
             {
                 return await this.jobService.RetrieveJobByIdAsync(jobId);
+                Job deletedJob =
+                    await this.jobService.RemoveJobByIdAsync(jobId);
+
+                return Ok(deletedJob);
             }
             catch (JobDependencyException jobDependencyException)
+            catch (JobValidationException jobValidationException)
+                when (jobValidationException.InnerException is NotFoundJobException)
             {
                 return InternalServerError(jobDependencyException.InnerException);
+                return NotFound(jobValidationException.InnerException);
             }
             catch (JobValidationException jobValidationException)
                 when (jobValidationException.InnerException is InvalidJobException)
@@ -40,8 +52,19 @@ namespace CashOverflow.Controllers
             }
             catch (JobValidationException jobValidationException)
                 when (jobValidationException.InnerException is NotFoundJobException)
+            catch (JobDependencyValidationException jobDependencyValidationException)
+                when (jobDependencyValidationException.InnerException is LockedJobException)
+            {
+                return Locked(jobDependencyValidationException.InnerException);
+            }
+            catch (JobDependencyValidationException jobDependencyValidationException)
+            {
+                return BadRequest(jobDependencyValidationException.InnerException);
+            }
+            catch (JobDependencyException jobDependencyException)
             {
                 return NotFound(jobValidationException.InnerException);
+                return InternalServerError(jobDependencyException.InnerException);
             }
             catch (JobServiceException jobServiceException)
             {
