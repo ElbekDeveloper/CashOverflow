@@ -44,5 +44,54 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfSalaryIsInvalidAndLogItAsync()
+        {
+            // given
+            var invalidSalary = new Salary();
+
+            var invalidSalaryException = new InvalidSalaryException();
+
+            invalidSalaryException.AddData(
+                key: nameof(Salary.Id),
+                values: "Id is required");
+
+            invalidSalaryException.AddData(
+                key: nameof(Salary.Amount),
+                values: "Amount is required");
+
+            invalidSalaryException.AddData(
+                key: nameof(Salary.Experience),
+                values: "Experience is required");
+
+            invalidSalaryException.AddData(
+                key: nameof(Salary.CreatedDate),
+                values: "Date is required");
+
+            var expectedSalaryValidationException =
+                new SalaryValidationException(invalidSalaryException);
+
+            // when
+            ValueTask<Salary> addSalaryTask =
+                this.salaryService.AddSalaryAsync(invalidSalary);
+
+            SalaryValidationException actualSalaryValidationException =
+                await Assert.ThrowsAsync<SalaryValidationException>(addSalaryTask.AsTask);
+
+            // then
+            actualSalaryValidationException.Should()
+                .BeEquivalentTo(expectedSalaryValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedSalaryValidationException))), Times.Once());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertSalaryAsync(It.IsAny<Salary>()), Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
