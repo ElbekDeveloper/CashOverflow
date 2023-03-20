@@ -26,6 +26,7 @@ namespace CashOverflow
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddDbContext<StorageBroker>();
             services.AddControllers();
 
