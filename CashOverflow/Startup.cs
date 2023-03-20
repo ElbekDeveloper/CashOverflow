@@ -28,8 +28,8 @@ namespace CashOverflow
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<StorageBroker>();
             services.AddControllers();
+            services.AddDbContext<StorageBroker>();
 
             services.AddSwaggerGen(config =>
             {
@@ -66,7 +66,7 @@ namespace CashOverflow
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         }
-        
+
         private static void AddFoundationServices(IServiceCollection services)
         {
             services.AddTransient<ILanguageService, LanguageService>();
