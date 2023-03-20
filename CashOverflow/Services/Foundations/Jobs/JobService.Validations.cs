@@ -4,8 +4,11 @@
 // --------------------------------------------------------
 
 using System;
+using System.Data;
+using System.Diagnostics;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
@@ -39,6 +42,13 @@ namespace CashOverflow.Services.Foundations.Jobs
         private static void ValidateAgainstStorageJobOnModify(Job inputJob, Job storageJob)
         {
             ValidateStorageJobExists(storageJob, inputJob.Id);
+
+            Validate(
+                (Rule: IsNotSame(
+                    firstDate: inputJob.CreatedDate,
+                    secondDate: storageJob.CreatedDate,
+                    secondDateName: nameof(Job.CreatedDate)),
+                 Parameter: nameof(Job.CreatedDate)));
         }
 
         private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
@@ -92,6 +102,15 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             return timeDifference.TotalSeconds is > 60 or < 0;
         }
+
+        private static dynamic IsNotSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not same as {secondDateName}"
+            };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {

@@ -260,7 +260,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             int randomNumber = GetRandomNegativeNumber();
             int randomMinutes = randomNumber;
             DateTimeOffset randomDateTime = GetRandomDateTime();
-            Job randomJob = CreateRandomJob(randomDateTime);
+            Job randomJob = CreateRandomModifyJob(randomDateTime);
             Job invalidJob = randomJob.DeepClone();
             Job storageJob = invalidJob.DeepClone();
             storageJob.CreatedDate = storageJob.CreatedDate.AddMinutes(randomMinutes);
@@ -270,7 +270,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             invalidJobException.AddData(
                 key: nameof(Job.CreatedDate),
-                values: $"Date is not same as {nameof(Job.CreatedDate)}.");
+                values: $"Date is not same as {nameof(Job.CreatedDate)}");
 
             var expectedJobValidationException =
                 new JobValidationException(invalidJobException);
