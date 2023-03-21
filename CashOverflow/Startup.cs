@@ -9,6 +9,7 @@ using CashOverflow.Brokers.Storages;
 using CashOverflow.Services.Foundations.Jobs;
 using CashOverflow.Services.Foundations.Languages;
 using CashOverflow.Services.Foundations.Locations;
+using CashOverflow.Services.Foundations.Salaries;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,8 +28,8 @@ namespace CashOverflow
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<StorageBroker>();
             services.AddControllers();
+            services.AddDbContext<StorageBroker>();
 
             services.AddSwaggerGen(config =>
             {
@@ -65,12 +66,13 @@ namespace CashOverflow
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         }
-        
+
         private static void AddFoundationServices(IServiceCollection services)
         {
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<IJobService, JobService>();
+            services.AddTransient<ISalaryService, SalaryService>();
         }
     }
 }

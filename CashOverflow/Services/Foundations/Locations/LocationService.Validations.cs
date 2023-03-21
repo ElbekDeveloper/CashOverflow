@@ -13,7 +13,7 @@ namespace CashOverflow.Services.Foundations.Locations
     {
         private void ValidateLocationOnAdd(Location location)
         {
-            ValidateLocationNotNull(location);      
+            ValidateLocationNotNull(location);
 
             Validate(
                 (Rule: IsInvalid(location.Id), Parameter: nameof(Location.Id)),

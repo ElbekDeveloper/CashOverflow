@@ -6,12 +6,12 @@
 using System;
 using Xeptions;
 
-namespace CashOverflow.Models.Locations.Exceptions
+namespace CashOverflow.Models.Salaries.Exceptions
 {
-    public class LockedLocationException : Xeption
+    public class AlreadyExistsSalaryException : Xeption
     {
-        public LockedLocationException(Exception innerException)
-            : base(message: "Locked Location record error, contact support.", innerException)
+        public AlreadyExistsSalaryException(Exception innerException)
+            : base(message: "Salary already exists.", innerException)
         { }
     }
 }

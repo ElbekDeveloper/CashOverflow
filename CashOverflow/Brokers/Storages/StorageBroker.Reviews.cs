@@ -5,13 +5,14 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using CashOverflow.Models.Salaries;
+using CashOverflow.Models.Reviews;
+using Microsoft.EntityFrameworkCore;
 
-namespace CashOverflow.Services.Foundations.Salaries
+namespace CashOverflow.Brokers.Storages
 {
-    public interface ISalaryService
+    public partial class StorageBroker
     {
-        ValueTask<Salary> AddSalaryAsync(Salary salary);
-        IQueryable<Salary> RetrieveAllSalaries();
+        public DbSet<Review> Reviews { get; set; }
+
     }
 }
