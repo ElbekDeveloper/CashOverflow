@@ -46,5 +46,67 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ShouldThrowValidationExceptionOnModifyIfLocationIsInvalidAndLogItAsync(string invalidString)
+        {
+            // given 
+            var invalidLocation = new Location
+            {
+                Name = invalidString
+            };
+
+            var invalidLocationException =
+                new InvalidLocationException();
+
+            invalidLocationException.AddData(
+                key: nameof(Location.Id),
+                values: "Id is required");
+
+            invalidLocationException.AddData(
+                key: nameof(Location.CreatedDate),
+                values: "Date is required");
+            
+            invalidLocationException.AddData(
+                key: nameof(Location.UpdatedDate),
+                values: "Date is required");
+
+
+            var expectedLocationValidationException =
+                new LocationValidationException(invalidLocationException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Returns(GetRandomDateTime);
+
+            // when
+            ValueTask<Location> modifyLocationTask =
+                this.locationService.ModifyLocationAsync(invalidLocation);
+
+            LocationValidationException actualLocationValidationException =
+                await Assert.ThrowsAsync<LocationValidationException>(
+                    modifyLocationTask.AsTask);
+
+            //then
+            actualLocationValidationException.Should()
+                .BeEquivalentTo(expectedLocationValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLocationValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLocationAsync(It.IsAny<Location>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
