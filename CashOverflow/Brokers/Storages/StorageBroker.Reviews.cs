@@ -14,10 +14,5 @@ namespace CashOverflow.Brokers.Storages
     {
         public DbSet<Review> Reviews { get; set; }
 
-        public async ValueTask<Review> InsertReviewAsync(Review review) =>
-           await this.InsertAsync(review);
-
-        public IQueryable<Review> SelectAllReviews() =>
-            SelectAll<Review>();
     }
 }
