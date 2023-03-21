@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
@@ -163,6 +164,57 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnModifyIfDatabaseUpdateErrorOccursAndLogItAsync()
+        {
+            // given
+            int minutesInPast = GetRandomNegativeNumber();
+            var randomDateTime = GetRandomDateTime();
+            Job randomJob = CreateRandomJob(randomDateTime);
+            Job someJob = randomJob;
+            someJob.CreatedDate = someJob.CreatedDate.AddMinutes(minutesInPast);
+            var serviceException = new Exception();
+
+            var failedJobServiceException =
+                new FailedJobServiceException(serviceException);
+
+            var expectedJobServiceException =
+                new JobServiceException(failedJobServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectJobByIdAsync(someJob.Id))
+                    .ThrowsAsync(serviceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Returns(randomDateTime);
+
+            // when
+            ValueTask<Job> modifyJobTask =
+                this.jobService.ModifyJobAsync(someJob);
+
+            JobServiceException actualJobServiceException =
+                await Assert.ThrowsAsync<JobServiceException>(
+                    modifyJobTask.AsTask);
+
+            // then
+            actualJobServiceException.Should().BeEquivalentTo(expectedJobServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(someJob.Id), Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobServiceException))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
