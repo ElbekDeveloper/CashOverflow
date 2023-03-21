@@ -187,13 +187,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             var expectedJobServiceException =
                 new JobServiceException(failedJobServiceException);
 
-            this.storageBrokerMock.Setup(broker =>
-                broker.SelectJobByIdAsync(someJob.Id))
-                    .ThrowsAsync(serviceException);
-
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset())
-                    .Returns(randomDateTime);
+                    .Throws(serviceException);
 
             // when
             ValueTask<Job> modifyJobTask =
