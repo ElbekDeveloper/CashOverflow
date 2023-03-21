@@ -47,7 +47,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             actualLocation.Should().BeEquivalentTo(expectedLocation);
 
             this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(), Times.Never);
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLocationByIdAsync(LocationId), Times.Never);

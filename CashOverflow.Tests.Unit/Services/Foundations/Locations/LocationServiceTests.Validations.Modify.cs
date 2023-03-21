@@ -78,6 +78,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             invalidLocationException.AddData(
                 key: nameof(Location.UpdatedDate),
                 "Date is required",
+                "Date is not recent",
                 $"Date is the same as {nameof(Location.CreatedDate)}");
 
 
@@ -101,7 +102,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 .BeEquivalentTo(expectedLocationValidationException);
 
             this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(), Times.Never);
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
@@ -148,7 +149,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 .BeEquivalentTo(expectedLocationValidationException);
 
             this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(), Times.Never);
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
@@ -164,18 +165,18 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
         [Theory]
         [MemberData(nameof(InvalidSeconds))]
-        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync(int minutes)
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync(int seconds)
         {
             // given
             DateTimeOffset dateTime = GetRandomDateTime();
             Location randomLocation = CreateRandomLocation(dateTime);
             Location inputLocation = randomLocation;
-            inputLocation.UpdatedDate = dateTime.AddMinutes(minutes);
+            inputLocation.UpdatedDate = dateTime.AddMinutes(seconds);
             var invalidLocationException = new InvalidLocationException();
 
             invalidLocationException.AddData(
                 key: nameof(Location.UpdatedDate),
-                values: "Date is not recent.");
+                values: "Date is not recent");
 
             var expectedLocationValidatonException =
                 new LocationValidationException(invalidLocationException);
