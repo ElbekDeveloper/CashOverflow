@@ -171,11 +171,51 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public async Task ShouldThrowServiceExceptionOnModifyIfDatabaseUpdateErrorOccursAndLogItAsync()
         {
             //given
+            int minutesInPast = GetRandomNegativeNumber();
+            DateTimeOffset randomDateTime = GetRandomDatetimeOffset();
+            Language randomLanguage = CreateRandomLanguage(randomDateTime);
+            Language someLanguage = randomLanguage;
+            someLanguage.CreatedDate = randomDateTime.AddMinutes(minutesInPast);
+            var serviceException = new Exception();
 
+            var failedLanguageException = 
+                new FailedLanguageServiceException(serviceException);
+
+            var expectedLanguageServiceException = 
+                new LanguageServiceException(failedLanguageException);
+            
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLanguageByIdAsync(someLanguage.Id))
+                    .ThrowsAsync(serviceException);
+            
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+        
             //when
+            ValueTask<Language> modifyLanguage = 
+                this.languageService.ModifyLanguageAsync(someLanguage);
+            
+            LanguageServiceException actualLanguageServiceException =
+                await Assert.ThrowsAsync<LanguageServiceException>(
+                    modifyLanguage.AsTask);
 
             //then
+            actualLanguageServiceException.Should().BeEquivalentTo(
+                expectedLanguageServiceException);
+            
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLanguageByIdAsync(someLanguage.Id), Times.Once);
+            
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+            
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLanguageServiceException))), Times.Once);
+            
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
-
     }
 }
