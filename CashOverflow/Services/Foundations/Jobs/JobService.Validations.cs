@@ -4,11 +4,8 @@
 // --------------------------------------------------------
 
 using System;
-using System.Data;
-using System.Diagnostics;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
@@ -17,6 +14,7 @@ namespace CashOverflow.Services.Foundations.Jobs
         private void ValidateJobOnModify(Job job)
         {
             ValidateJobNotNull(job);
+
             Validate(
                 (Rule: IsInvalid(job.Id), Parameter: nameof(Job.Id)),
                 (Rule: IsInvalid(job.Title), Parameter: nameof(Job.Title)),
@@ -31,11 +29,11 @@ namespace CashOverflow.Services.Foundations.Jobs
                     Parameter: nameof(job.UpdatedDate)));
         }
 
-        private void ValidateJobNotNull(Job job)
+        private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
         {
-            if (job is null)
+            if (maybejob is null)
             {
-                throw new NullJobException();
+                throw new NotFoundJobException(jobId);
             }
         }
 
@@ -48,15 +46,13 @@ namespace CashOverflow.Services.Foundations.Jobs
                     firstDate: inputJob.CreatedDate,
                     secondDate: storageJob.CreatedDate,
                     secondDateName: nameof(Job.CreatedDate)),
-                 Parameter: nameof(Job.CreatedDate)));
-        }
+                 Parameter: nameof(Job.CreatedDate)),
 
-        private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
-        {
-            if (maybejob is null)
-            {
-                throw new NotFoundJobException(jobId);
-            }
+                (Rule: IsSame(
+                    firstDate: inputJob.UpdatedDate,
+                    secondDate: storageJob.UpdatedDate,
+                    secondDateName: nameof(Job.UpdatedDate)),
+                 Parameter: nameof(Job.UpdatedDate)));
         }
 
         private static void ValidateJobId(Guid jobId) =>
@@ -79,6 +75,15 @@ namespace CashOverflow.Services.Foundations.Jobs
             Condition = date == default,
             Message = "Value is required"
         };
+
+        private static dynamic IsNotSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not same as {secondDateName}"
+            };
 
         private static dynamic IsSame(
             DateTimeOffset firstDate,
@@ -103,14 +108,13 @@ namespace CashOverflow.Services.Foundations.Jobs
             return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
-        private static dynamic IsNotSame(
-            DateTimeOffset firstDate,
-            DateTimeOffset secondDate,
-            string secondDateName) => new
+        private void ValidateJobNotNull(Job job)
+        {
+            if (job is null)
             {
-                Condition = firstDate != secondDate,
-                Message = $"Date is not same as {secondDateName}"
-            };
+                throw new NullJobException();
+            }
+        }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {

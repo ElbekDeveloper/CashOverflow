@@ -320,7 +320,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             invalidJobException.AddData(
                 key: nameof(Job.UpdatedDate),
-                values: $"Data is the same as {nameof(Job.UpdatedDate)}");
+                values: $"Date is the same as {nameof(Job.UpdatedDate)}");
 
             var expectedJobValidationException =
                 new JobValidationException(invalidJobException);
