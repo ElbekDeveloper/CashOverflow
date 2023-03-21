@@ -161,5 +161,52 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(InvalidSeconds))]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync(int minutes)
+        {
+            // given
+            DateTimeOffset dateTime = GetRandomDateTime();
+            Location randomLocation = CreateRandomLocation(dateTime);
+            Location inputLocation = randomLocation;
+            inputLocation.UpdatedDate = dateTime.AddMinutes(minutes);
+            var invalidLocationException = new InvalidLocationException();
+
+            invalidLocationException.AddData(
+                key: nameof(Location.UpdatedDate),
+                values: "Date is not recent.");
+
+            var expectedLocationValidatonException =
+                new LocationValidationException(invalidLocationException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(dateTime);
+
+            // when
+            ValueTask<Location> modifyLocationTask =
+                this.locationService.ModifyLocationAsync(inputLocation);
+
+            LocationValidationException actualLocationValidationException =
+                await Assert.ThrowsAsync<LocationValidationException>(
+                    modifyLocationTask.AsTask);
+
+            // then
+            actualLocationValidationException.Should().BeEquivalentTo(expectedLocationValidatonException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLocationValidatonException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLocationByIdAsync(It.IsAny<Guid>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
