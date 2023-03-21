@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
@@ -19,7 +20,7 @@ namespace CashOverflow.Controllers
     {
         private readonly ILanguageService languageService;
 
-        public LanguagesController(ILanguageService languageService) =>     
+        public LanguagesController(ILanguageService languageService) =>
             this.languageService = languageService;
 
         [HttpGet("{languageId}")]
@@ -34,7 +35,7 @@ namespace CashOverflow.Controllers
                 return InternalServerError(languageDependencyException.InnerException);
             }
             catch (LanguageValidationException languageValidationException)
-                when(languageValidationException.InnerException is InvalidLanguageException)
+                when (languageValidationException.InnerException is InvalidLanguageException)
             {
                 return BadRequest(languageValidationException.InnerException);
             }
@@ -42,6 +43,25 @@ namespace CashOverflow.Controllers
                 when (languageValidationException.InnerException is NotFoundLanguageException)
             {
                 return NotFound(languageValidationException.InnerException);
+            }
+            catch (LanguageServiceException languageServiceException)
+            {
+                return InternalServerError(languageServiceException.InnerException);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<IQueryable<Language>> GetAllLanguages()
+        {
+            try
+            {
+                IQueryable<Language> allLanguages = this.languageService.RetrieveAllLanguages();
+
+                return Ok(allLanguages);
+            }
+            catch (LanguageDependencyException locationDependencyException)
+            {
+                return InternalServerError(locationDependencyException.InnerException);
             }
             catch (LanguageServiceException languageServiceException)
             {
