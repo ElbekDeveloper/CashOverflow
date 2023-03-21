@@ -15,14 +15,14 @@ using RESTFulSense.Controllers;
 
 namespace CashOverflow.Controllers
 {
-	[ApiController]
-	[Route("api/[controller]")]
-	public class SalariesController:RESTFulController
-	{
-		private readonly ISalaryService salaryService;
+    [ApiController]
+    [Route("api/[controller]")]
+    public class SalariesController : RESTFulController
+    {
+        private readonly ISalaryService salaryService;
 
-		public SalariesController(ISalaryService salaryService) =>
-			this.salaryService = salaryService;
+        public SalariesController(ISalaryService salaryService) =>
+            this.salaryService = salaryService;
 
         [HttpPost]
         public async ValueTask<ActionResult<Salary>> PostSalaryAsync(Salary salary)
