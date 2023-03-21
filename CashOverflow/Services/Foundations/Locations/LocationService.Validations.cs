@@ -30,6 +30,9 @@ namespace CashOverflow.Services.Foundations.Locations
                  Parameter: nameof(Location.CreatedDate)));
         }
 
+        private void ValidateLocationOnModify(Location location) =>
+            ValidateLocationNotNull(location);
+
         private static void ValidateLocationId(Guid locationId) =>
             Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
 
