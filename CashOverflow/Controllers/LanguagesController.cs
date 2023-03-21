@@ -5,12 +5,10 @@
 
 using System.Linq;
 using CashOverflow.Models.Languages;
-using CashOverflow.Models.Locations.Exceptions;
-using CashOverflow.Models.Locations;
+using CashOverflow.Models.Languages.Exceptions;
 using CashOverflow.Services.Foundations.Languages;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
-using CashOverflow.Models.Languages.Exceptions;
 
 namespace CashOverflow.Controllers
 {
@@ -42,6 +40,5 @@ namespace CashOverflow.Controllers
             }
         }
     }
-
 }
 
