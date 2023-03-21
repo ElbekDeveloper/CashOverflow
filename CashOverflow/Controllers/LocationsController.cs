@@ -10,7 +10,6 @@ using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using CashOverflow.Services.Foundations.Locations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Query;
 using RESTFulSense.Controllers;
 
 namespace CashOverflow.Controllers
@@ -68,6 +67,33 @@ namespace CashOverflow.Controllers
             catch (LocationServiceException locationServiceException)
             {
                 return InternalServerError(locationServiceException.InnerException);
+            }
+        }
+
+        [HttpGet("{locationId}")]
+        public async ValueTask<ActionResult<Location>> GetLocationByIdAsync(Guid locationId)
+        {
+            try
+            {
+                return await this.locationService.RetrieveLocationByIdAsync(locationId);
+            }
+            catch (LocationDependencyException locationDependencyException)
+            {
+                return InternalServerError(locationDependencyException);
+            }
+            catch (LocationValidationException locationValidationException)
+                when (locationValidationException.InnerException is InvalidLocationException)
+            {
+                return BadRequest(locationValidationException.InnerException);
+            }
+            catch (LocationValidationException locationValidationException)
+                 when (locationValidationException.InnerException is NotFoundLocationException)
+            {
+                return NotFound(locationValidationException.InnerException);
+            }
+            catch (LocationServiceException locationServiceException)
+            {
+                return InternalServerError(locationServiceException);
             }
         }
 
