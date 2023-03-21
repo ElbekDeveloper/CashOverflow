@@ -48,5 +48,43 @@ namespace CashOverflow.Controllers
                 return InternalServerError(languageServiceException.InnerException);
             }
         }
+
+        [HttpDelete("{languageId}")]
+        public async ValueTask<ActionResult<Language>> DeleteLanguageByIdAsync(Guid languageId)
+        {
+            try
+            {
+                Language deletedLanguage =
+                    await this.languageService.RemoveLanguageByIdAsync(languageId);
+
+                return Ok(deletedLanguage);
+            }
+            catch (LanguageValidationException languageValidationException)
+                when (languageValidationException.InnerException is NotFoundLanguageException)
+            {
+                return NotFound(languageValidationException.InnerException);
+            }
+            catch (LanguageValidationException languageValidationException)
+            {
+                return BadRequest(languageValidationException.InnerException);
+            }
+            catch (LanguageDependencyValidationException languageDependencyValidationException)
+                when (languageDependencyValidationException.InnerException is LockedLanguageException)
+            {
+                return Locked(languageDependencyValidationException.InnerException);
+            }
+            catch (LanguageDependencyValidationException languageDependencyValidationException)
+            {
+                return BadRequest(languageDependencyValidationException.InnerException);
+            }
+            catch (LanguageDependencyException languageDependencyException)
+            {
+                return InternalServerError(languageDependencyException.InnerException);
+            }
+            catch (LanguageServiceException languageServiceException)
+            {
+                return InternalServerError(languageServiceException.InnerException);
+            }
+        }
     }
 }
