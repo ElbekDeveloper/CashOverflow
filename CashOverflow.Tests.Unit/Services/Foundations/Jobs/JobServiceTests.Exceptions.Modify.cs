@@ -158,7 +158,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 broker.SelectJobByIdAsync(jobId), Times.Once());
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogCritical(It.Is(SameExceptionAs(
+                broker.LogError(It.Is(SameExceptionAs(
                     expectedJobDependencyValidationException))), Times.Once);
 
             this.dateTimeBrokerMock.Verify(broker =>
