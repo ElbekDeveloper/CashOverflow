@@ -62,12 +62,12 @@ namespace CashOverflow.Services.Foundations.Languages
 
                 throw CreateAndLogDependencyException(failedLanguageStorageException);
             }
-            // catch (Exception exception)
-            // {
-            //     var failedLanguageServiceException = new FailedLanguageServiceException(exception);
+            catch (Exception exception)
+            {
+                var failedLanguageServiceException = new FailedLanguageServiceException(exception);
 
-            //     throw CreateAndLogServiceException(failedLanguageServiceException);
-            // }
+                throw CreateAndLogServiceException(failedLanguageServiceException);
+            }
         }
 
         private IQueryable<Language> TryCatch(ReturningLanguagesFunction returningLanguageFunction)
