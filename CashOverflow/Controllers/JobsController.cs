@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
@@ -21,6 +22,25 @@ namespace CashOverflow.Controllers
 
         public JobsController(IJobService jobService) =>
             this.jobService = jobService;
+
+        [HttpGet]
+        public ActionResult<IQueryable<Job>> GetAllJobs()
+        {
+            try
+            {
+                IQueryable<Job> allJobs = this.jobService.RetrieveAllJobs();
+
+                return Ok(allJobs);
+            }
+            catch (JobDependencyException jobDependencyException)
+            {
+                return InternalServerError(jobDependencyException);
+            }
+            catch (JobServiceException jobServiceException)
+            {
+                return InternalServerError(jobServiceException);
+            }
+        }
 
         [HttpGet("{jobId}")]
         public async ValueTask<ActionResult<Job>> GetJobByIdAsync(Guid jobId)

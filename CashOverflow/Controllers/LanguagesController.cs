@@ -22,18 +22,45 @@ namespace CashOverflow.Controllers
         public LanguagesController(ILanguageService languageService) =>     
             this.languageService = languageService;
 
+        [HttpGet("{languageId}")]
+        public async ValueTask<ActionResult<Language>> GetLanguageByIdAsync(Guid languageId)
+        {
+            try
+            {
+                return await this.languageService.RetrieveLanguageByIdAsync(languageId);
+            }
+            catch (LanguageDependencyException languageDependencyException)
+            {
+                return InternalServerError(languageDependencyException.InnerException);
+            }
+            catch (LanguageValidationException languageValidationException)
+                when(languageValidationException.InnerException is InvalidLanguageException)
+            {
+                return BadRequest(languageValidationException.InnerException);
+            }
+            catch (LanguageValidationException languageValidationException)
+                when (languageValidationException.InnerException is NotFoundLanguageException)
+            {
+                return NotFound(languageValidationException.InnerException);
+            }
+            catch (LanguageServiceException languageServiceException)
+            {
+                return InternalServerError(languageServiceException.InnerException);
+            }
+        }
+
         [HttpDelete("{languageId}")]
         public async ValueTask<ActionResult<Language>> DeleteLanguageByIdAsync(Guid languageId)
         {
             try
             {
-                Language deletedLanguage = 
+                Language deletedLanguage =
                     await this.languageService.RemoveLanguageByIdAsync(languageId);
 
                 return Ok(deletedLanguage);
             }
             catch (LanguageValidationException languageValidationException)
-                when(languageValidationException.InnerException is NotFoundLanguageException)
+                when (languageValidationException.InnerException is NotFoundLanguageException)
             {
                 return NotFound(languageValidationException.InnerException);
             }
