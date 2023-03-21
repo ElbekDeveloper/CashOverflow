@@ -25,13 +25,13 @@ namespace CashOverflow.Services.Foundations.Salaries
             {
                 return await returningSalaryFunction();
             }
-            catch (InvalidSalaryException invalidSalaryException)
-            {
-                throw CreateAndLogValidationException(invalidSalaryException);
-            }
             catch (NullSalaryException nullSalaryException)
             {
                 throw CreateAndLogValidationException(nullSalaryException);
+            }
+            catch (InvalidSalaryException invalidSalaryException)
+            {
+                throw CreateAndLogValidationException(invalidSalaryException);
             }
             catch (SqlException sqlException)
             {
