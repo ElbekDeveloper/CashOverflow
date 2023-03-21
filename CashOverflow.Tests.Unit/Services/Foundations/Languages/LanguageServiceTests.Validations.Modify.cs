@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
-// Developed by CashOverflow Team
+// Developed by CashOverflow Language
 // --------------------------------------------------------
 
 using System;
@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
 using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 using Xunit;
 
@@ -222,11 +223,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 broker.GetCurrentDateTimeOffset()).Returns(dateTime);
 
             //when 
-            ValueTask<Language> modifyTeamTask =
+            ValueTask<Language> modifyLanguageTask =
                 this.languageService.ModifyLanguageAsync(nonExistLanguage);
 
             LanguageValidationException actualLanguageValidationException =
-               await Assert.ThrowsAsync<LanguageValidationException>(modifyTeamTask.AsTask);
+               await Assert.ThrowsAsync<LanguageValidationException>(modifyLanguageTask.AsTask);
 
             //then
             actualLanguageValidationException.Should().BeEquivalentTo(expectedLanguageValidationException);
@@ -250,10 +251,53 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateNotSameAsCreatedDateAndLogItAsync()
         {
             //given 
+            int randomNumber = GetRandomNegativeNumber();
+            int randomMinutes = randomNumber;
+            DateTimeOffset randomDateTime = GetRandomDatetimeOffset();
+            Language randomLanguage = CreateRandomModifyLanguage(randomDateTime);
+            Language invalidLanguage = randomLanguage.DeepClone();
+            Language storageLanguage = invalidLanguage.DeepClone();
+            storageLanguage.CreatedDate = storageLanguage.CreatedDate.AddMinutes(randomMinutes);
+            storageLanguage.UpdatedDate = storageLanguage.UpdatedDate.AddMinutes(randomMinutes);
+            var invalidLanguageException = new InvalidLanguageException();
+            Guid LanguageId = invalidLanguage.Id;
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.CreatedDate),
+                values: $"Date is not same as {nameof(Language.CreatedDate)}.");
+
+            var expectedLanguageValidationException =
+                new LanguageValidationException(invalidLanguageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLanguageByIdAsync(LanguageId)).ReturnsAsync(storageLanguage);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
 
             //when 
+            ValueTask<Language> modifyLanguageTask =
+               this.languageService.ModifyLanguageAsync(invalidLanguage);
+
+            LanguageValidationException actualLanguageValidationException =
+                await Assert.ThrowsAsync<LanguageValidationException>(modifyLanguageTask.AsTask);
 
             //then
+            actualLanguageValidationException.Should().BeEquivalentTo(expectedLanguageValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLanguageByIdAsync(invalidLanguage.Id), Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+               broker.LogError(It.Is(SameExceptionAs(
+                   expectedLanguageValidationException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
