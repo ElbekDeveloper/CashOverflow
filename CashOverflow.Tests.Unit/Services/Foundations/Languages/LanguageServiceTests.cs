@@ -46,17 +46,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 .Create(count: GetRandomNumber()).AsQueryable();
         }
 
-        public static TheoryData<int> InvalidMinutes()
-        {
-            int minutesInFuture = GetRandomNumber();
-            int minutesInPast = GetRandomNegativeNumber();
-
-            return new TheoryData<int>
-            {
-                minutesInFuture,
-                minutesInPast
-            };
-        }
         public static TheoryData<int> InvalidSeconds()
         {
             int secondsInPast = -1 * new IntRange(
