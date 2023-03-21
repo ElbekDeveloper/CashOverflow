@@ -54,8 +54,11 @@ namespace CashOverflow.Services.Foundations.Locations
                 return maybeLocation;
             });
 
-        public async ValueTask<Location> ModifyLocationAsync(Location location) => 
-            await this.storageBroker.UpdateLocationAsync(location);
+        public ValueTask<Location> ModifyLocationAsync(Location location) =>
+        TryCatch(async () =>
+        {
+            return await this.storageBroker.UpdateLocationAsync(location);
+        });
 
         public ValueTask<Location> RemoveLocationByIdAsync(Guid locationId) =>
         TryCatch(async () =>
