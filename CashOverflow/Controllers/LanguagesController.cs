@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Languages;
 using CashOverflow.Models.Languages.Exceptions;
@@ -49,7 +50,24 @@ namespace CashOverflow.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult<IQueryable<Language>> GetAllLanguages()
+        {
+            try
+            {
+                IQueryable<Language> allLanguages = this.languageService.RetrieveAllLanguages();
 
+                return Ok(allLanguages);
+            }
+            catch (LanguageDependencyException locationDependencyException)
+            {
+                return InternalServerError(locationDependencyException.InnerException);
+            }
+            catch (LanguageServiceException languageServiceException)
+            {
+                return InternalServerError(languageServiceException.InnerException);
+            }
+        }
 
         [HttpDelete("{languageId}")]
         public async ValueTask<ActionResult<Language>> DeleteLanguageByIdAsync(Guid languageId)
