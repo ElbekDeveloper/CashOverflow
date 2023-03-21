@@ -36,8 +36,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.languageService = new LanguageService(
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object,
-                dateTimeBroker: this.dateTimeBrokerMock.Object
-                );
+                dateTimeBroker:this.dateTimeBrokerMock.Object);
+
         }
 
         private IQueryable<Language> CreateRandomLanguages()
@@ -55,6 +55,22 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             {
                 minutesInFuture,
                 minutesInPast
+            };
+        }
+        public static TheoryData<int> InvalidSeconds()
+        {
+            int secondsInPast = -1 * new IntRange(
+                min: 60,
+                max: short.MaxValue).GetValue();
+
+            int secondsInFuture = new IntRange(
+                min: 0,
+                max: short.MaxValue).GetValue();
+
+            return new TheoryData<int>
+            {
+                secondsInPast,
+                secondsInFuture
             };
         }
 
@@ -81,6 +97,16 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
         private Language CreateRandomLanguage() =>
             CreateLanguageFiller(GetRandomDatetimeOffset()).Create();
+        
+        private Language CreateRandomModifyLanguage(DateTimeOffset dates)
+        {
+            int randomdaysInPast = GetRandomNegativeNumber();
+            Language randomLanguage = CreateRandomLanguage(dates);
+
+            randomLanguage.CreatedDate = randomLanguage.CreatedDate.AddDays(randomdaysInPast);
+
+            return randomLanguage;
+        }
 
         private Filler<Language> CreateLanguageFiller(DateTimeOffset dates)
         {

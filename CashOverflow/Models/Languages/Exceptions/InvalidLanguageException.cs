@@ -10,7 +10,7 @@ namespace CashOverflow.Models.Languages.Exceptions
     public class InvalidLanguageException : Xeption
     {
         public InvalidLanguageException()
-            : base(message: "Language is invalid")
+            : base(message: "Language is invalid.")
         { }
     }
 }

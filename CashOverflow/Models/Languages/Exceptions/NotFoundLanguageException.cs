@@ -10,8 +10,8 @@ namespace CashOverflow.Models.Languages.Exceptions
 {
     public class NotFoundLanguageException : Xeption
     {
-        public NotFoundLanguageException(Guid someLanguageId)
-            : base(message: $"Couldn't find language with id: {someLanguageId}.")
+        public NotFoundLanguageException(Guid languageId)
+            : base(message: $"Couldn't find language with id:{languageId}")
         { }
     }
 }

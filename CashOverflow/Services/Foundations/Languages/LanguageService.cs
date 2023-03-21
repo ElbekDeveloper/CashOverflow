@@ -30,40 +30,53 @@ namespace CashOverflow.Services.Foundations.Languages
         }
 
         public ValueTask<Language> AddLanguageAsync(Language language) =>
-        TryCatch(async () =>
-        {
-            ValidateLanguageOnAdd(language);
+            TryCatch(async () =>
+            {
+                ValidateLanguageOnAdd(language);
 
-            return await this.storageBroker.InsertLanguageAsync(language);
-        });
+                return await this.storageBroker.InsertLanguageAsync(language);
+            });
 
         public IQueryable<Language> RetrieveAllLanguages() =>
-        TryCatch(() => this.storageBroker.SelectAllLanguages());
+            TryCatch(() => this.storageBroker.SelectAllLanguages());
 
         public ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId) =>
+            TryCatch(async () =>
+            {
+                ValidateLanguageId(languageId);
+
+                Language maybeLanguage =
+                    await this.storageBroker.SelectLanguageByIdAsync(languageId);
+
+                ValidateStorageLanguage(maybeLanguage, languageId);
+
+                return maybeLanguage;
+            });
+
+        public ValueTask<Language> ModifyLanguageAsync(Language language) =>
         TryCatch(async () =>
         {
-            ValidateLanguageId(languageId);
+            ValidateLanguageOnModify(language);
 
-            Language maybeLanguage =
-                await this.storageBroker.SelectLanguageByIdAsync(languageId);
+            var maybeLanguage =
+                await this.storageBroker.SelectLanguageByIdAsync(language.Id);
 
-            ValidateStorageLanguage(maybeLanguage, languageId);
+            ValidateAgainstStorageLanguageOnModify(inputLanguage: language, storageLanguage: maybeLanguage);
 
-            return maybeLanguage;
+            return await this.storageBroker.UpdateLanguageAsync(language);
         });
 
         public ValueTask<Language> RemoveLanguageByIdAsync(Guid languageId) =>
-        TryCatch(async () =>
-        {
-            ValidateLanguageId(languageId);
+            TryCatch(async () =>
+            {
+                ValidateLanguageId(languageId);
 
-            Language maybeLanguage = await this.storageBroker.
-                SelectLanguageByIdAsync(languageId);
+                Language maybeLanguage = await this.storageBroker.
+                    SelectLanguageByIdAsync(languageId);
 
-            ValidateStorageLanguageExist(maybeLanguage, languageId);
+                ValidateStorageLanguage(maybeLanguage, languageId);
 
-            return await this.storageBroker.DeleteLanguageAsync(maybeLanguage);
-        });
+                return await this.storageBroker.DeleteLanguageAsync(maybeLanguage);
+            });
     }
 }

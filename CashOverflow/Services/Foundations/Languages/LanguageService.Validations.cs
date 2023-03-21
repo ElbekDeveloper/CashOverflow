@@ -30,9 +30,45 @@ namespace CashOverflow.Services.Foundations.Languages
                     Parameter: nameof(Language.CreatedDate)));
         }
 
-        private void ValidateStorageLanguage(Language maybeTicket, Guid languageId)
+        private void ValidateLanguageOnModify(Language language)
         {
-            if (maybeTicket is null)
+            ValidateLanguageNotNull(language);
+
+            Validate(
+                (Rule: IsInvalid(language.Id), Parameter: nameof(Language.Id)),
+                (Rule: IsInvalid(language.Name), Parameter: nameof(Language.Name)),
+                (Rule: IsInvalid(language.Type), Parameter: nameof(Language.Type)),
+                (Rule: IsInvalid(language.CreatedDate), Parameter: nameof(Language.CreatedDate)),
+                (Rule: IsInvalid(language.UpdatedDate), Parameter: nameof(Language.UpdatedDate)),
+                (Rule: IsNotRecent(language.UpdatedDate), Parameter: nameof(Language.UpdatedDate)),
+
+                (Rule: IsSame(
+                    firstDate: language.UpdatedDate,
+                    secondDate: language.CreatedDate,
+                    secondDateName: nameof(language.CreatedDate)),
+                    Parameter: nameof(language.UpdatedDate)));
+        }
+
+        private static void ValidateAgainstStorageLanguageOnModify(Language inputLanguage, Language storageLanguage)
+        {
+            ValidateStorageLanguage(storageLanguage, inputLanguage.Id);
+            Validate(
+            (Rule: IsNotSame(
+                    firstDate: inputLanguage.CreatedDate,
+                    secondDate: storageLanguage.CreatedDate,
+                    secondDateName: nameof(Language.CreatedDate)),
+                    Parameter: nameof(Language.CreatedDate)),
+
+                     (Rule: IsSame(
+                        firstDate: inputLanguage.UpdatedDate,
+                        secondDate: storageLanguage.UpdatedDate,
+                        secondDateName: nameof(Language.UpdatedDate)),
+                        Parameter: nameof(Language.UpdatedDate)));
+        }
+
+        private static void ValidateStorageLanguage(Language maybeLanguage, Guid languageId)
+        {
+            if (maybeLanguage is null)
             {
                 throw new NotFoundLanguageException(languageId);
             }
@@ -55,7 +91,7 @@ namespace CashOverflow.Services.Foundations.Languages
             Message = "Id is required"
         };
 
-        private dynamic IsNotSame(
+        private static dynamic IsNotSame(
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
             string secondDateName) => new
@@ -76,11 +112,33 @@ namespace CashOverflow.Services.Foundations.Languages
             Message = "Date is required"
         };
 
+        private static dynamic IsInvalid<T>(T value) => new
+        {
+            Condition = IsEnumInvalid(value),
+            Message = "Value is not recognized"
+        };
+
         private dynamic IsNotRecent(DateTimeOffset date) => new
         {
             Condition = IsDateNotRecent(date),
             Message = "Date is not recent"
         };
+
+        private static bool IsEnumInvalid<T>(T value)
+        {
+            bool isDefined = Enum.IsDefined(typeof(T), value);
+
+            return isDefined is false;
+        }
+
+        private static dynamic IsSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate == secondDate,
+                Message = $"Date is the same as {secondDateName}"
+            };
 
         private bool IsDateNotRecent(DateTimeOffset date)
         {
@@ -88,14 +146,6 @@ namespace CashOverflow.Services.Foundations.Languages
             TimeSpan timeDifference = currentDate.Subtract(date);
 
             return timeDifference.TotalSeconds is > 60 or < 0;
-        }
-
-        private static void ValidateStorageLanguageExist(Language maybeLanguage, Guid languageId)
-        {
-            if (maybeLanguage is null)
-            {
-                throw new NotFoundLanguageException(languageId);
-            }
         }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
