@@ -30,8 +30,8 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
         }
-        public ValueTask<Job> AddJobAsync(Job job) =>
-            throw new  NotImplementedException();
+        public async ValueTask<Job> AddJobAsync(Job job) =>
+            await this.storageBroker.InsertJobAsync(job);
 
         public IQueryable<Job> RetrieveAllJobs() =>
             TryCatch(() => this.storageBroker.SelectAllJobs());
