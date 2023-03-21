@@ -1,0 +1,68 @@
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System;
+using System.Threading.Tasks;
+using CashOverflow.Models.Jobs;
+using CashOverflow.Models.Jobs.Exceptions;
+using FluentAssertions;
+using Microsoft.Data.SqlClient;
+using Moq;
+using Xunit;
+
+namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
+{
+    public partial class JobServiceTests
+    {
+        [Fact]
+        public async Task ShouldThrowCriticalDependencyExceptionOnModifyIfSqlErrorOccursAndLogItAsync()
+        {
+            // given
+            DateTimeOffset someDateTime = GetRandomDateTime();
+            Job randomJob = CreateRandomJob();
+            Job someJob = randomJob;
+            Guid jobId = someJob.Id;
+            SqlException sqlException = CreateSqlException();
+
+            var failedJobStorageException =
+                new FailedJobStorageException(sqlException);
+
+            var expectedJobDependencyException =
+                new JobDependencyException(failedJobStorageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Throws(sqlException);
+
+            // when
+            ValueTask<Job> modifyJobTask =
+                this.jobService.ModifyJobAsync(someJob);
+
+            JobDependencyException actualJobDependencyException =
+                await Assert.ThrowsAsync<JobDependencyException>(
+                    modifyJobTask.AsTask);
+
+            // then
+            actualJobDependencyException.Should().BeEquivalentTo(
+                expectedJobDependencyException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(jobId), Times.Never);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateJobAsync(someJob), Times.Never);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogCritical(It.Is(SameExceptionAs(
+                    expectedJobDependencyException))), Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+               broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+    }
+}
