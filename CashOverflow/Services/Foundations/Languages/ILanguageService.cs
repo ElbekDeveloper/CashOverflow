@@ -16,5 +16,6 @@ namespace CashOverflow.Services.Foundations.Languages
         IQueryable<Language> RetrieveAllLanguages();
         ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId);
         ValueTask<Language> ModifyLanguageAsync(Language language);
+        ValueTask<Language> RemoveLanguageByIdAsync(Guid languageId);
     }
 }

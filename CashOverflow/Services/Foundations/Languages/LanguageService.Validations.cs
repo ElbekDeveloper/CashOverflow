@@ -91,7 +91,7 @@ namespace CashOverflow.Services.Foundations.Languages
             Message = "Id is required"
         };
 
-        private dynamic IsNotSame(
+        private static dynamic IsNotSame(
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
             string secondDateName) => new
@@ -130,15 +130,6 @@ namespace CashOverflow.Services.Foundations.Languages
 
             return isDefined is false;
         }
-
-        private static dynamic IsNotSame
-            (DateTimeOffset firstDate,
-            DateTimeOffset secondDate,
-            string secondDateName) => new
-            {
-                Condition = firstDate != secondDate,
-                Message = $"Date is not same as {secondDateName}."
-            };
 
         private static dynamic IsSame(
             DateTimeOffset firstDate,
