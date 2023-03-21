@@ -82,7 +82,7 @@ namespace CashOverflow.Controllers
                 return InternalServerError(locationDependencyException);
             }
             catch (LocationValidationException locationValidationException)
-                when(locationValidationException.InnerException is InvalidLocationException)
+                when (locationValidationException.InnerException is InvalidLocationException)
             {
                 return BadRequest(locationValidationException.InnerException);
             }

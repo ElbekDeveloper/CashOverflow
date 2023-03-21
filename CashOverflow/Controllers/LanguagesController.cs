@@ -20,7 +20,7 @@ namespace CashOverflow.Controllers
     {
         private readonly ILanguageService languageService;
 
-        public LanguagesController(ILanguageService languageService) =>     
+        public LanguagesController(ILanguageService languageService) =>
             this.languageService = languageService;
 
         [HttpGet("{languageId}")]
@@ -35,7 +35,7 @@ namespace CashOverflow.Controllers
                 return InternalServerError(languageDependencyException.InnerException);
             }
             catch (LanguageValidationException languageValidationException)
-                when(languageValidationException.InnerException is InvalidLanguageException)
+                when (languageValidationException.InnerException is InvalidLanguageException)
             {
                 return BadRequest(languageValidationException.InnerException);
             }
