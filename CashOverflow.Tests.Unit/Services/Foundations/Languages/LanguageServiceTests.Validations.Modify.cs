@@ -151,5 +151,51 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(InvalidMinutes))]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync(
+            int invalidMinutes)
+        {
+            //given
+            DateTimeOffset randomDateTime = GetRandomDatetimeOffset();
+            Language randomLanguage = CreateRandomLanguage(randomDateTime);
+            Language inputLanguage = randomLanguage;
+            inputLanguage.UpdatedDate = randomDateTime.AddSeconds(invalidMinutes);
+            var invalidLanguageException = new InvalidLanguageException();
+
+            invalidLanguageException.AddData(
+                key: nameof(Language.UpdatedDate),
+                values: "Date is not recent");
+
+            var expectedLanguageValidationException =
+                new LanguageValidationException(invalidLanguageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+
+            //when
+            ValueTask<Language> modifyLanguageTask = this.languageService.ModifyLanguageAsync(inputLanguage);
+
+            LanguageValidationException actualLanguageValidationException =
+                await Assert.ThrowsAsync<LanguageValidationException>(modifyLanguageTask.AsTask);
+
+            //then
+            actualLanguageValidationException.Should().BeEquivalentTo(
+                expectedLanguageValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedLanguageValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLanguageByIdAsync(It.IsAny<Guid>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
