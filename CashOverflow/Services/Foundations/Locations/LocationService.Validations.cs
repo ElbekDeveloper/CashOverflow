@@ -40,11 +40,26 @@ namespace CashOverflow.Services.Foundations.Locations
                 (Rule: IsInvalid(location.Id),Parameter: nameof(Location.Id)),
                 (Rule: IsInvalid(location.Name),Parameter: nameof(Location.Name)),
                 (Rule: IsInvalid(location.CreatedDate),Parameter: nameof(Location.CreatedDate)),
-                (Rule: IsInvalid(location.UpdatedDate),Parameter: nameof(Location.UpdatedDate)));
+                (Rule: IsInvalid(location.UpdatedDate),Parameter: nameof(Location.UpdatedDate)),
+
+                (Rule: IsSame(
+                    firstDate: location.UpdatedDate,
+                    secondDate: location.CreatedDate,
+                    secondDateName: nameof(location.CreatedDate)),
+                    Parameter: nameof(location.UpdatedDate)));
 
         }
 
-        private static void ValidateLocationId(Guid locationId) =>
+        private static dynamic IsSame(
+            DateTimeOffset firstDate, 
+            DateTimeOffset secondDate, 
+            string secondDateName) => new
+            {
+                Condition = firstDate == secondDate,
+                Message = $"Date is the same as {secondDateName}"
+            };
+
+    private static void ValidateLocationId(Guid locationId) =>
             Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
 
         private static void ValidateStorageLocation(Location maybeLocation, Guid locationId)

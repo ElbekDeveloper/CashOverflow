@@ -77,7 +77,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             
             invalidLocationException.AddData(
                 key: nameof(Location.UpdatedDate),
-                values: "Date is required");
+                "Date is required",
+                $"Date is the same as {nameof(Location.CreatedDate)}");
 
 
             var expectedLocationValidationException =
@@ -147,7 +148,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 .BeEquivalentTo(expectedLocationValidationException);
 
             this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(), Times.Once);
+                broker.GetCurrentDateTimeOffset(), Times.Never);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
