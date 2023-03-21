@@ -83,7 +83,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 new FailedJobStorageException(databaseUpdateException);
 
             var expectedJobDependencyException =
-                new JobDependencyException(databaseUpdateException);
+                new JobDependencyException(failedStorageJobException);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectJobByIdAsync(jobId))
@@ -107,17 +107,16 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectJobByIdAsync(jobId), Times.Once);
 
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogCritical(It.Is(SameExceptionAs(
+                    expectedJobDependencyException))), Times.Once);
+
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
 
-            this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(
-                    expectedJobDependencyException))), Times.Once);
-
             this.storageBrokerMock.VerifyNoOtherCalls();
-            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
-
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
