@@ -23,6 +23,35 @@ namespace CashOverflow.Controllers
         public LanguagesController(ILanguageService languageService) =>
             this.languageService = languageService;
 
+        [HttpPost]
+        public async ValueTask<ActionResult<Language>> PostLanguageAsync(Language language)
+        {
+            try
+            {
+                Language addedLanguage = await this.languageService.AddLanguageAsync(language);
+
+                return Created(addedLanguage);
+            }
+            catch (LanguageValidationException languageValidationException)
+            {
+                return BadRequest(languageValidationException.InnerException);
+            }
+            catch (LanguageDependencyValidationException languageDependencyValidationException)
+                when (languageDependencyValidationException.InnerException is AlreadyExistsLanguageException)
+            {
+                return Conflict(languageDependencyValidationException.InnerException);
+            }
+            catch (LanguageDependencyException languageDependencyException)
+            {
+                return InternalServerError(languageDependencyException.InnerException);
+            }
+            catch (LanguageServiceException languageServiceException)
+            {
+                return InternalServerError(languageServiceException.InnerException);
+            }
+        }
+
+
         [HttpGet("{languageId}")]
         public async ValueTask<ActionResult<Language>> GetLanguageByIdAsync(Guid languageId)
         {
