@@ -305,5 +305,56 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfStorageUpdatedDateSameAsUpdatedDateAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTime = GetRandomDateTime();
+            Job randomJob = CreateRandomModifyJob(randomDateTime);
+            Job invalidJob = randomJob;
+            Job storageJob = randomJob.DeepClone();
+            invalidJob.UpdatedDate = storageJob.UpdatedDate;
+            Guid jobId = invalidJob.Id;
+            var invalidJobException = new InvalidJobException();
+
+            invalidJobException.AddData(
+                key: nameof(Job.UpdatedDate),
+                values: $"Data is the same as {nameof(Job.UpdatedDate)}");
+
+            var expectedJobValidationException =
+                new JobValidationException(invalidJobException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectJobByIdAsync(invalidJob.Id)).ReturnsAsync(storageJob);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+
+            // when
+            ValueTask<Job> modifyJobTask =
+                this.jobService.ModifyJobAsync(invalidJob);
+
+            JobValidationException actualJobValidationException =
+                await Assert.ThrowsAsync<JobValidationException>(modifyJobTask.AsTask);
+
+            // then
+            actualJobValidationException.Should()
+                .BeEquivalentTo(expectedJobValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectJobByIdAsync(jobId), Times.Once());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobValidationException))), Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once());
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
