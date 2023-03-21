@@ -167,6 +167,15 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnModifyIfDatabaseUpdateErrorOccursAndLogItAsync()
+        {
+            //given
+
+            //when
+
+            //then
+        }
 
     }
 }
