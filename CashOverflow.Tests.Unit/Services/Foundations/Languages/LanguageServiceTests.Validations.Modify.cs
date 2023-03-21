@@ -314,7 +314,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             invalidLanguageException.AddData(
             key: nameof(Language.UpdatedDate),
-                values: $"Date is the same a {nameof(Language.UpdatedDate)}");
+                values: $"Date is the same as {nameof(Language.UpdatedDate)}");
 
             var expectedLanguageValidationException =
                 new LanguageValidationException(invalidLanguageException);
