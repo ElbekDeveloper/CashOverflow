@@ -304,10 +304,49 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         public async Task ShouldThrowValidationExceptionOnModifyIfStorageUpdatedDateSameAsUpdatedDateAndLogItAsync()
         {
             //given 
+            DateTimeOffset randomDateTime = GetRandomDatetimeOffset();
+            Language randomLanguage = CreateRandomModifyLanguage(randomDateTime);
+            Language invalidLanguage = randomLanguage;
+            Language storageLanguage = randomLanguage.DeepClone();
+            invalidLanguage.UpdatedDate = storageLanguage.UpdatedDate;
+            Guid LanguageId = invalidLanguage.Id;
+            var invalidLanguageException = new InvalidLanguageException();
+
+            invalidLanguageException.AddData(
+            key: nameof(Language.UpdatedDate),
+                values: $"Date is the same a {nameof(Language.UpdatedDate)}");
+
+            var expectedLanguageValidationException =
+                new LanguageValidationException(invalidLanguageException);
+
+            this.storageBrokerMock.Setup(broker =>
+               broker.SelectLanguageByIdAsync(invalidLanguage.Id)).ReturnsAsync(storageLanguage);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
 
             //when 
+            ValueTask<Language> modifyLanguageTask = this.languageService.ModifyLanguageAsync(invalidLanguage);
+
+            LanguageValidationException actualLanguageValidationException =
+               await Assert.ThrowsAsync<LanguageValidationException>(modifyLanguageTask.AsTask);
 
             //then
+            actualLanguageValidationException.Should().BeEquivalentTo(expectedLanguageValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLanguageByIdAsync(LanguageId), Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLanguageValidationException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
