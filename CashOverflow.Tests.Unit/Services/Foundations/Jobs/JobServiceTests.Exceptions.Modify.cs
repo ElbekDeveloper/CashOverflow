@@ -75,7 +75,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             DateTimeOffset randomDateTime = GetRandomDatetimeOffset();
             Job randomJob = CreateRandomJob(randomDateTime);
             Job someJob = randomJob;
-            Guid jobId = someJob.Id;
             someJob.CreatedDate = someJob.CreatedDate.AddMinutes(minutesInPast);
             var databaseUpdateException = new DbUpdateException();
 
@@ -85,13 +84,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             var expectedJobDependencyException =
                 new JobDependencyException(failedStorageJobException);
 
-            this.storageBrokerMock.Setup(broker =>
-                broker.SelectJobByIdAsync(jobId))
-                    .ThrowsAsync(databaseUpdateException);
-
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset())
-                    .Returns(randomDateTime);
+                    .Throws(databaseUpdateException);
 
             // when
             ValueTask<Job> modifyJobTask =
@@ -103,9 +98,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             // then
             actualJobDependencyException.Should().BeEquivalentTo(expectedJobDependencyException);
-
-            this.storageBrokerMock.Verify(broker =>
-                broker.SelectJobByIdAsync(jobId), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
@@ -128,7 +120,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             Job randomJob = CreateRandomJob(randomDateTime);
             Job someJob = randomJob;
             someJob.CreatedDate = randomDateTime.AddMinutes(minutesInPast);
-            Guid jobId = someJob.Id;
             var databaseUpdateConcurrencyException = new DbUpdateConcurrencyException();
 
             var lockedJobException =
@@ -137,12 +128,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             var expectedJobDependencyValidationException =
                 new JobDependencyValidationException(lockedJobException);
 
-            this.storageBrokerMock.Setup(broker =>
-              broker.SelectJobByIdAsync(jobId))
-                  .ThrowsAsync(databaseUpdateConcurrencyException);
-
             this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+                broker.GetCurrentDateTimeOffset())
+                    .Throws(databaseUpdateConcurrencyException);
 
             // when
             ValueTask<Job> modifyJobTask =
@@ -154,9 +142,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             // then
             actualJobDependencyValidationException.Should()
                 .BeEquivalentTo(expectedJobDependencyValidationException);
-
-            this.storageBrokerMock.Verify(broker =>
-                broker.SelectJobByIdAsync(jobId), Times.Once());
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
@@ -201,9 +186,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             // then
             actualJobServiceException.Should().BeEquivalentTo(expectedJobServiceException);
-
-            this.storageBrokerMock.Verify(broker =>
-                broker.SelectJobByIdAsync(someJob.Id), Times.Once);
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
