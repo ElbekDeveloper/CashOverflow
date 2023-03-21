@@ -50,13 +50,13 @@ namespace CashOverflow.Services.Foundations.Languages
 
                 throw CreateAndDependencyValidationException(alreadyExistsLanguageException);
             }
-            catch(DbUpdateConcurrencyException DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException DbUpdateConcurrencyException)
             {
                 var lockedLanguageException = new LockedLanguageException(DbUpdateConcurrencyException);
 
                 throw CreateAndDependencyValidationException(lockedLanguageException);
             }
-            catch(DbUpdateException databaseUpdateException)
+            catch (DbUpdateException databaseUpdateException)
             {
                 var failedLanguageStorageException = new FailedLanguageStorageException(databaseUpdateException);
 
@@ -123,6 +123,7 @@ namespace CashOverflow.Services.Foundations.Languages
 
             return languageServiceException;
         }
+
         private LanguageDependencyException CreateAndLogDependencyException(Xeption exception)
         {
             var languageDependencyException = new LanguageDependencyException(exception);
