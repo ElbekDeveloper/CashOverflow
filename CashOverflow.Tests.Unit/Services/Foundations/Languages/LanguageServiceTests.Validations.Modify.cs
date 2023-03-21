@@ -153,7 +153,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         }
 
         [Theory]
-        [MemberData(nameof(InvalidMinutes))]
+        [MemberData(nameof(InvalidSeconds))]
         public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync(
             int invalidMinutes)
         {

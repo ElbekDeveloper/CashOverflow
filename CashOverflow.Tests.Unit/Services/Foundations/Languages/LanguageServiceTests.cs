@@ -57,6 +57,22 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 minutesInPast
             };
         }
+        public static TheoryData<int> InvalidSeconds()
+        {
+            int secondsInPast = -1 * new IntRange(
+                min: 60,
+                max: short.MaxValue).GetValue();
+
+            int secondsInFuture = new IntRange(
+                min: 0,
+                max: short.MaxValue).GetValue();
+
+            return new TheoryData<int>
+            {
+                secondsInPast,
+                secondsInFuture
+            };
+        }
 
         private string GetRandomString() =>
             new MnemonicString().GetValue();
