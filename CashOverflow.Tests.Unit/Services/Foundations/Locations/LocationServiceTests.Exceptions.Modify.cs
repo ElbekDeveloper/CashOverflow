@@ -116,5 +116,57 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnModifyIfDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
+        {
+            // given
+            int minutesInPast = GetRandomNegativeNumber();
+            DateTimeOffset randomDateTime = GetRandomDateTime();
+            Location randomLocation = CreateRandomLocation(randomDateTime);
+            Location someLocation = randomLocation;
+            someLocation.CreatedDate = randomDateTime.AddMinutes(minutesInPast);
+            Guid LocationId = someLocation.Id;
+            var databaseUpdateConcurrencyException = new DbUpdateConcurrencyException();
+
+            var lockedLocationException =
+                new LockedLocationException(databaseUpdateConcurrencyException);
+
+            var expectedLocationDependencyValidationException =
+                new LocationDependencyValidationException(lockedLocationException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLocationByIdAsync(LocationId))
+                    .ThrowsAsync(databaseUpdateConcurrencyException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+
+            // when
+            ValueTask<Location> modifyLocationTask =
+                this.locationService.ModifyLocationAsync(someLocation);
+
+            LocationDependencyValidationException actualLocationDependencyValidationException =
+                await Assert.ThrowsAsync<LocationDependencyValidationException>(
+                    modifyLocationTask.AsTask);
+
+            // then
+            actualLocationDependencyValidationException.Should().BeEquivalentTo(
+                expectedLocationDependencyValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLocationByIdAsync(LocationId), Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLocationDependencyValidationException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
