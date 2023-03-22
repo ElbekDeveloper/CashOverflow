@@ -90,7 +90,7 @@ namespace CashOverflow.Controllers
             }
             catch (LanguageDependencyValidationException languageDependencyValidationException)
             {
-                return Conflict(languageDependencyValidationException.InnerException);
+                return BadRequest(languageDependencyValidationException.InnerException);
             }
             catch (LanguageDependencyException languageDependencyException)
             {
