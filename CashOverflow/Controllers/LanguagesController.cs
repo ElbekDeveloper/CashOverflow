@@ -84,22 +84,22 @@ namespace CashOverflow.Controllers
             {
                 return NotFound(languageValidationException.InnerException);
             }
-            catch (LanguageValidationException LanguageValidationException)
+            catch (LanguageValidationException languageValidationException)
             {
-                return BadRequest(LanguageValidationException.InnerException);
+                return BadRequest(languageValidationException.InnerException);
             }
-            catch (LanguageDependencyValidationException LanguageDependencyValidationException)
-                when (LanguageDependencyValidationException.InnerException is AlreadyExistsLanguageException)
+            catch (LanguageDependencyValidationException languageDependencyValidationException)
+                when (languageDependencyValidationException.InnerException is AlreadyExistsLanguageException)
             {
-                return Conflict(LanguageDependencyValidationException.InnerException);
+                return Conflict(languageDependencyValidationException.InnerException);
             }
-            catch (LanguageDependencyException LanguageDependencyException)
+            catch (LanguageDependencyException languageDependencyException)
             {
-                return InternalServerError(LanguageDependencyException.InnerException);
+                return InternalServerError(languageDependencyException.InnerException);
             }
-            catch (LanguageServiceException LanguageServiceException)
+            catch (LanguageServiceException languageServiceException)
             {
-                return InternalServerError(LanguageServiceException.InnerException);
+                return InternalServerError(languageServiceException.InnerException);
             }
         }
 
