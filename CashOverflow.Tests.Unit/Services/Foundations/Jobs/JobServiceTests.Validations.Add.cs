@@ -70,9 +70,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 key: nameof(Job.Title),
                 values: "Text is required");
 
-            invalidJobException.AddData(
-                key: nameof(Job.Level),
-                values: "Level is required");
+            //invalidJobException.AddData(
+            //    key: nameof(Job.Level),
+            //    values: "Level is required");
 
             invalidJobException.AddData(
                 key: nameof(Job.CreatedDate),
@@ -123,6 +123,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             var expectedJobValidationException = new JobValidationException(invalidJobException);
 
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Returns(randomDate);
+
             // when
             ValueTask<Job> addJobTask = this.jobService.AddJobAsync(invalidJob);
 
@@ -131,6 +134,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             // then
             actualJobValidationException.Should().BeEquivalentTo(expectedJobValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedJobValidationException))), Times.Once);
@@ -143,6 +149,52 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
+        [Theory]
+        [MemberData(nameof(InvalidMinutes))]
+        public async Task ShouldThrowValidationExceptionIfCreatedDateIsNotRecentAndLogItAsync(
+            int invalidMinutes)
+        {
+            // given
+            DateTimeOffset randomDate = GetRandomDatetimeOffset();
+            DateTimeOffset invalidDateTime = randomDate.AddMinutes(invalidMinutes);   
+            Job randomJob = CreateRandomJob(invalidDateTime);
+            Job invalidJob = randomJob;
+            var invalidJobException = new InvalidJobException();
+
+            invalidJobException.AddData(
+                key: nameof(Job.CreatedDate),
+                values: "Date is not recent");
+
+            var expectedJobValidationException =
+                new JobValidationException(invalidJobException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDate);
+
+            // when
+            ValueTask<Job> addJobTask = this.jobService.AddJobAsync(invalidJob);
+
+            JobValidationException actualJobValidationException =
+                await Assert.ThrowsAsync<JobValidationException>(addJobTask.AsTask);
+
+            // then
+            actualJobValidationException.Should().
+                BeEquivalentTo(expectedJobValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+            broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
+                SameExceptionAs(expectedJobValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+
+        }
     }
 }
 

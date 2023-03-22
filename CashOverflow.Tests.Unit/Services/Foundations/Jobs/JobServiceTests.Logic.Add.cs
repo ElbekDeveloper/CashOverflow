@@ -19,20 +19,27 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         public async Task ShouldAddJobAsync()
         {
             // given
-            Job randomJob = CreateRandomJob();
+            DateTimeOffset randomDate = GetRandomDatetimeOffset();
+            Job randomJob = CreateRandomJob(randomDate);
             Job inputJob = randomJob;
             Job persistedJob = inputJob;
             Job expectedJob = persistedJob.DeepClone();
 
+            this.dateTimeBrokerMock.Setup(broker =>
+            broker.GetCurrentDateTimeOffset()).Returns(randomDate);
+
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertJobAsync(inputJob)).ReturnsAsync(persistedJob);
-
+            
             // when
             Job actualJob = await this.jobService
                 .AddJobAsync(inputJob);
 
             // then
             actualJob.Should().BeEquivalentTo(expectedJob);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertJobAsync(inputJob), Times.Once);

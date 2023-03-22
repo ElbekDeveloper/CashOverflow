@@ -39,6 +39,18 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
+        public static TheoryData<int> InvalidMinutes()
+        {
+            int minutesInFuture = GetRandomNumber();
+            int minutesInPast = GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                minutesInFuture,
+                minutesInPast
+            };
+        }
+
         public static TheoryData<int> InvalidSeconds()
         {
             int secondsInPast = -1 * new IntRange(
