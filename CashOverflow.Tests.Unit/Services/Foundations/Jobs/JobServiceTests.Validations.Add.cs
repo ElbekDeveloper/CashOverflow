@@ -37,7 +37,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(
-                    SameExceptionAs(expectedJobValidationException))), Times.Once);
+                    SameExceptionAs(expectedJobValidationException))),
+                        Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
             broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
