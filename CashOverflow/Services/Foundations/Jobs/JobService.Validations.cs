@@ -19,7 +19,6 @@ namespace CashOverflow.Services.Foundations.Jobs
             Validate(
                 (Rule: IsInvalid(job.Id), Parameter: nameof(Job.Id)),
                 (Rule: IsInvalid(job.Title), Parameter: nameof(Job.Title)),
-                //(Rule: IsInvalid(job.Level), Parameter: nameof(Job.Level)),
                 (Rule: IsInvalid(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
                 (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)),
                 (Rule: IsNotRecent(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
@@ -98,12 +97,6 @@ namespace CashOverflow.Services.Foundations.Jobs
             Message = "Date is required"
         };
 
-        //private static dynamic IsInvalid(Level level) => new
-        //{
-        //    Condition = level == default,
-        //    Message = "Level is required"
-        //};
-
         private static dynamic IsNotSame(
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
@@ -125,7 +118,7 @@ namespace CashOverflow.Services.Foundations.Jobs
         private dynamic IsNotRecent(DateTimeOffset date) => new
         {
             Condition = IsDateNotRecent(date),
-            Message = "Date is not recent."
+            Message = "Date is not recent"
         };
 
         private bool IsDateNotRecent(DateTimeOffset date)
