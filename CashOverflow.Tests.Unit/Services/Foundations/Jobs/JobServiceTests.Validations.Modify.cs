@@ -76,7 +76,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 values: new[]
                     {
                         "Date is required",
-                        "Date is not recent.",
+                        "Date is not recent",
                         $"Date is the same as {nameof(Job.CreatedDate)}"
                     }
                 );
