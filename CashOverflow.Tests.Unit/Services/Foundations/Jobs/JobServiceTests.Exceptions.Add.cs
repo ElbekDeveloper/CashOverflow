@@ -82,14 +82,16 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
-         [Fact]
+        [Fact]
         public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
         {
             // given
             Job someJob = new Job();
             var serviceException = new Exception();
             var failedJobServiceException = new FailedJobServiceException(serviceException);
-            var expectedJobServiceException = new JobServiceException(failedJobServiceException);
+
+            var expectedJobServiceException =
+                new JobServiceException(failedJobServiceException);
 
             this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
                 .Throws(serviceException);
