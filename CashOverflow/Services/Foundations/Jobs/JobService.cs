@@ -10,6 +10,7 @@ using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Jobs;
+using CashOverflow.Models.Jobs.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
@@ -30,8 +31,25 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
         }
-        public async ValueTask<Job> AddJobAsync(Job job) =>
-            await this.storageBroker.InsertJobAsync(job);
+        public async ValueTask<Job> AddJobAsync(Job job)
+        {
+            try
+            {
+                if (job is null)
+                {
+                    throw new NullJobException();
+                }
+
+                return await this.storageBroker.InsertJobAsync(job);
+            }
+            catch(NullJobException nullJobException)
+            {
+                var jobValidationException = new JobValidationException(nullJobException);
+                this.loggingBroker.LogError(jobValidationException);
+
+                throw jobValidationException;
+            }           
+        }
 
         public IQueryable<Job> RetrieveAllJobs() =>
             TryCatch(() => this.storageBroker.SelectAllJobs());
