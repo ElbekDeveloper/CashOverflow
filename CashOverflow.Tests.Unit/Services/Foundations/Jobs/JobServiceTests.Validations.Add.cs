@@ -44,6 +44,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Theory]
@@ -118,7 +119,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             invalidJobException.AddData(
                 key: nameof(Job.CreatedDate),
-                values: $"Date is not the same as {nameof(Job.UpdatedDate)}");
+                values: $"Date is not same as {nameof(Job.UpdatedDate)}");
 
             var expectedJobValidationException = new JobValidationException(invalidJobException);
 
