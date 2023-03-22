@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Data;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 
@@ -11,6 +12,19 @@ namespace CashOverflow.Services.Foundations.Jobs
 {
     public partial class JobService
     {
+        private static void ValidateJobOnAdd(Job job)
+        {
+            ValidateJobNotNull(job);
+
+            Validate(
+                (Rule: IsInvalid(job.Id), Parameter: nameof(Job.Id)),
+                (Rule: IsInvalid(job.Title), Parameter: nameof(Job.Title)),
+                (Rule: IsInvalid(job.Level), Parameter: nameof(Job.Level)),
+                (Rule: IsInvalid(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
+                (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)));
+                
+
+        }
         private static void ValidateJobNotNull(Job job)
         {
             if (job is null)
@@ -18,7 +32,7 @@ namespace CashOverflow.Services.Foundations.Jobs
                 throw new NullJobException();
             }
         }
-
+        
         private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
         {
             if (maybejob is null)
@@ -38,14 +52,20 @@ namespace CashOverflow.Services.Foundations.Jobs
 
         private static dynamic IsInvalid(string text) => new
         {
-            Condition = string.IsNullOrWhiteSpace(text),
+            Condition = String.IsNullOrWhiteSpace(text),
             Message = "Text is required"
         };
 
         private static dynamic IsInvalid(DateTimeOffset date) => new
         {
             Condition = date == default,
-            Message = "Value is required"
+            Message = "Date is required"
+        };
+
+        private static dynamic IsInvalid(Level level) => new
+        {
+            Condition = level == default,
+            Message = "Level is required"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
