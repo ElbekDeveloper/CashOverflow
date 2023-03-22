@@ -104,8 +104,7 @@ namespace CashOverflow.Services.Foundations.Locations
         private LocationDependencyException CreateAndLogDependencyException(Xeption xeption)
         {
             var locationDependencyException = new LocationDependencyException(xeption);
-
-            this.loggingBroker.LogCritical(locationDependencyException);
+            this.loggingBroker.LogError(locationDependencyException);
 
             return locationDependencyException;
         }
@@ -113,7 +112,6 @@ namespace CashOverflow.Services.Foundations.Locations
         private LocationDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
             var locationDependencyException = new LocationDependencyException(exception);
-
             this.loggingBroker.LogCritical(locationDependencyException);
 
             return locationDependencyException;
@@ -132,7 +130,6 @@ namespace CashOverflow.Services.Foundations.Locations
         private LocationServiceException CreateAndLogServiceException(Xeption exception)
         {
             var locationServiceException = new LocationServiceException(exception);
-
             this.loggingBroker.LogError(locationServiceException);
 
             return locationServiceException;

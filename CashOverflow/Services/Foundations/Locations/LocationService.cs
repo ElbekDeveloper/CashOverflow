@@ -58,9 +58,7 @@ namespace CashOverflow.Services.Foundations.Locations
         TryCatch(async () =>
         {
             ValidateLocationOnModify(location);
-
             var maybeLocation = await this.storageBroker.SelectLocationByIdAsync(location.Id);
-
             ValidateAgainstStorageLocationOnModify(inputLocation: location, storageLocation: maybeLocation);
 
             return await this.storageBroker.UpdateLocationAsync(location);

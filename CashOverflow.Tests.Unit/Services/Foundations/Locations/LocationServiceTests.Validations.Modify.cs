@@ -82,7 +82,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 "Date is not recent",
                 $"Date is the same as {nameof(Location.CreatedDate)}");
 
-
             var expectedLocationValidationException =
                 new LocationValidationException(invalidLocationException);
 
@@ -311,7 +310,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
-
 
         [Fact]
         public async Task ShouldThrowValidationExceptionOnModifyIfStorageUpdatedDateSameAsUpdatedDateAndLogItAsync()

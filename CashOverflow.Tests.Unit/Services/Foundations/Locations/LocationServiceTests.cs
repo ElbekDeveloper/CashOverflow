@@ -79,7 +79,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         {
             int randomdaysInPast = GetRandomNegativeNumber();
             Location randomLocation = CreateRandomLocation(randomDate);
-
             randomLocation.CreatedDate = randomLocation.CreatedDate.AddDays(randomdaysInPast);
 
             return randomLocation;

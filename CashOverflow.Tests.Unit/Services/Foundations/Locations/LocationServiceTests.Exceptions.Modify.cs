@@ -3,10 +3,10 @@
 // Developed by CashOverflow Location
 // --------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Moq;
-using System.Threading.Tasks;
-using System;
 using Xunit;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
@@ -111,7 +111,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
-                    expectedLocationDependencyException))), Times.Never);
+                    expectedLocationDependencyException))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

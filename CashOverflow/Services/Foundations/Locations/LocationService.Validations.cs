@@ -46,12 +46,12 @@ namespace CashOverflow.Services.Foundations.Locations
                     secondDate: location.CreatedDate,
                     secondDateName: nameof(location.CreatedDate)),
                     Parameter: nameof(location.UpdatedDate)));
-
         }
 
         private static void ValidateAgainstStorageLocationOnModify(Location inputLocation, Location storageLocation)
         {
             ValidateStorageLocation(storageLocation, inputLocation.Id);
+
             Validate(
             (Rule: IsNotSame(
                     firstDate: inputLocation.CreatedDate,
