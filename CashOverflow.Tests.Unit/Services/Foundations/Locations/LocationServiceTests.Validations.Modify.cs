@@ -327,7 +327,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 
             invalidLocationException.AddData(
             key: nameof(Location.UpdatedDate),
-                values: $"Date is the same as {nameof(Location.UpdatedDate)}.");
+                values: $"Date is the same as {nameof(Location.UpdatedDate)}");
 
             var expectedLocationValidationException =
                 new LocationValidationException(invalidLocationException);
