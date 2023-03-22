@@ -11,7 +11,7 @@ namespace CashOverflow.Models.Jobs.Exceptions
     public class AlreadyExistsJobException : Xeption
     {
         public AlreadyExistsJobException(Exception innerException)
-            : base(message: "Already exists exception", innerException)
+            : base(message: "Job already exists.", innerException)
         { }
     }
 }
