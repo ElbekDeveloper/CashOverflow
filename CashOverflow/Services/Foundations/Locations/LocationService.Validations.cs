@@ -59,11 +59,11 @@ namespace CashOverflow.Services.Foundations.Locations
                     secondDateName: nameof(Location.CreatedDate)),
                     Parameter: nameof(Location.CreatedDate)),
 
-                     (Rule: IsSame(
-                        firstDate: inputLocation.UpdatedDate,
-                        secondDate: storageLocation.UpdatedDate,
-                        secondDateName: nameof(Location.UpdatedDate)),
-                        Parameter: nameof(Location.UpdatedDate)));
+            (Rule: IsSame(
+                    firstDate: inputLocation.UpdatedDate,
+                    secondDate: storageLocation.UpdatedDate,
+                    secondDateName: nameof(Location.UpdatedDate)),
+                    Parameter: nameof(Location.UpdatedDate)));
         }
 
         private static dynamic IsNotSame(
