@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
+using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -42,6 +43,39 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(expectedJobDependencyException))), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfDublicateKeyErrorOccursAndLogItAsync()
+        {
+            // given
+            string someMessage = GetRandomString();
+            Job someJob = new Job();
+            var duplicateKeyException = new DuplicateKeyException(someMessage);
+            var alreadyExistsJobException = new AlreadyExistsJobException(duplicateKeyException);
+            var expectedJobDependencyValidationException = new JobDependencyValidationException(alreadyExistsJobException);
+
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Throws(duplicateKeyException);
+
+            // when
+            ValueTask<Job> addJobTask = this.jobService.AddJobAsync(someJob);
+
+            JobDependencyValidationException actualJobDependencyValidationException =
+                await Assert.ThrowsAsync<JobDependencyValidationException>(addJobTask.AsTask);
+
+            // then
+            actualJobDependencyValidationException.Should()
+                .BeEquivalentTo(expectedJobDependencyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
+                SameExceptionAs(expectedJobDependencyValidationException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
