@@ -74,10 +74,10 @@ namespace CashOverflow.Controllers
         {
             try
             {
-                Language modifeLanguage =
+                Language modifyLanguage =
                     await this.languageService.ModifyLanguageAsync(language);
 
-                return Ok(modifeLanguage);
+                return Ok(modifyLanguage);
             }
             catch (LanguageValidationException languageValidationException)
                 when (languageValidationException.InnerException is NotFoundLanguageException)
