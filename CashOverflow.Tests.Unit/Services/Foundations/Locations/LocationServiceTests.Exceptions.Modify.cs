@@ -88,9 +88,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 broker.GetCurrentDateTimeOffset())
                     .Throws(databaseUpdateException);
 
-            this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
-
             // when
             ValueTask<Location> modifyLocationTask =
                 this.locationService.ModifyLocationAsync(someLocation);
@@ -104,7 +101,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 expectedLocationDependencyException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLocationByIdAsync(LocationId), Times.Once);
+                broker.SelectLocationByIdAsync(LocationId), Times.Never);
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
@@ -135,12 +132,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             var expectedLocationDependencyValidationException =
                 new LocationDependencyValidationException(lockedLocationException);
 
-            this.storageBrokerMock.Setup(broker =>
-                broker.SelectLocationByIdAsync(LocationId))
-                    .ThrowsAsync(databaseUpdateConcurrencyException);
-
             this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+                broker.GetCurrentDateTimeOffset())
+                    .Throws(databaseUpdateConcurrencyException);
 
             // when
             ValueTask<Location> modifyLocationTask =
@@ -155,7 +149,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 expectedLocationDependencyValidationException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLocationByIdAsync(LocationId), Times.Once);
+                broker.SelectLocationByIdAsync(LocationId), Times.Never);
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
@@ -186,12 +180,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             var expectedLocationServiceException =
                 new LocationServiceException(failedLocationException);
 
-            this.storageBrokerMock.Setup(broker =>
-                broker.SelectLocationByIdAsync(someLocation.Id))
-                    .ThrowsAsync(serviceException);
-
             this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+                broker.GetCurrentDateTimeOffset())
+                    .Throws(serviceException);
 
             // when
             ValueTask<Location> modifyLocationTask =
@@ -206,7 +197,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 expectedLocationServiceException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLocationByIdAsync(someLocation.Id), Times.Once);
+                broker.SelectLocationByIdAsync(someLocation.Id), Times.Never);
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
