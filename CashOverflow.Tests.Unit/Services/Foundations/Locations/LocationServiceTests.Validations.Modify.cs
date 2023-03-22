@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 using Xunit;
 
@@ -252,6 +253,59 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLocationValidationException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateNotSameAsCreatedDateAndLogItAsync()
+        {
+            // given
+            int randomNumber = GetRandomNegativeNumber();
+            int randomMinutes = randomNumber;
+            DateTimeOffset randomDateTime = GetRandomDateTime();
+            Location randomLocation = CreateRandomModifyLocation(randomDateTime);
+            Location invalidLocation = randomLocation.DeepClone();
+            Location storageLocation = invalidLocation.DeepClone();
+            storageLocation.CreatedDate = storageLocation.CreatedDate.AddMinutes(randomMinutes);
+            storageLocation.UpdatedDate = storageLocation.UpdatedDate.AddMinutes(randomMinutes);
+            var invalidLocationException = new InvalidLocationException();
+            Guid LocationId = invalidLocation.Id;
+
+            invalidLocationException.AddData(
+                key: nameof(Location.CreatedDate),
+                values: $"Date is not same as {nameof(Location.CreatedDate)}.");
+
+            var expectedLocationValidationException =
+                new LocationValidationException(invalidLocationException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLocationByIdAsync(LocationId)).ReturnsAsync(storageLocation);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+
+            // when
+            ValueTask<Location> modifyLocationTask =
+                this.locationService.ModifyLocationAsync(invalidLocation);
+
+            LocationValidationException actualLocationValidationException =
+                await Assert.ThrowsAsync<LocationValidationException>(modifyLocationTask.AsTask);
+
+            // then
+            actualLocationValidationException.Should().BeEquivalentTo(expectedLocationValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLocationByIdAsync(invalidLocation.Id), Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+               broker.LogError(It.Is(SameExceptionAs(
+                   expectedLocationValidationException))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
