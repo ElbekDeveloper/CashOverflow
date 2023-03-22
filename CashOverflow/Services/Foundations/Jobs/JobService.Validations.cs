@@ -11,6 +11,14 @@ namespace CashOverflow.Services.Foundations.Jobs
 {
     public partial class JobService
     {
+        private static void ValidateJobNotNull(Job job)
+        {
+            if (job is null)
+            {
+                throw new NullJobException();
+            }
+        }
+
         private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
         {
             if (maybejob is null)
