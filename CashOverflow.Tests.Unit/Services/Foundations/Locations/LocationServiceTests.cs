@@ -75,6 +75,32 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
+        private Location CreateRandomModifyLocation(DateTimeOffset randomDate)
+        {
+            int randomdaysInPast = GetRandomNegativeNumber();
+            Location randomLocation = CreateRandomLocation(randomDate);
+            randomLocation.CreatedDate = randomLocation.CreatedDate.AddDays(randomdaysInPast);
+
+            return randomLocation;
+        }
+
+        public static TheoryData<int> InvalidSeconds()
+        {
+            int secondsInPast = -1 * new IntRange(
+                min: 60,
+                max: short.MaxValue).GetValue();
+
+            int secondsInFuture = new IntRange(
+                min: 0,
+                max: short.MaxValue).GetValue();
+
+            return new TheoryData<int>
+            {
+                secondsInPast,
+                secondsInFuture
+            };
+        }
+
         private IQueryable<Location> CreateRandomLocations()
         {
             return CreateLocationFiller(GetRandomDateTimeOffset())

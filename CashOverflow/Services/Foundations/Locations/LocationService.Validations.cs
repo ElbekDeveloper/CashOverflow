@@ -30,7 +30,61 @@ namespace CashOverflow.Services.Foundations.Locations
                  Parameter: nameof(Location.CreatedDate)));
         }
 
-        private static void ValidateLocationId(Guid locationId) =>
+        private void ValidateLocationOnModify(Location location)
+        {
+            ValidateLocationNotNull(location);
+
+            Validate(
+                (Rule: IsInvalid(location.Id),Parameter: nameof(Location.Id)),
+                (Rule: IsInvalid(location.Name),Parameter: nameof(Location.Name)),
+                (Rule: IsInvalid(location.CreatedDate),Parameter: nameof(Location.CreatedDate)),
+                (Rule: IsInvalid(location.UpdatedDate),Parameter: nameof(Location.UpdatedDate)),
+                (Rule: IsNotRecent(location.UpdatedDate),Parameter: nameof(Location.UpdatedDate)),
+
+                (Rule: IsSame(
+                    firstDate: location.UpdatedDate,
+                    secondDate: location.CreatedDate,
+                    secondDateName: nameof(location.CreatedDate)),
+                    Parameter: nameof(location.UpdatedDate)));
+        }
+
+        private static void ValidateAgainstStorageLocationOnModify(Location inputLocation, Location storageLocation)
+        {
+            ValidateStorageLocation(storageLocation, inputLocation.Id);
+
+            Validate(
+            (Rule: IsNotSame(
+                    firstDate: inputLocation.CreatedDate,
+                    secondDate: storageLocation.CreatedDate,
+                    secondDateName: nameof(Location.CreatedDate)),
+                    Parameter: nameof(Location.CreatedDate)),
+
+            (Rule: IsSame(
+                    firstDate: inputLocation.UpdatedDate,
+                    secondDate: storageLocation.UpdatedDate,
+                    secondDateName: nameof(Location.UpdatedDate)),
+                    Parameter: nameof(Location.UpdatedDate)));
+        }
+
+        private static dynamic IsNotSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not same as {secondDateName}"
+            };
+
+        private static dynamic IsSame(
+            DateTimeOffset firstDate, 
+            DateTimeOffset secondDate, 
+            string secondDateName) => new
+            {
+                Condition = firstDate == secondDate,
+                Message = $"Date is the same as {secondDateName}"
+            };
+
+    private static void ValidateLocationId(Guid locationId) =>
             Validate((Rule: IsInvalid(locationId), Parameter: nameof(Location.Id)));
 
         private static void ValidateStorageLocation(Location maybeLocation, Guid locationId)

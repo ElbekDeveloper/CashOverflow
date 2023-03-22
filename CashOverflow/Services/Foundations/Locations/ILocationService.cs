@@ -15,6 +15,7 @@ namespace CashOverflow.Services.Foundations.Locations
         ValueTask<Location> AddLocationAsync(Location location);
         IQueryable<Location> RetrieveAllLocations();
         ValueTask<Location> RetrieveLocationByIdAsync(Guid locationId);
+        ValueTask<Location> ModifyLocationAsync(Location location);
         ValueTask<Location> RemoveLocationByIdAsync(Guid locationId);
     }
 }
