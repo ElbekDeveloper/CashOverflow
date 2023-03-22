@@ -87,11 +87,6 @@ namespace CashOverflow.Controllers
             {
                 return BadRequest(jobValidationException.InnerException);
             }
-            catch (JobDependencyValidationException jobDependencyValidationException)
-                when (jobDependencyValidationException.InnerException is AlreadyExistsJobException)
-            {
-                return Conflict(jobDependencyValidationException.InnerException);
-            }
             catch (JobDependencyException jobDependencyException)
             {
                 return InternalServerError(jobDependencyException.InnerException);
