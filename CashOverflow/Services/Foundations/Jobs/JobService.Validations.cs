@@ -21,8 +21,14 @@ namespace CashOverflow.Services.Foundations.Jobs
                 (Rule: IsInvalid(job.Title), Parameter: nameof(Job.Title)),
                 (Rule: IsInvalid(job.Level), Parameter: nameof(Job.Level)),
                 (Rule: IsInvalid(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
-                (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)));
+                (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)),
 
+                (Rule: IsNotSame(
+                    firstDate: job.CreatedDate,
+                    secondDate: job.UpdatedDate,
+                    secondDateName: nameof(Job.UpdatedDate)),
+
+                Parameter: nameof(Job.CreatedDate)));
         }
 
         private void ValidateJobOnModify(Job job)
