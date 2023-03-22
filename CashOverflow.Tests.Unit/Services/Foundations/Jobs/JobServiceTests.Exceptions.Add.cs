@@ -18,7 +18,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
     public partial class JobServiceTests
     {
         [Fact]
-        public async Task ShoudlThrowCriticalDependencyExceptionOnAddIfdependencyErrorOccursAndLogItAsync()
+        public async Task ShoudlThrowCriticalDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync()
         {
             // given
             Job someJob = CreateRandomJob();
@@ -82,7 +82,37 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
-        
+         [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Job someJob = new Job();
+            var serviceException = new Exception();
+            var failedJobServiceException = new FailedJobServiceException(serviceException);
+            var expectedJobServiceException = new JobServiceException(failedJobServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Throws(serviceException);
+
+            // when
+            ValueTask<Job> addJobTask = this.jobService.AddJobAsync(someJob);
+
+            JobServiceException actualJobServiceException =
+                await Assert.ThrowsAsync<JobServiceException>(addJobTask.AsTask);
+
+            // then
+            actualJobServiceException.Should().BeEquivalentTo(expectedJobServiceException);
+
+            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
+                expectedJobServiceException))), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
     }
 }
 
