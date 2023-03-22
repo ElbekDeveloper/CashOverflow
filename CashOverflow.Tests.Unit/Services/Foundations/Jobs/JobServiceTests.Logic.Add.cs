@@ -38,6 +38,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 broker.InsertJobAsync(inputJob), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
