@@ -69,6 +69,39 @@ namespace CashOverflow.Controllers
             }
         }
 
+        [HttpPut]
+        public async ValueTask<ActionResult<Job>> PutJobAsync(Job job)
+        {
+            try
+            {
+                Job modifiedJob = await this.jobService.ModifyJobAsync(job);
+
+                return Ok(modifiedJob);
+            }
+            catch (JobValidationException jobValidationException)
+                when (jobValidationException.InnerException is NotFoundJobException)
+            {
+                return NotFound(jobValidationException.InnerException);
+            }
+            catch (JobValidationException jobValidationException)
+            {
+                return BadRequest(jobValidationException.InnerException);
+            }
+            catch (JobDependencyValidationException jobDependencyValidationException)
+                when (jobDependencyValidationException.InnerException is AlreadyExistsJobException)
+            {
+                return Conflict(jobDependencyValidationException.InnerException);
+            }
+            catch (JobDependencyException jobDependencyException)
+            {
+                return InternalServerError(jobDependencyException.InnerException);
+            }
+            catch (JobServiceException jobServiceException)
+            {
+                return InternalServerError(jobServiceException.InnerException);
+            }
+        }
+
         [HttpDelete("{jobId}")]
         public async ValueTask<ActionResult<Job>> DeleteJobByIdAsync(Guid jobId)
         {
