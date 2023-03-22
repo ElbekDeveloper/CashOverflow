@@ -84,9 +84,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
             var expectedLocationDependencyException =
                 new LocationDependencyException(failedLocationException);
 
-            this.storageBrokerMock.Setup(broker =>
-                broker.SelectLocationByIdAsync(LocationId))
-                    .ThrowsAsync(databaseUpdateException);
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Throws(databaseUpdateException);
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
