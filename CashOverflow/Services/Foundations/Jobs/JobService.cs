@@ -18,8 +18,8 @@ namespace CashOverflow.Services.Foundations.Jobs
     {
 
         private readonly IStorageBroker storageBroker;
-        private readonly ILoggingBroker loggingBroker;
         private readonly IDateTimeBroker dateTimeBroker;
+        private readonly ILoggingBroker loggingBroker;
 
         public JobService(
             IStorageBroker storageBroker,
@@ -28,8 +28,8 @@ namespace CashOverflow.Services.Foundations.Jobs
 
         {
             this.storageBroker = storageBroker;
-            this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
+            this.loggingBroker = loggingBroker;
         }
         public ValueTask<Job> AddJobAsync(Job job) =>
             TryCatch(async () =>

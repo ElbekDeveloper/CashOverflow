@@ -31,7 +31,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
             Validate(
                 (Rule: IsInvalid(job.Id), Parameter: nameof(Job.Id)),
-                (Rule: IsInvalid(job.Title), Parameter: nameof(Job.Title))
+                (Rule: IsInvalid(job.Title), Parameter: nameof(Job.Title)),
                 (Rule: IsInvalid(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
                 (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)),
                 (Rule: IsNotRecent(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)),
@@ -129,7 +129,7 @@ namespace CashOverflow.Services.Foundations.Jobs
             return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
-        private void ValidateJobNotNull(Job job)
+        private static void ValidateJobNotNull(Job job)
         {
             if (job is null)
             {
