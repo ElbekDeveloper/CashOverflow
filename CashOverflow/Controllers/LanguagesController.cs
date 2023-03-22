@@ -80,11 +80,6 @@ namespace CashOverflow.Controllers
                 return Ok(modifyLanguage);
             }
             catch (LanguageValidationException languageValidationException)
-                when (languageValidationException.InnerException is NotFoundLanguageException)
-            {
-                return NotFound(languageValidationException.InnerException);
-            }
-            catch (LanguageValidationException languageValidationException)
             {
                 return BadRequest(languageValidationException.InnerException);
             }
