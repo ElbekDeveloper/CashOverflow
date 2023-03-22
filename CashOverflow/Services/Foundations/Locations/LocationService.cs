@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
+using CashOverflow.Models.Languages;
 using CashOverflow.Models.Locations;
 
 namespace CashOverflow.Services.Foundations.Locations
@@ -58,6 +59,10 @@ namespace CashOverflow.Services.Foundations.Locations
         TryCatch(async () =>
         {
             ValidateLocationOnModify(location);
+
+            var maybeLocation = await this.storageBroker.SelectLocationByIdAsync(location.Id);
+
+            ValidateAgainstStorageLocationOnModify(inputLocation: location, storageLocation: maybeLocation);
 
             return await this.storageBroker.UpdateLocationAsync(location);
         });

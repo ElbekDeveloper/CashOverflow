@@ -50,7 +50,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
                 broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLocationByIdAsync(LocationId), Times.Never);
+                broker.SelectLocationByIdAsync(LocationId), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.UpdateLocationAsync(inputLocation), Times.Once);
