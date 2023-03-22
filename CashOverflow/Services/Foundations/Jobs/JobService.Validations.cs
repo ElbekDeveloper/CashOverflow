@@ -22,7 +22,7 @@ namespace CashOverflow.Services.Foundations.Jobs
                 (Rule: IsInvalid(job.Level), Parameter: nameof(Job.Level)),
                 (Rule: IsInvalid(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
                 (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)));
-                
+
 
         }
         private static void ValidateJobNotNull(Job job)
@@ -32,7 +32,7 @@ namespace CashOverflow.Services.Foundations.Jobs
                 throw new NullJobException();
             }
         }
-        
+
         private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
         {
             if (maybejob is null)

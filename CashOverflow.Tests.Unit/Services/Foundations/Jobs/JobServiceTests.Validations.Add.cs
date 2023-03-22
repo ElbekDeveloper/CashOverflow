@@ -13,57 +13,57 @@ using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 {
-	public partial class JobServiceTests
-	{
-		[Fact]
-		public async Task ShouldThrowValidationExceptionOnAddIfInputIsNullAndLogItAsync()
-		{
-			// given
-			Job nullJob = null;
-			var nullJobException = new NullJobException();
+    public partial class JobServiceTests
+    {
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfInputIsNullAndLogItAsync()
+        {
+            // given
+            Job nullJob = null;
+            var nullJobException = new NullJobException();
 
-			var expectedJobValidationException =
-				new JobValidationException(nullJobException);
+            var expectedJobValidationException =
+                new JobValidationException(nullJobException);
 
-			// when
-			ValueTask<Job> addJobTask = this.jobService.AddJobAsync(nullJob);
+            // when
+            ValueTask<Job> addJobTask = this.jobService.AddJobAsync(nullJob);
 
-			JobValidationException actualJobValidationException =
-				await Assert.ThrowsAsync<JobValidationException>(addJobTask.AsTask);
+            JobValidationException actualJobValidationException =
+                await Assert.ThrowsAsync<JobValidationException>(addJobTask.AsTask);
 
-			// then
-			actualJobValidationException.Should()
-				.BeEquivalentTo(expectedJobValidationException);
+            // then
+            actualJobValidationException.Should()
+                .BeEquivalentTo(expectedJobValidationException);
 
-			this.loggingBrokerMock.Verify(broker =>
-				broker.LogError(It.Is(
-					SameExceptionAs(expectedJobValidationException))), Times.Once);
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(
+                    SameExceptionAs(expectedJobValidationException))), Times.Once);
 
-			this.storageBrokerMock.Verify(broker =>
-			broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
+            this.storageBrokerMock.Verify(broker =>
+            broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
 
-			this.loggingBrokerMock.VerifyNoOtherCalls();
-			this.storageBrokerMock.VerifyNoOtherCalls();
-		}
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
 
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		[InlineData(" ")]
-		public async Task ShouldThrowValidationExceptionOnAddIfJobIsInvalidAndLogItAsync(
-			string invalidText)
-		{
-			// given
-			Job invalidJob = new Job()
-			{
-				Title = invalidText
-			};
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ShouldThrowValidationExceptionOnAddIfJobIsInvalidAndLogItAsync(
+            string invalidText)
+        {
+            // given
+            Job invalidJob = new Job()
+            {
+                Title = invalidText
+            };
 
-			var invalidJobException = new InvalidJobException();
+            var invalidJobException = new InvalidJobException();
 
-			invalidJobException.AddData(
-				key: nameof(Job.Id),
-				values: "Id is required");
+            invalidJobException.AddData(
+                key: nameof(Job.Id),
+                values: "Id is required");
 
             invalidJobException.AddData(
                 key: nameof(Job.Title),
@@ -78,32 +78,32 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 values: "Date is required");
 
             invalidJobException.AddData(
-				key: nameof(Job.UpdatedDate),
-				values: "Date is required");
+                key: nameof(Job.UpdatedDate),
+                values: "Date is required");
 
-			var expectedJobValidationException =
-				new JobValidationException(invalidJobException);
+            var expectedJobValidationException =
+                new JobValidationException(invalidJobException);
 
-			// when
-			ValueTask<Job> addJobTask = this.jobService.AddJobAsync(invalidJob);
+            // when
+            ValueTask<Job> addJobTask = this.jobService.AddJobAsync(invalidJob);
 
-			JobValidationException actualJobValidationException =
-				await Assert.ThrowsAsync<JobValidationException>(addJobTask.AsTask);
+            JobValidationException actualJobValidationException =
+                await Assert.ThrowsAsync<JobValidationException>(addJobTask.AsTask);
 
-			// then
-			actualJobValidationException.Should()
-				.BeEquivalentTo(expectedJobValidationException);
+            // then
+            actualJobValidationException.Should()
+                .BeEquivalentTo(expectedJobValidationException);
 
-			this.loggingBrokerMock.Verify(broker =>
-				broker.LogError(It.Is(SameExceptionAs(
-					expectedJobValidationException))), Times.Once);
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedJobValidationException))), Times.Once);
 
-			this.storageBrokerMock.Verify(broker =>
-				broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
 
-			this.loggingBrokerMock.VerifyNoOtherCalls();
-			this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
         }
-	}
+    }
 }
 

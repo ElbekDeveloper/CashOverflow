@@ -29,7 +29,7 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 throw CreateAndLogValidationException(invalidJobException);
             }
-            catch(NullJobException nullJobException)
+            catch (NullJobException nullJobException)
             {
                 throw CreateAndLogValidationException(nullJobException);
             }
