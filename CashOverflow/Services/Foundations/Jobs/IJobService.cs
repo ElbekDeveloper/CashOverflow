@@ -15,6 +15,7 @@ namespace CashOverflow.Services.Foundations.Jobs
         ValueTask<Job> AddJobAsync(Job job);
         IQueryable<Job> RetrieveAllJobs();
         ValueTask<Job> RetrieveJobByIdAsync(Guid jobId);
+        ValueTask<Job> ModifyJobAsync(Job job);
         ValueTask<Job> RemoveJobByIdAsync(Guid jobId);
     }
 }
