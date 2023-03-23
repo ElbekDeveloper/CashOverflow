@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
+using CashOverflow.Models.Languages.Exceptions;
 using CashOverflow.Services.Foundations.Jobs;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -22,6 +23,36 @@ namespace CashOverflow.Controllers
 
         public JobsController(IJobService jobService) =>
             this.jobService = jobService;
+
+        [HttpPost]
+        public async ValueTask<ActionResult<Job>> PostJobAsync(Job job)
+        {
+            try
+            {
+                return await this.jobService.AddJobAsync(job);
+            }
+            catch (JobValidationException jobValidationException)
+            {
+                return BadRequest(jobValidationException.InnerException);
+            }
+            catch (JobDependencyValidationException jobDependencyValidationException)
+                  when (jobDependencyValidationException.InnerException is AlreadyExistsJobException)
+            {
+                return Conflict(jobDependencyValidationException.InnerException);
+            }
+            catch (JobDependencyValidationException jobDependencyValidationException)
+            {
+                return BadRequest(jobDependencyValidationException.InnerException);
+            }
+            catch (JobDependencyException jobDependencyException)
+            {
+                return InternalServerError(jobDependencyException.InnerException);
+            }
+            catch (JobServiceException jobServiceException)
+            {
+                return InternalServerError(jobServiceException.InnerException);
+            }
+        }
 
         [HttpGet]
         public ActionResult<IQueryable<Job>> GetAllJobs()
