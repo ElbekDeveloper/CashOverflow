@@ -4,12 +4,14 @@
 // --------------------------------------------------------
 
 using System;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -42,7 +44,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
                 broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogCritical(It.Is(SameExceptionAs(expectedJobDependencyException))), Times.Once);
+                broker.LogCritical(It.Is(
+                    SameExceptionAs(expectedJobDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -57,7 +60,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             Job someJob = new Job();
             var duplicateKeyException = new DuplicateKeyException(someMessage);
             var alreadyExistsJobException = new AlreadyExistsJobException(duplicateKeyException);
-            var expectedJobDependencyValidationException = new JobDependencyValidationException(alreadyExistsJobException);
+
+            var expectedJobDependencyValidationException =
+                new JobDependencyValidationException(alreadyExistsJobException);
 
             this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
                 .Throws(duplicateKeyException);
@@ -72,7 +77,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             actualJobDependencyValidationException.Should()
                 .BeEquivalentTo(expectedJobDependencyValidationException);
 
-            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
                 SameExceptionAs(expectedJobDependencyValidationException))), Times.Once);
@@ -80,6 +86,46 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfDbConcurrencyErrorOccursAndLogItAsync()
+        {
+            // given
+            Job someJob = CreateRandomJob();
+            var dbUpdateConcurrencyException = new DbUpdateConcurrencyException();
+
+            var lockedJobException = new LockedJobException(dbUpdateConcurrencyException);
+
+            var expectedJobDependencyValidationException =
+                new JobDependencyValidationException(lockedJobException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Throws(dbUpdateConcurrencyException);
+
+            // when
+            ValueTask<Job> addJobTask = this.jobService.AddJobAsync(someJob);
+
+            JobDependencyValidationException actualJobDependencyValidationException =
+                 await Assert.ThrowsAsync<JobDependencyValidationException>(addJobTask.AsTask);
+
+            // then
+            actualJobDependencyValidationException.Should()
+                .BeEquivalentTo(expectedJobDependencyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
+                SameExceptionAs(expectedJobDependencyValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertJobAsync(It.IsAny<Job>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -105,7 +151,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             // then
             actualJobServiceException.Should().BeEquivalentTo(expectedJobServiceException);
 
-            this.dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTimeOffset(), Times.Once);
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
                 expectedJobServiceException))), Times.Once);
@@ -114,7 +161,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
-
     }
 }
 
