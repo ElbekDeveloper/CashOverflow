@@ -100,7 +100,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             actualJobDependencyException.Should().BeEquivalentTo(expectedJobDependencyException);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogCritical(It.Is(SameExceptionAs(
+                broker.LogError(It.Is(SameExceptionAs(
                     expectedJobDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.Verify(broker =>

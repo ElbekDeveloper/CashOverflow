@@ -42,7 +42,7 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 var failedJobStorageException = new FailedJobStorageException(sqlException);
 
-                throw CreateAndLogDependencyException(failedJobStorageException);
+                throw CreateAndLogCriticalDependencyException(failedJobStorageException);
             }
             catch(DuplicateKeyException duplicateKeyException)
             {
@@ -109,10 +109,11 @@ namespace CashOverflow.Services.Foundations.Jobs
         private JobDependencyException CreateAndLogDependencyException(Xeption exception)
         {
             var jobDependencyException = new JobDependencyException(exception);
-            this.loggingBroker.LogCritical(jobDependencyException);
+            this.loggingBroker.LogError(jobDependencyException);
 
             return jobDependencyException;
         }
+
 
         private JobDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {
