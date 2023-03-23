@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Data;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
 
@@ -11,6 +12,25 @@ namespace CashOverflow.Services.Foundations.Jobs
 {
     public partial class JobService
     {
+        private void ValidateJobOnAdd(Job job)
+        {
+            ValidateJobNotNull(job);
+
+            Validate(
+                (Rule: IsInvalid(job.Id), Parameter: nameof(Job.Id)),
+                (Rule: IsInvalid(job.Title), Parameter: nameof(Job.Title)),
+                (Rule: IsInvalid(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
+                (Rule: IsInvalid(job.UpdatedDate), Parameter: nameof(Job.UpdatedDate)),
+                (Rule: IsNotRecent(job.CreatedDate), Parameter: nameof(Job.CreatedDate)),
+
+                (Rule: IsNotSame(
+                    firstDate: job.CreatedDate,
+                    secondDate: job.UpdatedDate,
+                    secondDateName: nameof(Job.UpdatedDate)),
+
+                Parameter: nameof(Job.CreatedDate)));
+        }
+
         private void ValidateJobOnModify(Job job)
         {
             ValidateJobNotNull(job);
@@ -27,6 +47,7 @@ namespace CashOverflow.Services.Foundations.Jobs
                     secondDate: job.CreatedDate,
                     secondDateName: nameof(job.CreatedDate)),
                     Parameter: nameof(job.UpdatedDate)));
+
         }
 
         private static void ValidateStorageJobExists(Job maybejob, Guid jobId)
@@ -66,14 +87,14 @@ namespace CashOverflow.Services.Foundations.Jobs
 
         private static dynamic IsInvalid(string text) => new
         {
-            Condition = string.IsNullOrWhiteSpace(text),
+            Condition = String.IsNullOrWhiteSpace(text),
             Message = "Text is required"
         };
 
         private static dynamic IsInvalid(DateTimeOffset date) => new
         {
             Condition = date == default,
-            Message = "Value is required"
+            Message = "Date is required"
         };
 
         private static dynamic IsNotSame(
@@ -97,7 +118,7 @@ namespace CashOverflow.Services.Foundations.Jobs
         private dynamic IsNotRecent(DateTimeOffset date) => new
         {
             Condition = IsDateNotRecent(date),
-            Message = "Date is not recent."
+            Message = "Date is not recent"
         };
 
         private bool IsDateNotRecent(DateTimeOffset date)
@@ -108,7 +129,7 @@ namespace CashOverflow.Services.Foundations.Jobs
             return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
-        private void ValidateJobNotNull(Job job)
+        private static void ValidateJobNotNull(Job job)
         {
             if (job is null)
             {

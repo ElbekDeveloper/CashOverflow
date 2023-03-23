@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Jobs;
 using CashOverflow.Models.Jobs.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Xeptions;
@@ -41,7 +42,13 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 var failedJobStorageException = new FailedJobStorageException(sqlException);
 
-                throw CreateAndLogDependencyException(failedJobStorageException);
+                throw CreateAndLogCriticalDependencyException(failedJobStorageException);
+            }
+            catch(DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsJobException = new AlreadyExistsJobException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsJobException);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
@@ -102,10 +109,11 @@ namespace CashOverflow.Services.Foundations.Jobs
         private JobDependencyException CreateAndLogDependencyException(Xeption exception)
         {
             var jobDependencyException = new JobDependencyException(exception);
-            this.loggingBroker.LogCritical(jobDependencyException);
+            this.loggingBroker.LogError(jobDependencyException);
 
             return jobDependencyException;
         }
+
 
         private JobDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {

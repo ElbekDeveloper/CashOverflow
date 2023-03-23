@@ -10,6 +10,7 @@ using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Jobs;
+using CashOverflow.Models.Jobs.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
@@ -17,8 +18,8 @@ namespace CashOverflow.Services.Foundations.Jobs
     {
 
         private readonly IStorageBroker storageBroker;
-        private readonly ILoggingBroker loggingBroker;
         private readonly IDateTimeBroker dateTimeBroker;
+        private readonly ILoggingBroker loggingBroker;
 
         public JobService(
             IStorageBroker storageBroker,
@@ -27,9 +28,17 @@ namespace CashOverflow.Services.Foundations.Jobs
 
         {
             this.storageBroker = storageBroker;
-            this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
+            this.loggingBroker = loggingBroker;
         }
+
+        public ValueTask<Job> AddJobAsync(Job job) =>
+        TryCatch(async () =>
+        {
+            ValidateJobOnAdd(job);
+
+            return await this.storageBroker.InsertJobAsync(job);
+        });
 
         public IQueryable<Job> RetrieveAllJobs() =>
             TryCatch(() => this.storageBroker.SelectAllJobs());
@@ -72,6 +81,5 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                return await this.storageBroker.DeleteJobAsync(maybeJob);
            });
-
     }
 }

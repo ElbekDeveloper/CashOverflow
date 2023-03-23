@@ -69,14 +69,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             invalidJobException.AddData(
                 key: nameof(Job.CreatedDate),
-                values: "Value is required");
+                values: "Date is required");
 
             invalidJobException.AddData(
                 key: nameof(Job.UpdatedDate),
                 values: new[]
                     {
-                        "Value is required",
-                        "Date is not recent.",
+                        "Date is required",
+                        "Date is not recent",
                         $"Date is the same as {nameof(Job.CreatedDate)}"
                     }
                 );
@@ -170,7 +170,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             invalidJobException.AddData(
                 key: nameof(Job.UpdatedDate),
-                values: "Date is not recent.");
+                values: "Date is not recent");
 
             var expectedJobValidatonException =
                 new JobValidationException(invalidJobException);

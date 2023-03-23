@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <UserSecretsId>f933ed4a-9230-4760-b431-b2140aa3256c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +25,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="RESTFulSense" Version="2.10.0" />
+    <PackageReference Include="RESTFulSense" Version="2.11.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Xeption" Version="2.5.0" />
   </ItemGroup>
