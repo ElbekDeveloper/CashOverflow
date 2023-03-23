@@ -30,31 +30,31 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset()).Returns(randomDate);
-            
+
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLanguageByIdAsync(languageId))
                     .ReturnsAsync(storageLangauge);
-            
+
             this.storageBrokerMock.Setup(broker =>
                 broker.UpdateLanguageAsync(inputLanguage))
                     .ReturnsAsync(updatedLanguage);
-            
+
             //when
             Language actualLanguage =
                 await this.languageService.ModifyLanguageAsync(inputLanguage);
-            
+
             //then
             actualLanguage.Should().BeEquivalentTo(expectedLanguage);
-            
+
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
-            
+
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLanguageByIdAsync(languageId), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.UpdateLanguageAsync(inputLanguage), Times.Once);
-            
+
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

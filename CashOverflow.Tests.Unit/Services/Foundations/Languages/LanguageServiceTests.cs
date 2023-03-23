@@ -36,7 +36,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.languageService = new LanguageService(
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object,
-                dateTimeBroker:this.dateTimeBrokerMock.Object);
+                dateTimeBroker: this.dateTimeBrokerMock.Object);
 
         }
 
@@ -97,7 +97,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
         private Language CreateRandomLanguage() =>
             CreateLanguageFiller(GetRandomDatetimeOffset()).Create();
-        
+
         private Language CreateRandomModifyLanguage(DateTimeOffset dates)
         {
             int randomdaysInPast = GetRandomNegativeNumber();

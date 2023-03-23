@@ -102,7 +102,7 @@ namespace CashOverflow.Controllers
         {
             try
             {
-                Location modifiedLocation = 
+                Location modifiedLocation =
                     await this.locationService.ModifyLocationAsync(location);
 
                 return Ok(modifiedLocation);
@@ -112,20 +112,20 @@ namespace CashOverflow.Controllers
             {
                 return NotFound(locationValidationException.InnerException);
             }
-            catch(LocationValidationException locationValidationException)
+            catch (LocationValidationException locationValidationException)
             {
                 return BadRequest(locationValidationException.InnerException);
             }
-            catch(LocationDependencyValidationException locationDependencyValidationException)
+            catch (LocationDependencyValidationException locationDependencyValidationException)
                 when (locationDependencyValidationException.InnerException is AlreadyExistsLocationException)
-            { 
+            {
                 return Conflict(locationDependencyValidationException.InnerException);
             }
-            catch(LocationDependencyException locationDependencyException)
+            catch (LocationDependencyException locationDependencyException)
             {
                 return InternalServerError(locationDependencyException.InnerException);
             }
-            catch(LocationServiceException locationServiceException)
+            catch (LocationServiceException locationServiceException)
             {
                 return InternalServerError(locationServiceException.InnerException);
             }
