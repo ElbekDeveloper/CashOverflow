@@ -31,13 +31,14 @@ namespace CashOverflow.Services.Foundations.Jobs
             this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
         }
-        public ValueTask<Job> AddJobAsync(Job job) =>
-        TryCatch(async () =>
-        {
-            ValidateJobOnAdd(job);
 
-            return await this.storageBroker.InsertJobAsync(job);
-        });
+        public ValueTask<Job> AddJobAsync(Job job) =>
+            TryCatch(async () =>
+            {
+                ValidateJobOnAdd(job);
+
+                return await this.storageBroker.InsertJobAsync(job);
+            });
 
         public IQueryable<Job> RetrieveAllJobs() =>
             TryCatch(() => this.storageBroker.SelectAllJobs());
@@ -80,6 +81,5 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                return await this.storageBroker.DeleteJobAsync(maybeJob);
            });
-
     }
 }

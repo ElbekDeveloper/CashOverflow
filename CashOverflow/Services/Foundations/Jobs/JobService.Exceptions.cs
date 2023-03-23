@@ -26,13 +26,13 @@ namespace CashOverflow.Services.Foundations.Jobs
             {
                 return await returningJobFunction();
             }
-            catch (InvalidJobException invalidJobException)
-            {
-                throw CreateAndLogValidationException(invalidJobException);
-            }
             catch (NullJobException nullJobException)
             {
                 throw CreateAndLogValidationException(nullJobException);
+            }
+            catch (InvalidJobException invalidJobException)
+            {
+                throw CreateAndLogValidationException(invalidJobException);
             }
             catch (NotFoundJobException notFoundJobException)
             {
