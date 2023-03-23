@@ -117,9 +117,8 @@ namespace CashOverflow.Controllers
                 return BadRequest(locationValidationException.InnerException);
             }
             catch (LocationDependencyValidationException locationDependencyValidationException)
-                when (locationDependencyValidationException.InnerException is AlreadyExistsLocationException)
             {
-                return Conflict(locationDependencyValidationException.InnerException);
+                return BadRequest(locationDependencyValidationException.InnerException);
             }
             catch (LocationDependencyException locationDependencyException)
             {
