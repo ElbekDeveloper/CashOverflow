@@ -97,6 +97,40 @@ namespace CashOverflow.Controllers
             }
         }
 
+        [HttpPut]
+        public async ValueTask<ActionResult<Location>> PutLocationAsync(Location location)
+        {
+            try
+            {
+                Location modifiedLocation = 
+                    await this.locationService.ModifyLocationAsync(location);
+
+                return Ok(modifiedLocation);
+            }
+            catch (LocationValidationException locationValidationException)
+                when (locationValidationException.InnerException is NotFoundLocationException)
+            {
+                return NotFound(locationValidationException.InnerException);
+            }
+            catch(LocationValidationException locationValidationException)
+            {
+                return BadRequest(locationValidationException.InnerException);
+            }
+            catch(LocationDependencyValidationException locationDependencyValidationException)
+                when (locationDependencyValidationException.InnerException is AlreadyExistsLocationException)
+            { 
+                return Conflict(locationDependencyValidationException.InnerException);
+            }
+            catch(LocationDependencyException locationDependencyException)
+            {
+                return InternalServerError(locationDependencyException.InnerException);
+            }
+            catch(LocationServiceException locationServiceException)
+            {
+                return InternalServerError(locationServiceException.InnerException);
+            }
+        }
+
         [HttpDelete("{locationId}")]
         public async ValueTask<ActionResult<Location>> DeleteLocationByIdAsync(Guid locationId)
         {
