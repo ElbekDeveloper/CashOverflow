@@ -3,8 +3,6 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Linq;
-using System.Threading.Tasks;
 using CashOverflow.Models.Reviews;
 using Microsoft.EntityFrameworkCore;
 

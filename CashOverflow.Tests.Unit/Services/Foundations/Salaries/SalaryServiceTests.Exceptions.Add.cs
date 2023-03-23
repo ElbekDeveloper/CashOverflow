@@ -73,7 +73,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             actualSalaryDependencyValidationException.Should()
                 .BeEquivalentTo(expectedSalaryDependencyValidationException);
 
-            this.dateTimeBrokerMock.Verify(broker => 
+            this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(brokers =>
@@ -95,7 +95,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             var expectedSalaryServiceException =
                 new SalaryServiceException(failedSalaryServiceException);
 
-            this.dateTimeBrokerMock.Setup(broker => 
+            this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset()).Throws(serviceException);
 
             // when

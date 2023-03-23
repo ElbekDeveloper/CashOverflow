@@ -5,11 +5,11 @@
 
 using System;
 using System.Threading.Tasks;
+using CashOverflow.Models.Locations;
+using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 using Xunit;
-using CashOverflow.Models.Locations;
-using Force.DeepCloner;
-using FluentAssertions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 {

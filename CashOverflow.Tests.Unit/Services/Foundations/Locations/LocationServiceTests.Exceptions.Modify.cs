@@ -5,13 +5,13 @@
 
 using System;
 using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-using Moq;
-using Xunit;
 using CashOverflow.Models.Locations;
 using CashOverflow.Models.Locations.Exceptions;
 using FluentAssertions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Moq;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Locations
 {
