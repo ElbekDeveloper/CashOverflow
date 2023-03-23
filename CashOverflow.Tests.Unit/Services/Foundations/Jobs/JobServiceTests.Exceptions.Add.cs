@@ -129,6 +129,46 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         }
 
         [Fact]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateErrorOccursAndLogItAsync()
+        {
+            // given
+            Job someJob = CreateRandomJob();
+            var dbUpdateException = new DbUpdateException();
+
+            var failedJobStorageException = new FailedJobStorageException(dbUpdateException);
+
+            var expectedJobDependencyException =
+                new JobDependencyException(failedJobStorageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Throws(dbUpdateException);
+
+            // when
+            ValueTask<Job> addJobTask = this.jobService.AddJobAsync(someJob);
+
+            JobDependencyException actualJobDependencyException =
+                 await Assert.ThrowsAsync<JobDependencyException>(addJobTask.AsTask);
+
+            // then
+            actualJobDependencyException.Should()
+                .BeEquivalentTo(expectedJobDependencyException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
+                SameExceptionAs(expectedJobDependencyException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateJobAsync(It.IsAny<Job>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
         public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
         {
             // given
