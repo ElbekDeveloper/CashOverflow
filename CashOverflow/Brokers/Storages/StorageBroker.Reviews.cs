@@ -15,6 +15,5 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Review> InsertReviewAsync(Review review) =>
             await InsertAsync(review);
-
     }
 }
