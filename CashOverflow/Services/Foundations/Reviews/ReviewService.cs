@@ -12,7 +12,7 @@ using CashOverflow.Models.Reviews;
 
 namespace CashOverflow.Services.Foundations.Reviews
 {
-    public class ReviewService : IReviewService
+    public partial class ReviewService : IReviewService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -29,6 +29,6 @@ namespace CashOverflow.Services.Foundations.Reviews
         }
 
         public IQueryable<Review> RetrieveAllReviews() =>
-            this.storageBroker.SelectAllReviews();
+            TryCatch(() => this.storageBroker.SelectAllReviews());
     }
 }
