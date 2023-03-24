@@ -12,7 +12,7 @@ using CashOverflow.Models.Reviews;
 namespace CashOverflow.Services.Foundations.Reviews
 {
     public partial class ReviewService : IReviewService
-    { 
+    {
         private readonly IStorageBroker storageBroker;
         private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
