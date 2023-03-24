@@ -30,6 +30,20 @@ namespace CashOverflow.Services.Foundations.Reviews
 
                 throw CreateAndLogCriticalDependencyException(failedReviewServiceException);
             }
+            catch (Exception exception)
+            {
+                var failedReviewServiceException = new FailedReviewServiceException(exception);
+
+                throw CreateAndLogServiceException(failedReviewServiceException);
+            }
+        }
+
+        private ReviewServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var reviewServiceException = new ReviewServiceException(exception);
+            this.loggingBroker.LogError(reviewServiceException);
+
+            return reviewServiceException;
         }
 
         private ReviewDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
