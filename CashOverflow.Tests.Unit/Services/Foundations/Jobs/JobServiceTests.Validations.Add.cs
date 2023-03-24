@@ -157,7 +157,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
         {
             // given
             DateTimeOffset randomDate = GetRandomDatetimeOffset();
-            DateTimeOffset invalidDateTime = randomDate.AddMinutes(invalidMinutes);   
+            DateTimeOffset invalidDateTime = randomDate.AddMinutes(invalidMinutes);
             Job randomJob = CreateRandomJob(invalidDateTime);
             Job invalidJob = randomJob;
             var invalidJobException = new InvalidJobException();
