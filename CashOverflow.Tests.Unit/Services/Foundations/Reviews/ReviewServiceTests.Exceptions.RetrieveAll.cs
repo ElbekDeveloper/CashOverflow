@@ -31,7 +31,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 
             ReviewDependencyException actualreviewDependencyException =
                 Assert.Throws<ReviewDependencyException>(retrieveAllReviewAction);
-            
+
             // then
             actualreviewDependencyException.Should().BeEquivalentTo(expectedReviewDependencyException);
 
@@ -61,11 +61,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             Action retrieveAllReviewAction = () => this.reviewService.RetrieveAllReviews();
 
             // then
-            Assert.Throws<ReviewServiceException> (retrieveAllReviewAction);
+            Assert.Throws<ReviewServiceException>(retrieveAllReviewAction);
 
             this.storageBrokerMock.Verify(broker => broker.SelectAllReviews(), Times.Once);
 
-            this.loggingBrokerMock.Verify(broker => 
+            this.loggingBrokerMock.Verify(broker =>
                broker.LogError(It.Is(SameExceptionAs(expectedReviewServiceException))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
