@@ -28,9 +28,7 @@ namespace CashOverflow.Services.Foundations.Reviews
             this.dateTimeBroker = dateTimeBroker;
 
         }
-        public IQueryable<Review> RetrieveAllReviews()
-        {
-            throw new System.NotImplementedException();
-        }
+        public IQueryable<Review> RetrieveAllReviews() =>
+            this.storageBroker.SelectAllReviews();
     }
 }
