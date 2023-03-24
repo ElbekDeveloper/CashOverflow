@@ -3,7 +3,6 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
 using System.Linq;
 using CashOverflow.Models.Reviews;
 using FluentAssertions;
