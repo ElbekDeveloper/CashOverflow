@@ -7,7 +7,6 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Reviews;
@@ -22,19 +21,16 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
     public partial class ReviewServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
-        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly IReviewService reviewService;
 
         public ReviewServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
-            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.reviewService = new ReviewService(
                 this.storageBrokerMock.Object,
-                this.dateTimeBrokerMock.Object,
                 this.loggingBrokerMock.Object);
         }
 
