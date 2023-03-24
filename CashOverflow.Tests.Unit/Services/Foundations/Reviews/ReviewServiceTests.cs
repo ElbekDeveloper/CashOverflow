@@ -44,7 +44,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
              actualException => actualException.SameExceptionAs(expectedException);
 
-
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
