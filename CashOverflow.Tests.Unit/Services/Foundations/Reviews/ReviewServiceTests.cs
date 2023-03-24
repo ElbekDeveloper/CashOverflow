@@ -11,7 +11,6 @@ using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Reviews;
-using CashOverflow.Models.Reviews.Exceptions;
 using CashOverflow.Services.Foundations.Reviews;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -42,11 +41,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private int GetRandomNumber() =>
+        private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private static string GetRandomMessage() =>
+            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
 
         private IQueryable<Review> CreateRandomReviews()
         {

@@ -4,11 +4,6 @@
 // --------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using CashOverflow.Models.Reviews.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
@@ -48,6 +43,42 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(expectedReviewDependencyException))),
                     Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public void ShouldThrowServiceExceptionOnRetrieveAllWhenAllServicesErrorOccursAndLogIt()
+        {
+            // given
+            string exceptionMessage = GetRandomMessage();
+            var serviceException = new Exception(exceptionMessage);
+            var failedReviewServiceException = new FailedReviewServiceException(serviceException);
+
+            var expectedReviewServiceException =
+                new ReviewServiceException(failedReviewServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllReviews()).Throws(serviceException);
+
+            // when
+            Action retrieveAllReviewAction = () =>
+                this.reviewService.RetrieveAllReviews();
+
+            ReviewServiceException actualReviewServiceException =
+                Assert.Throws<ReviewServiceException>(retrieveAllReviewAction);
+
+            // then
+            actualReviewServiceException.Should().BeEquivalentTo(expectedReviewServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllReviews(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedReviewServiceException))),Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
