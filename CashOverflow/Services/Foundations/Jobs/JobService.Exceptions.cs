@@ -44,7 +44,7 @@ namespace CashOverflow.Services.Foundations.Jobs
 
                 throw CreateAndLogCriticalDependencyException(failedJobStorageException);
             }
-            catch(DuplicateKeyException duplicateKeyException)
+            catch (DuplicateKeyException duplicateKeyException)
             {
                 var alreadyExistsJobException = new AlreadyExistsJobException(duplicateKeyException);
 

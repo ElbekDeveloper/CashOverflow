@@ -30,7 +30,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertJobAsync(inputJob)).ReturnsAsync(persistedJob);
-            
+
             // when
             Job actualJob = await this.jobService
                 .AddJobAsync(inputJob);

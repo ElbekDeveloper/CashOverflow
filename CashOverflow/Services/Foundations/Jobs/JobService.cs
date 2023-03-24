@@ -10,7 +10,6 @@ using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Jobs;
-using CashOverflow.Models.Jobs.Exceptions;
 
 namespace CashOverflow.Services.Foundations.Jobs
 {
