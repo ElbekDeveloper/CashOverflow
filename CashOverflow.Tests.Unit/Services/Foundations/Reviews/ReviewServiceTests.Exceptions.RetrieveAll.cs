@@ -43,5 +43,33 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public void ShouldThrowServiceExceptionOnRetrieveAllWhenAllServiceErrorOccursAndLogIt()
+        {
+            // given 
+            string exceptionMessage = GetRandomString();
+            var serviceException = new Exception(exceptionMessage);
+
+            var failedReviewServiceException = new FailedReviewServiceException(serviceException);
+
+            var expectedReviewServiceException = new ReviewServiceException(failedReviewServiceException);
+
+            this.storageBrokerMock.Setup(broker => broker.SelectAllReviews()).Throws(serviceException);
+
+            // when 
+            Action retrieveAllReviewAction = () => this.reviewService.RetrieveAllReviews();
+
+            // then
+            Assert.Throws<ReviewServiceException> (retrieveAllReviewAction);
+
+            this.storageBrokerMock.Verify(broker => broker.SelectAllReviews(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => 
+               broker.LogError(It.Is(SameExceptionAs(expectedReviewServiceException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

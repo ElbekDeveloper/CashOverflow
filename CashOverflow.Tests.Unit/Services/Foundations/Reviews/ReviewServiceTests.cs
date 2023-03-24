@@ -47,8 +47,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
-        private static int GetRandomNumber() =>
-            new IntRange(min: 2, max: 99).GetValue();
+        private static int GetRandomNumber() => new IntRange(min: 2, max: 99).GetValue();
+
+        private static string GetRandomString() => new MnemonicString().GetValue();
 
         private static IQueryable<Review> CreateRandomReviews()
         {
