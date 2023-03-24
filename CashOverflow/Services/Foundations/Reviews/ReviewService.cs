@@ -18,7 +18,6 @@ namespace CashOverflow.Services.Foundations.Reviews
         public ReviewService(
             IStorageBroker storageBroker,
             ILoggingBroker loggingBroker)
-
         {
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;

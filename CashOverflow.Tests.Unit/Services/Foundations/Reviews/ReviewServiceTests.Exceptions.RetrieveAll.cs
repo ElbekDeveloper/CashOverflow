@@ -20,11 +20,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             // given 
             SqlException sqlException = CreateSqlException();
 
-            var failedStorageException = new FailedReviewStorageException(sqlException);
+            var failedStorageException = 
+                new FailedReviewStorageException(sqlException);
 
-            var expectedReviewDependencyException = new ReviewDependencyException(failedStorageException);
+            var expectedReviewDependencyException = 
+                new ReviewDependencyException(failedStorageException);
 
-            this.storageBrokerMock.Setup(broker => broker.SelectAllReviews()).Throws(sqlException);
+            this.storageBrokerMock.Setup(broker => 
+                broker.SelectAllReviews()).Throws(sqlException);
 
             // when 
             Action retrieveAllReviewAction = () => this.reviewService.RetrieveAllReviews();
@@ -51,11 +54,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             string exceptionMessage = GetRandomString();
             var serviceException = new Exception(exceptionMessage);
 
-            var failedReviewServiceException = new FailedReviewServiceException(serviceException);
+            var failedReviewServiceException = 
+                new FailedReviewServiceException(serviceException);
 
-            var expectedReviewServiceException = new ReviewServiceException(failedReviewServiceException);
+            var expectedReviewServiceException = 
+                new ReviewServiceException(failedReviewServiceException);
 
-            this.storageBrokerMock.Setup(broker => broker.SelectAllReviews()).Throws(serviceException);
+            this.storageBrokerMock.Setup(broker => 
+                broker.SelectAllReviews()).Throws(serviceException);
 
             // when 
             Action retrieveAllReviewAction = () => this.reviewService.RetrieveAllReviews();
