@@ -5,13 +5,17 @@
 
 using System;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Reviews;
 using CashOverflow.Services.Foundations.Reviews;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 {
@@ -33,6 +37,13 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
                 this.dateTimeBrokerMock.Object,
                 this.loggingBrokerMock.Object);
         }
+
+        private SqlException CreateSqlException() =>
+           (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+             actualException => actualException.SameExceptionAs(expectedException);
+
 
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
