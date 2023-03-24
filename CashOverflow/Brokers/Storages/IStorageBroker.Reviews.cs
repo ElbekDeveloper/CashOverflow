@@ -3,9 +3,8 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using CashOverflow.Models.Locations;
-using CashOverflow.Models.Reviews;
 using System.Threading.Tasks;
+using CashOverflow.Models.Reviews;
 
 namespace CashOverflow.Brokers.Storages
 {
