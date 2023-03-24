@@ -26,8 +26,8 @@ namespace CashOverflow.Services.Foundations.Reviews
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
-
         }
+
         public IQueryable<Review> RetrieveAllReviews() =>
             this.storageBroker.SelectAllReviews();
     }

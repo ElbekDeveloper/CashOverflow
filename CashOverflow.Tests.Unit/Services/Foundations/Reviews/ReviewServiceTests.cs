@@ -5,13 +5,18 @@
 
 using System;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Reviews;
+using CashOverflow.Models.Reviews.Exceptions;
 using CashOverflow.Services.Foundations.Reviews;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 {
@@ -33,6 +38,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
                 loggingBroker: this.loggingBrokerMock.Object,
                 dateTimeBroker: this.dateTimeBrokerMock.Object);
         }
+
+        private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
@@ -59,5 +67,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 
             return filler;
         }
+        private static SqlException CreateSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
     }
 }
