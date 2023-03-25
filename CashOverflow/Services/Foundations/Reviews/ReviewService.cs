@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System.Linq;
+using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
@@ -27,6 +28,9 @@ namespace CashOverflow.Services.Foundations.Reviews
             this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
         }
+
+        public ValueTask<Review> AddReviewAsync(Review review)=>
+            throw new System.NotImplementedException();
 
         public IQueryable<Review> RetrieveAllReviews() =>
             TryCatch(() => this.storageBroker.SelectAllReviews());
