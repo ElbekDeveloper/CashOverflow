@@ -33,7 +33,7 @@ namespace CashOverflow.Services.Foundations.Reviews
         public ValueTask<Review> AddReviewAsync(Review review) =>
             TryCatch(async () =>
             {
-                ValidateReviewNotNull(review);
+                ValidateReviewOnAdd(review);
 
                 return await this.storageBroker.InsertReviewAsync(review);
             });

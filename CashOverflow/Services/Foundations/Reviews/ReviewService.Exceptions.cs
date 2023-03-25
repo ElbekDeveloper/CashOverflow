@@ -27,6 +27,10 @@ namespace CashOverflow.Services.Foundations.Reviews
             {
                 throw CreateAndLogValidationException(nullReviewException);
             }
+            catch (InvalidReviewException invalidReviewException)
+            {
+                throw CreateAndLogValidationException(invalidReviewException);
+            }
         }
 
         private IQueryable<Review> TryCatch(ReturningReviewsFunction

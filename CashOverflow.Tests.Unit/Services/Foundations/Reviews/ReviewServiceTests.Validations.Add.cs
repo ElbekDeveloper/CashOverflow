@@ -7,8 +7,6 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Reviews;
 using CashOverflow.Models.Reviews.Exceptions;
-using CashOverflow.Models.Reviews;
-using CashOverflow.Models.Reviews.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -72,7 +70,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 
             invalidReviewException.AddData(
                 key: nameof(Review.CompanyName),
-                values: "Company name is required");
+                values: "Text is required");
 
             invalidReviewException.AddData(
                 key: nameof(Review.Stars),
@@ -80,7 +78,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 
             invalidReviewException.AddData(
                 key: nameof(Review.Thoughts),
-                values: "Thoughts are required");
+                values: "Text is required");
 
             var expectedReviewValidationException =
                 new ReviewValidationException(invalidReviewException);

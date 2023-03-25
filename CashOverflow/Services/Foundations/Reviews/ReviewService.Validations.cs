@@ -6,11 +6,41 @@
 using System;
 using CashOverflow.Models.Reviews;
 using CashOverflow.Models.Reviews.Exceptions;
+using System.Data;
 
 namespace CashOverflow.Services.Foundations.Reviews
 {
     public partial class ReviewService
     {
+
+
+        private static void ValidateReviewOnAdd(Review review)
+        {
+            ValidateReviewNotNull(review);
+
+            Validate((Rule: IsInvalid(review.Id), Parameter: nameof(Review.Id)),
+                     (Rule: IsInvalid(review.CompanyName), Parameter: nameof(Review.CompanyName)),
+                     (Rule: IsInvalid(review.Stars), Parameter: nameof(Review.Stars)),
+                     (Rule: IsInvalid(review.Thoughts), Parameter: nameof(Review.Thoughts)));
+
+        }
+        private static dynamic IsInvalid(Guid Id) => new
+        {
+            Condition = Id == default,
+            Message = "Id is required"
+        };
+
+        private static dynamic IsInvalid(string text) => new
+        {
+            Condition = String.IsNullOrWhiteSpace(text),
+            Message = "Text is required"
+        };
+
+        private static dynamic IsInvalid(int stars) => new
+        {
+            Condition = stars == 0,
+            Message = "Stars are required"
+        };
 
         private static void ValidateReviewNotNull(Review review)
         {
@@ -20,6 +50,22 @@ namespace CashOverflow.Services.Foundations.Reviews
             }
         }
 
+        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
+        {
+            var invalidReviewException = new InvalidReviewException();
+
+            foreach ((dynamic rule, string parameter) in validations)
+            {
+                if (rule.Condition)
+                {
+                    invalidReviewException.UpsertDataList(
+                        key: parameter,
+                        value: rule.Message);
+                }
+            }
+
+            invalidReviewException.ThrowIfContainsErrors();
+        }
 
 
     }
