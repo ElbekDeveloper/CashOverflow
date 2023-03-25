@@ -43,8 +43,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertReviewAsync(It.IsAny<Review>()), Times.Never);
 
-            this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }

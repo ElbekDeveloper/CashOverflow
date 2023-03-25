@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
-using CashOverflow.Models.Locations;
 using CashOverflow.Models.Reviews;
+using CashOverflow.Models.Reviews.Exceptions;
+using CashOverflow.Models.Locations;
 
 namespace CashOverflow.Services.Foundations.Reviews
 {
@@ -29,8 +30,25 @@ namespace CashOverflow.Services.Foundations.Reviews
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public async ValueTask<Review> AddReviewAsync(Review review) =>
-           await this.storageBroker.InsertReviewAsync(review);
+        public async ValueTask<Review> AddReviewAsync(Review review)
+        {
+            try
+            {
+                if (review is null)
+                {
+                    throw new NullReviewException();
+                }
+
+                return await this.storageBroker.InsertReviewAsync(review);
+            }
+            catch (NullReviewException nullReviewException)
+            {
+                var reviewValidationException = new ReviewValidationException(nullReviewException);
+                this.loggingBroker.LogError(reviewValidationException);
+
+                throw reviewValidationException;
+            }
+        }
 
         public IQueryable<Review> RetrieveAllReviews() =>
             TryCatch(() => this.storageBroker.SelectAllReviews());
