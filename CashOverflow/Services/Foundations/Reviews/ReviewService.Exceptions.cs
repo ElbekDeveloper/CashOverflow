@@ -17,11 +17,11 @@ namespace CashOverflow.Services.Foundations.Reviews
     {
         private delegate ValueTask<Review> ReturningReviewFunction();
         private delegate IQueryable<Review> ReturningReviewsFunction();
-        private ValueTask<Review> TryCatch(ReturningReviewFunction returningReviewFunction)
+        private async ValueTask<Review> TryCatch(ReturningReviewFunction returningReviewFunction)
         {
             try
             {
-                return returningReviewFunction();
+                return await returningReviewFunction();
             }
             catch (NullReviewException nullReviewException)
             {
