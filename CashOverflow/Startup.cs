@@ -9,6 +9,7 @@ using CashOverflow.Brokers.Storages;
 using CashOverflow.Services.Foundations.Jobs;
 using CashOverflow.Services.Foundations.Languages;
 using CashOverflow.Services.Foundations.Locations;
+using CashOverflow.Services.Foundations.Reviews;
 using CashOverflow.Services.Foundations.Salaries;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -73,6 +74,7 @@ namespace CashOverflow
             services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<IJobService, JobService>();
             services.AddTransient<ISalaryService, SalaryService>();
+            services.AddTransient<IReviewService, ReviewService>();
         }
     }
 }
