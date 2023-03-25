@@ -29,8 +29,8 @@ namespace CashOverflow.Services.Foundations.Reviews
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public ValueTask<Review> AddReviewAsync(Review review)=>
-            throw new System.NotImplementedException();
+        public async ValueTask<Review> AddReviewAsync(Review review) =>
+           await this.storageBroker.InsertReviewAsync(review);
 
         public IQueryable<Review> RetrieveAllReviews() =>
             TryCatch(() => this.storageBroker.SelectAllReviews());

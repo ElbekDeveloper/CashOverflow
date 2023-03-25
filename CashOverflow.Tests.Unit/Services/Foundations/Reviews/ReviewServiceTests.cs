@@ -59,6 +59,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         private Review CreateRandomReview(DateTimeOffset dates) =>
             CreateReviewFiller(dates).Create();
 
+        private Review CreateRandomReview()=>
+            CreateReviewFiller(dates:GetRandomDateTimeOffset()).Create();
+
         private Filler<Review> CreateReviewFiller(DateTimeOffset dates)
         {
             var filler = new Filler<Review>();

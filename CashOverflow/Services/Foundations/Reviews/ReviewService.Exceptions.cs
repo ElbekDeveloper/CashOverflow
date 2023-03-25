@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CashOverflow.Models.Reviews;
 using CashOverflow.Models.Reviews.Exceptions;
 using Microsoft.Data.SqlClient;
@@ -14,9 +15,10 @@ namespace CashOverflow.Services.Foundations.Reviews
 {
     public partial class ReviewService
     {
-        private delegate IQueryable<Review> ReturningReviewFunction();
+        private delegate ValueTask<Review> ReturningReviewFunction();
+        private delegate IQueryable<Review> ReturningReviewsFunction();
 
-        private IQueryable<Review> TryCatch(ReturningReviewFunction
+        private IQueryable<Review> TryCatch(ReturningReviewsFunction
             returningReviewFunction)
         {
             try
