@@ -17,6 +17,17 @@ namespace CashOverflow.Services.Foundations.Reviews
     {
         private delegate ValueTask<Review> ReturningReviewFunction();
         private delegate IQueryable<Review> ReturningReviewsFunction();
+        private ValueTask<Review> TryCatch(ReturningReviewFunction returningReviewFunction)
+        {
+            try
+            {
+                return returningReviewFunction();
+            }
+            catch (NullReviewException nullReviewException)
+            {
+                throw CreateAndLogValidationException(nullReviewException);
+            }
+        }
 
         private IQueryable<Review> TryCatch(ReturningReviewsFunction
             returningReviewFunction)
@@ -38,6 +49,14 @@ namespace CashOverflow.Services.Foundations.Reviews
 
                 throw CreateAndLogServiceException(failedReviewServiceException);
             }
+        }
+
+        private ReviewValidationException CreateAndLogValidationException(Xeption exception)
+        {
+            var reviewValidationException = new ReviewValidationException(exception);
+            this.loggingBroker.LogError(reviewValidationException);
+
+            return reviewValidationException;
         }
 
         private ReviewServiceException CreateAndLogServiceException(Xeption exception)

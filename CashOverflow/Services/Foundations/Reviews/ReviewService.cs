@@ -30,25 +30,13 @@ namespace CashOverflow.Services.Foundations.Reviews
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public async ValueTask<Review> AddReviewAsync(Review review)
-        {
-            try
+        public ValueTask<Review> AddReviewAsync(Review review) =>
+            TryCatch(async () =>
             {
-                if (review is null)
-                {
-                    throw new NullReviewException();
-                }
+                ValidateReviewNotNull(review);
 
                 return await this.storageBroker.InsertReviewAsync(review);
-            }
-            catch (NullReviewException nullReviewException)
-            {
-                var reviewValidationException = new ReviewValidationException(nullReviewException);
-                this.loggingBroker.LogError(reviewValidationException);
-
-                throw reviewValidationException;
-            }
-        }
+            });
 
         public IQueryable<Review> RetrieveAllReviews() =>
             TryCatch(() => this.storageBroker.SelectAllReviews());
