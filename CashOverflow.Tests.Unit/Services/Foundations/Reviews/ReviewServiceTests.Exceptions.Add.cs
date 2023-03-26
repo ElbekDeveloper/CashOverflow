@@ -11,6 +11,7 @@ using Moq;
 using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
+using EFxceptions.Models.Exceptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 {
@@ -25,7 +26,13 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             Review someReview = CreateRandomReview(GetRandomStarsInRange());
             SqlException sqlException = CreateSqlException();
             var failedReviewStorageException = new FailedReviewStorageException(sqlException);
-            var expectedReviewDependencyException = new ReviewDependencyException(failedReviewStorageException);
+
+            var expectedReviewDependencyException =
+                new ReviewDependencyException(failedReviewStorageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertReviewAsync(someReview)).
+                    ThrowsAsync(sqlException);
 
             // when
             ValueTask<Review> addReviewTask = this.reviewService.AddReviewAsync(someReview);
@@ -34,11 +41,15 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
                 await Assert.ThrowsAsync<ReviewDependencyException>(addReviewTask.AsTask);
 
             // then
-            actualReviewDependencyException.Should().BeEquivalentTo(expectedReviewDependencyException);
+            actualReviewDependencyException.Should()
+                .BeEquivalentTo(expectedReviewDependencyException);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(
                     SameExceptionAs(expectedReviewDependencyException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+            broker.InsertReviewAsync(someReview), Times.Once);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
