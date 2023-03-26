@@ -13,13 +13,14 @@ using Force.DeepCloner;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 {
-	public partial class ReviewServiceTests
-	{
+    public partial class ReviewServiceTests
+    {
         [Fact]
         public async Task ShouldAddReviewAsync()
         {
             // given
-            Review randomReview = CreateRandomReview();
+            int randomStars = GetRandomStarsInRange();
+            Review randomReview = CreateRandomReview(randomStars);
             Review inputReview = randomReview;
             Review persistedReview = inputReview;
             Review expectedReview = persistedReview.DeepClone();
@@ -38,6 +39,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
                 broker.InsertReviewAsync(inputReview), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

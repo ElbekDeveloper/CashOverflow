@@ -58,7 +58,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             -1 * new IntRange(min: 1, max: 10).GetValue();
 
         private static int GetRandomStarsInRange() =>
-            new IntRange(min: 6, max: 10).GetValue();
+            new IntRange(min: 1, max: 5).GetValue();
 
         private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
