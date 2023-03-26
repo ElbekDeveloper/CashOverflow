@@ -21,8 +21,8 @@ namespace CashOverflow.Services.Foundations.Reviews
             Validate((Rule: IsInvalid(review.Id), Parameter: nameof(Review.Id)),
                      (Rule: IsInvalid(review.CompanyName), Parameter: nameof(Review.CompanyName)),
                      (Rule: IsInvalid(review.Stars), Parameter: nameof(Review.Stars)),
-                     (Rule: IsInvalid(review.Thoughts), Parameter: nameof(Review.Thoughts)));
-
+                     (Rule: IsInvalid(review.Thoughts), Parameter: nameof(Review.Thoughts)),
+                     (Rule: IsOutOfRange(review.Stars), Parameter: nameof(Review.Stars)));
         }
         private static dynamic IsInvalid(Guid Id) => new
         {
@@ -40,6 +40,12 @@ namespace CashOverflow.Services.Foundations.Reviews
         {
             Condition = stars == 0,
             Message = "Stars are required"
+        };
+
+        private static dynamic IsOutOfRange(int stars) => new
+        {
+            Condition = stars is > 5 or < 0,
+            Message = "Stars are out of range"
         };
 
         private static void ValidateReviewNotNull(Review review)
