@@ -13,6 +13,7 @@ namespace CashOverflow.Services.Foundations.Reviews
 {
     public interface IReviewService
     {
+        ValueTask<Review> AddReviewAsync(Review review);
         IQueryable<Review> RetrieveAllReviews();
     }
 }

@@ -16,6 +16,7 @@ using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 {
@@ -38,6 +39,30 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
                 dateTimeBroker: this.dateTimeBrokerMock.Object);
         }
 
+        public static TheoryData<int> InvalidStars()
+        {
+            int starsAboveRange = GetRandomStars();
+            int starsBelowRange = GetRandomNegativeStars();
+
+            return new TheoryData<int>
+            {
+                starsAboveRange,
+                starsBelowRange
+            };
+        }
+
+        private string GetRandomString() =>
+            new MnemonicString().GetValue();
+
+        private static int GetRandomStars() =>
+            new IntRange(min: 6, max: 10).GetValue();
+
+        private static int GetRandomNegativeStars() =>
+            -1 * new IntRange(min: 1, max: 10).GetValue();
+
+        private static int GetRandomStarsInRange() =>
+            new IntRange(min: 1, max: 5).GetValue();
+
         private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
@@ -56,8 +81,22 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
                 .Create(count: GetRandomNumber()).AsQueryable();
         }
 
+        private Review CreateRandomReview(int stars) =>
+              CreateReviewFiller(stars).Create();
+
+        private Filler<Review> CreateReviewFiller(int stars)
+        {
+            var filler = new Filler<Review>();
+            filler.Setup().OnType<int>().Use(stars);
+
+            return filler;
+        }
+
         private Review CreateRandomReview(DateTimeOffset dates) =>
             CreateReviewFiller(dates).Create();
+
+        private Review CreateRandomReview() =>
+            CreateReviewFiller(dates: GetRandomDateTimeOffset()).Create();
 
         private Filler<Review> CreateReviewFiller(DateTimeOffset dates)
         {
