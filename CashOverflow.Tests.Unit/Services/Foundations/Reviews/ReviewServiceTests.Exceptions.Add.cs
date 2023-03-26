@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using EFxceptions.Models.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using CashOverflow.Models.Reviews;
+using CashOverflow.Models.Reviews.Exceptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 {
@@ -85,6 +88,39 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 
             this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
                 SameExceptionAs(expectedReviewDependencyValidationException))), Times.Once);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Review someReview = CreateRandomReview(GetRandomStarsInRange());
+            var serviceException = new Exception();
+            var failedReviewServiceException = new FailedReviewServiceException(serviceException);
+
+            var expectedReviewServiceException =
+                new ReviewServiceException(failedReviewServiceException);
+
+            this.storageBrokerMock.Setup(broker => broker.InsertReviewAsync(someReview))
+                .Throws(serviceException);
+
+            // when
+            ValueTask<Review> addReviewTask = this.reviewService.AddReviewAsync(someReview);
+
+            ReviewServiceException actualReviewServiceException =
+                await Assert.ThrowsAsync<ReviewServiceException>(addReviewTask.AsTask);
+
+            // then
+            actualReviewServiceException.Should().BeEquivalentTo(expectedReviewServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertReviewAsync(someReview), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
+                expectedReviewServiceException))), Times.Once);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
