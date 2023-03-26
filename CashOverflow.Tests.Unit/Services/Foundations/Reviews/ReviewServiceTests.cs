@@ -51,6 +51,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             };
         }
 
+        private string GetRandomString() =>
+            new MnemonicString().GetValue();
+
         private static int GetRandomStars() =>
             new IntRange(min: 6, max: 10).GetValue();
 

@@ -54,6 +54,41 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfDublicateKeyErrorOccursAndLogItAsync()
+        {
+            // given
+            string someMessage = GetRandomString();
+            Review someReview = CreateRandomReview(GetRandomStarsInRange());
+            var duplicateKeyException = new DuplicateKeyException(someMessage);
+            var alreadyExistsReviewException = new AlreadyExistsReviewException(duplicateKeyException);
+
+            var expectedReviewDependencyValidationException =
+                new ReviewDependencyValidationException(alreadyExistsReviewException);
+
+            this.storageBrokerMock.Setup(broker => broker.InsertReviewAsync(someReview))
+                .Throws(duplicateKeyException);
+
+            // when
+            ValueTask<Review> addReviewTask = this.reviewService.AddReviewAsync(someReview);
+
+            ReviewDependencyValidationException actualReviewDependencyValidationException =
+                await Assert.ThrowsAsync<ReviewDependencyValidationException>(addReviewTask.AsTask);
+
+            // then
+            actualReviewDependencyValidationException.Should()
+                .BeEquivalentTo(expectedReviewDependencyValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertReviewAsync(someReview), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
+                SameExceptionAs(expectedReviewDependencyValidationException))), Times.Once);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
 
