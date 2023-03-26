@@ -18,6 +18,7 @@ namespace CashOverflow.Services.Foundations.Reviews
     {
         private delegate ValueTask<Review> ReturningReviewFunction();
         private delegate IQueryable<Review> ReturningReviewsFunction();
+
         private async ValueTask<Review> TryCatch(ReturningReviewFunction returningReviewFunction)
         {
             try
@@ -45,6 +46,12 @@ namespace CashOverflow.Services.Foundations.Reviews
                     new AlreadyExistsReviewException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsReviewException);
+            }
+            catch (Exception exception)
+            {
+                var failedReviewServiceException = new FailedReviewServiceException(exception);
+
+                throw CreateAndLogServiceException(failedReviewServiceException);
             }
         }
 

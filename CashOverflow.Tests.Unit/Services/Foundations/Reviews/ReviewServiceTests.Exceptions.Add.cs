@@ -13,8 +13,6 @@ using Xunit;
 using FluentAssertions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using CashOverflow.Models.Reviews;
-using CashOverflow.Models.Reviews.Exceptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 {
