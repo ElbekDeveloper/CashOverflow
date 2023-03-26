@@ -7,8 +7,6 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Reviews;
 using CashOverflow.Models.Reviews.Exceptions;
-using CashOverflow.Models.Reviews;
-using CashOverflow.Models.Reviews.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
