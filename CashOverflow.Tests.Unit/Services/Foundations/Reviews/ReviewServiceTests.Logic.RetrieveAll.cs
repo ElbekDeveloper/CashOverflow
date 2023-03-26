@@ -25,11 +25,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectAllReviews()).Returns(storageReviews);
             // when
-            IQueryable<Review> actualReview =
+            IQueryable<Review> actualReviews =
                 this.reviewService.RetrieveAllReviews();
 
             // then
-            actualReview.Should().BeEquivalentTo(expectedReveiws);
+            actualReviews.Should().BeEquivalentTo(expectedReveiws);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectAllReviews(), Times.Once());
