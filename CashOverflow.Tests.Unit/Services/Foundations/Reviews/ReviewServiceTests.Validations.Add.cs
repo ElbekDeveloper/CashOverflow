@@ -53,7 +53,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         [InlineData("")]
         [InlineData(" ")]
         public async Task ShouldThrowValidationExceptionOnAddIfReviewIsInvalidAndLogItAsync(
-    string invalidText)
+            string invalidText)
         {
             // given
             Review invalidReview = new Review()

@@ -16,11 +16,12 @@ namespace CashOverflow.Services.Foundations.Reviews
         {
             ValidateReviewNotNull(review);
 
-            Validate((Rule: IsInvalid(review.Id), Parameter: nameof(Review.Id)),
-                     (Rule: IsInvalid(review.CompanyName), Parameter: nameof(Review.CompanyName)),
-                     (Rule: IsInvalid(review.Stars), Parameter: nameof(Review.Stars)),
-                     (Rule: IsInvalid(review.Thoughts), Parameter: nameof(Review.Thoughts)),
-                     (Rule: IsOutOfRange(review.Stars), Parameter: nameof(Review.Stars)));
+            Validate(
+                (Rule: IsInvalid(review.Id), Parameter: nameof(Review.Id)),
+                (Rule: IsInvalid(review.CompanyName), Parameter: nameof(Review.CompanyName)),
+                (Rule: IsInvalid(review.Stars), Parameter: nameof(Review.Stars)),
+                (Rule: IsInvalid(review.Thoughts), Parameter: nameof(Review.Thoughts)),
+                (Rule: IsOutOfRange(review.Stars), Parameter: nameof(Review.Stars)));
         }
 
         private static dynamic IsInvalid(Guid Id) => new

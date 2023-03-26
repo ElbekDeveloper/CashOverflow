@@ -31,12 +31,12 @@ namespace CashOverflow.Services.Foundations.Reviews
         }
 
         public ValueTask<Review> AddReviewAsync(Review review) =>
-            TryCatch(async () =>
-            {
-                ValidateReviewOnAdd(review);
+        TryCatch(async () =>
+        {
+            ValidateReviewOnAdd(review);
 
-                return await this.storageBroker.InsertReviewAsync(review);
-            });
+            return await this.storageBroker.InsertReviewAsync(review);
+        });
 
         public IQueryable<Review> RetrieveAllReviews() =>
             TryCatch(() => this.storageBroker.SelectAllReviews());

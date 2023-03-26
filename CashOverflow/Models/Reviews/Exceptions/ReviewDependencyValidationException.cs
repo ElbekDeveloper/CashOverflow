@@ -11,7 +11,8 @@ namespace CashOverflow.Models.Reviews.Exceptions
     public class ReviewDependencyValidationException : Xeption
     {
         public ReviewDependencyValidationException(Xeption innerException)
-            : base(message: "Review dependency validation error occured, fix the errors and try again.", innerException)
+            : base(message: "Review dependency validation error occurred, fix the errors and try again.",
+                innerException)
         { }
     }
 }
