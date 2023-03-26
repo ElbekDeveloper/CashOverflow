@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Reviews;
 using CashOverflow.Models.Reviews.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Xeptions;
 
@@ -37,6 +38,13 @@ namespace CashOverflow.Services.Foundations.Reviews
                     new FailedReviewStorageException(sqlException);
 
                 throw CreateAndLogCriticalDependencyException(failedReviewStorageException);
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsReviewException =
+                    new AlreadyExistsReviewException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsReviewException);
             }
         }
 
@@ -84,6 +92,16 @@ namespace CashOverflow.Services.Foundations.Reviews
             this.loggingBroker.LogCritical(reviewDependencyException);
 
             return reviewDependencyException;
+        }
+
+        private ReviewDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var reviewDependencyValidationException =
+                new ReviewDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(reviewDependencyValidationException);
+
+            return reviewDependencyValidationException;
         }
     }
 }

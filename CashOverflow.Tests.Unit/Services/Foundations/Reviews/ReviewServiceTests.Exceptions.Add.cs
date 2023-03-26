@@ -68,7 +68,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
                 new ReviewDependencyValidationException(alreadyExistsReviewException);
 
             this.storageBrokerMock.Setup(broker => broker.InsertReviewAsync(someReview))
-                .Throws(duplicateKeyException);
+                .ThrowsAsync(duplicateKeyException);
 
             // when
             ValueTask<Review> addReviewTask = this.reviewService.AddReviewAsync(someReview);
