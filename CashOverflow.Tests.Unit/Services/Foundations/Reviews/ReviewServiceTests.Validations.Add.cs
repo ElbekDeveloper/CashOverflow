@@ -7,6 +7,8 @@ using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Reviews;
 using CashOverflow.Models.Reviews.Exceptions;
+using CashOverflow.Models.Reviews;
+using CashOverflow.Models.Reviews.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -100,6 +102,44 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertReviewAsync(It.IsAny<Review>()), Times.Never);
 
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [MemberData(nameof(InvalidStars))]
+        public async Task ShouldThrowValidationExceptionIfStarsAreOutOfRangeAndLogItAsync(
+       int invalidStars)
+        {
+            // given
+            Review randomReview = CreateRandomReview(invalidStars);
+            Review invalidReview = randomReview;
+            var invalidReviewException = new InvalidReviewException();
+
+            invalidReviewException.AddData(
+                key: nameof(Review.Stars),
+                values: "Stars are out of range");
+
+            var expectedReviewValidationException =
+                new ReviewValidationException(invalidReviewException);
+
+            // when
+            ValueTask<Review> addReviewTask = this.reviewService.AddReviewAsync(invalidReview);
+
+            ReviewValidationException actualReviewValidationException =
+                await Assert.ThrowsAsync<ReviewValidationException>(addReviewTask.AsTask);
+
+            // then
+            actualReviewValidationException.Should().
+                BeEquivalentTo(expectedReviewValidationException);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
+                SameExceptionAs(expectedReviewValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertReviewAsync(It.IsAny<Review>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
