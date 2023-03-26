@@ -12,8 +12,6 @@ namespace CashOverflow.Services.Foundations.Reviews
 {
     public partial class ReviewService
     {
-
-
         private static void ValidateReviewOnAdd(Review review)
         {
             ValidateReviewNotNull(review);
@@ -24,6 +22,7 @@ namespace CashOverflow.Services.Foundations.Reviews
                      (Rule: IsInvalid(review.Thoughts), Parameter: nameof(Review.Thoughts)),
                      (Rule: IsOutOfRange(review.Stars), Parameter: nameof(Review.Stars)));
         }
+
         private static dynamic IsInvalid(Guid Id) => new
         {
             Condition = Id == default,
@@ -72,8 +71,6 @@ namespace CashOverflow.Services.Foundations.Reviews
 
             invalidReviewException.ThrowIfContainsErrors();
         }
-
-
     }
 }
 

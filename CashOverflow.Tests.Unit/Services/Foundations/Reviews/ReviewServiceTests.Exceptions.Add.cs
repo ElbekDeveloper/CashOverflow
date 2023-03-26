@@ -18,12 +18,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 {
     public partial class ReviewServiceTests
     {
-
         [Fact]
         public async Task ShoudlThrowCriticalDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync()
         {
             // given
-
             Review someReview = CreateRandomReview(GetRandomStarsInRange());
             SqlException sqlException = CreateSqlException();
             var failedReviewStorageException = new FailedReviewStorageException(sqlException);
@@ -50,7 +48,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
                     SameExceptionAs(expectedReviewDependencyException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-            broker.InsertReviewAsync(someReview), Times.Once);
+                broker.InsertReviewAsync(someReview), Times.Once);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
