@@ -21,7 +21,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         public async Task ShoudlThrowCriticalDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync()
         {
             // given
-            Review someReview = CreateRandomReview();
+
+            Review someReview = CreateRandomReview(GetRandomStarsInRange());
             SqlException sqlException = CreateSqlException();
             var failedReviewStorageException = new FailedReviewStorageException(sqlException);
             var expectedReviewDependencyException = new ReviewDependencyException(failedReviewStorageException);
