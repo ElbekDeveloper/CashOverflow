@@ -51,6 +51,7 @@ namespace CashOverflow.Controllers
                 return InternalServerError(reviewServiceException.InnerException);
             }
         }
+
         [HttpGet]
         public ActionResult<IQueryable<Review>> GetAllReviews()
         {
