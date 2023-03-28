@@ -15,10 +15,10 @@ namespace CashOverflow.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-
     public class ReviewController : RESTFulController
     {
         private readonly IReviewService reviewService;
+
         public ReviewController(IReviewService reviewService) =>
             this.reviewService = reviewService;
 
@@ -38,6 +38,10 @@ namespace CashOverflow.Controllers
             {
                 return Conflict(reviewDependencyValidationException.InnerException);
             }
+            catch (ReviewDependencyValidationException reviewDependencyValidationException)
+            {
+                return BadRequest(reviewDependencyValidationException.InnerException);
+            }
             catch(ReviewDependencyException reviewDependencyException)
             {
                 return InternalServerError(reviewDependencyException.InnerException);
@@ -47,6 +51,5 @@ namespace CashOverflow.Controllers
                 return InternalServerError(reviewServiceException.InnerException);
             }
         }
-
     }
 }
