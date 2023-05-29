@@ -17,7 +17,7 @@ namespace CashOverflow.Infrastructure.Build
         {
             var githubPipeline = new GithubPipeline
             {
-                Name = "Build & Test CashOverlow",
+                Name = "Build & Test ExpressGo",
 
                 OnEvents = new Events
                 {
