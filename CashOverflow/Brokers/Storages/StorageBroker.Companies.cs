@@ -3,7 +3,6 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-
 using CashOverflow.Models.Companies;
 using Microsoft.EntityFrameworkCore;
 
