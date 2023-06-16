@@ -67,6 +67,7 @@ namespace CashOverflow.Brokers.Storages
             string connectionString = this.configuration.GetConnectionString(name: "DefaultConnection");
 
             optionsBuilder.UseSqlServer(connectionString);
+            //optionsBuilder.UseNpgsql(connectionString);
         }
     }
 }
