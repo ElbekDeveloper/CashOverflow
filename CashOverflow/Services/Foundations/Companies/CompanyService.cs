@@ -16,7 +16,7 @@ namespace CashOverflow.Services.Foundations.Companies
         public CompanyService(IStorageBroker storageBroker) =>
             this.storageBroker = storageBroker;
 
-        public ValueTask<Company> AddCompanyAsync(Company company) =>
-            throw new System.NotImplementedException();
+        public async ValueTask<Company> AddCompanyAsync(Company company) =>
+             await this.storageBroker.InsertCompanyAsync(company);
     }
 }
