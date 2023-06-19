@@ -1,6 +1,15 @@
-﻿namespace CashOverflow.Brokers.Storages
+﻿// --------------------------------------------------------
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Developed by CashOverflow Team
+// --------------------------------------------------------
+
+using System.Threading.Tasks;
+using CashOverflow.Models.Companies;
+
+namespace CashOverflow.Brokers.Storages
 {
-    public interface IStorageBroker
+    public partial interface IStorageBroker
     {
+        ValueTask<Company> InsertCompanyAsync(Company company);
     }
 }
