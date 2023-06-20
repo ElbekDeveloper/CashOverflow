@@ -3,8 +3,8 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
+using System.Threading.Tasks;
 
 namespace CashOverflow.Brokers.Storages
 {
@@ -12,5 +12,6 @@ namespace CashOverflow.Brokers.Storages
     {
         ValueTask<Company> InsertCompanyAsync(Company company);
         ValueTask<Company> DeleteCompanyAsync(Company company);
+        ValueTask<Company> UpdateCompanyAsync(Company company);
     }
 }
