@@ -38,6 +38,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                 broker.InsertCompanyAsync(inputCompany), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
