@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
@@ -11,24 +12,28 @@ using CashOverflow.Models.Companies;
 using CashOverflow.Services.Foundations.Companies;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 {
     public partial class CompanyServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
-        private readonly Mock<ILoggingBroker> loggingBroker;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ICompanyService companyService;
 
         public CompanyServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
-            this.loggingBroker = new Mock<ILoggingBroker>();
+            this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
 			this.companyService = new CompanyService(
                 storageBroker: this.storageBrokerMock.Object,
-				loggingBroker: this.loggingBroker.Object);
+				loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
@@ -46,7 +51,5 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
             return filler;
         }
-
-        
     }
 }
