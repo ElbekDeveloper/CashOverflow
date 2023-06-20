@@ -20,7 +20,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             // given
             Company nullCompany = null;
             var nullCompanyException = new NullCompanyException();
-            var expectedCompanyValidationException = new CompanyValidationException(nullCompanyException); ;
+
+            var expectedCompanyValidationException = 
+                new CompanyValidationException(nullCompanyException);
 
             // when
             ValueTask<Company> addCompanyTask =
