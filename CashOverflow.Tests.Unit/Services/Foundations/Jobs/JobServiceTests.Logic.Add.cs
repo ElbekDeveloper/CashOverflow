@@ -26,7 +26,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             Job expectedJob = persistedJob.DeepClone();
 
             this.dateTimeBrokerMock.Setup(broker =>
-            broker.GetCurrentDateTimeOffset()).Returns(randomDate);
+                broker.GetCurrentDateTimeOffset()).Returns(randomDate);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertJobAsync(inputJob)).ReturnsAsync(persistedJob);
