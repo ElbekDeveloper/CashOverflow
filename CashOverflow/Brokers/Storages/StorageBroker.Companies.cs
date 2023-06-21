@@ -13,7 +13,7 @@ namespace CashOverflow.Brokers.Storages
     public partial class StorageBroker
     {
         public DbSet<Company> Companies { get; set; }
-             
+
         public async ValueTask<Company> InsertCompanyAsync(Company company) =>
             await InsertAsync(company);
         public IQueryable<Company> SelectAllCompanies() =>
