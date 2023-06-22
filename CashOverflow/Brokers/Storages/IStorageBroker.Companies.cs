@@ -12,5 +12,6 @@ namespace CashOverflow.Brokers.Storages
     {
         ValueTask<Company> InsertCompanyAsync(Company company);
         ValueTask<Company> DeleteCompanyAsync(Company company);
+        ValueTask<Company> UpdateCompanyAsync(Company company);
     }
 }
