@@ -24,7 +24,7 @@ namespace CashOverflow.Services.Foundations.Companies
         public ValueTask<Company> AddCompanyAsync(Company company) =>
         TryCatch(async () =>
         {
-            ValidateCompanyNotNull(company);
+            ValidateCompany(company);
 
             return await this.storageBroker.InsertCompanyAsync(company);
         });

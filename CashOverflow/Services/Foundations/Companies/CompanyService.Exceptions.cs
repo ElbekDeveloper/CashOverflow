@@ -24,6 +24,10 @@ namespace CashOverflow.Services.Foundations.Companies
             {
                 throw CreateAndLogValidationException(nullCompanyException);
             }
+            catch(InvalidCompanyException invalidCompanyException)
+            {
+                throw CreateAndLogValidationException(invalidCompanyException);
+            }
         }
 
         private CompanyValidationException CreateAndLogValidationException(Xeption exception)
