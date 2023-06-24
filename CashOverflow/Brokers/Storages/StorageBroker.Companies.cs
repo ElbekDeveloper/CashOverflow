@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,9 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Company> InsertCompanyAsync(Company company) =>
             await InsertAsync(company);
+
+        public async ValueTask<Company> SelectCompanyByIdAsync(Guid companyId) => 
+            await SelectAsync<Company>(companyId);
 
         public async ValueTask<Company> DeleteCompanyAsync(Company company) =>
             await DeleteAsync(company);
