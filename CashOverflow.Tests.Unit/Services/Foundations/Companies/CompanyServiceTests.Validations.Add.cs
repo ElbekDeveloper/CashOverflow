@@ -90,6 +90,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             actualCompanyValidationException.Should().BeEquivalentTo(
                 expectedCompanyValidationException);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
             this.loggingBrokerMock.Verify(broker => broker.LogError(
                 It.Is(SameExceptionAs(expectedCompanyValidationException))), Times.Once);
 
