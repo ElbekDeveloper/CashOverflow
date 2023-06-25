@@ -10,7 +10,9 @@ using CashOverflow.Models.Companies;
 using CashOverflow.Services.Foundations.Companies;
 using Moq;
 using System;
+using System.Linq.Expressions;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 {
@@ -35,6 +37,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
         private static DateTimeOffset GetRandomDateTime() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private static Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException)
+            => actualException => actualException.SameExceptionAs(expectedException);
 
         private static int GetRandomNegativeNumber() =>
             -1 * new IntRange(min: 2, max: 10).GetValue();
