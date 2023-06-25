@@ -99,5 +99,54 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
+        [Theory]
+        [MemberData(nameof(InvalidMinutes))]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
+            int invalidMinutes)
+        {
+            // given
+            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
+            DateTimeOffset invalidDateTime = randomDateTime.AddMinutes(invalidMinutes);
+            Company randomCompany = CreateRandomCompany(randomDateTime);
+            Company invalidCompany = randomCompany;
+            invalidCompany.CreatedDate = invalidDateTime;
+
+            var invalidCompanyException = new InvalidCompanyException();
+
+            invalidCompanyException.AddData(
+                key: nameof(Company.CreatedDate),
+                values: "Value is not recent");
+
+            var expectedCompanyValidationException = 
+                new CompanyValidationException(invalidCompanyException);
+
+            this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
+                .Returns(randomDateTime);
+
+            // when
+            ValueTask<Company> addCompanyTask =
+                this.companyService.AddCompanyAsync(invalidCompany);
+
+            var actualCompanyValidationException =
+                await Assert.ThrowsAsync<CompanyValidationException>(addCompanyTask.AsTask);
+
+            // then
+            actualCompanyValidationException.Should().BeEquivalentTo(
+                expectedCompanyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedCompanyValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker => 
+                broker.InsertCompanyAsync(It.IsAny<Company>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

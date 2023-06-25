@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System.Threading.Tasks;
+using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Companies;
@@ -14,11 +15,16 @@ namespace CashOverflow.Services.Foundations.Companies
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
 
-        public CompanyService(IStorageBroker storageBroker, ILoggingBroker loggingBroker)
+        public CompanyService(
+            IStorageBroker storageBroker,
+            ILoggingBroker loggingBroker,
+            IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
+            this.dateTimeBroker = dateTimeBroker;
         }
 
         public ValueTask<Company> AddCompanyAsync(Company company) =>
