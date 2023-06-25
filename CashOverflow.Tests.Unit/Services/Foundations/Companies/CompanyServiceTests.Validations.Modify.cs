@@ -10,6 +10,7 @@ using Moq;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using Force.DeepCloner;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 {
@@ -135,6 +136,59 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectCompanyByIdAsync(nonExistCompany.Id), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedCompanyValidationException))), Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateNotSameAsCreatedDateAndLogItAsync()
+        {
+            // given
+            int randomNumber = GetRandomNegativeNumber();
+            int randomMinutes = randomNumber;
+            DateTimeOffset randomDateTime = GetRandomDateTime();
+            Company randomCompany = CreateRandomModifyCompany(randomDateTime);
+            Company invalidCompany = randomCompany.DeepClone();
+            Company storageCompany = invalidCompany.DeepClone();
+            storageCompany.CreatedDate = storageCompany.CreatedDate.AddMinutes(randomMinutes);
+            var invalidCompanyException = new InvalidCompanyException();
+            Guid CompanyId = invalidCompany.Id;
+
+            invalidCompanyException.AddData(
+                key: nameof(Company.CreatedDate),
+                values: $"Date is not same as {nameof(Company.CreatedDate)}");
+
+            var expectedCompanyValidationException =
+                new CompanyValidationException(invalidCompanyException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectCompanyByIdAsync(CompanyId)).ReturnsAsync(storageCompany);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
+
+            // when
+            ValueTask<Company> modifyCompanyTask =
+                this.companyService.ModifyCompanyAsync(invalidCompany);
+
+            CompanyValidationException actualCompanyValidationException =
+                await Assert.ThrowsAsync<CompanyValidationException>(
+                    modifyCompanyTask.AsTask);
+
+            // then
+            actualCompanyValidationException.Should().BeEquivalentTo(expectedCompanyValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectCompanyByIdAsync(invalidCompany.Id), Times.Once());
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
