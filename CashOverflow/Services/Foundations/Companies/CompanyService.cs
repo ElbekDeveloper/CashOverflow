@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.ComponentModel.Design;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
@@ -28,8 +29,13 @@ namespace CashOverflow.Services.Foundations.Companies
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<Company> RemoveCompanyByIdAsync(Guid companyId) =>
-            throw new NotImplementedException();
-        
+        public async ValueTask<Company> RemoveCompanyByIdAsync(Guid companyId)
+        {
+            Company maybeCompany =
+                await this.storageBroker.SelectCompanyByIdAsync(companyId);
+
+            return await this.storageBroker.DeleteCompanyAsync(maybeCompany);
+        }
+
     }
 }
