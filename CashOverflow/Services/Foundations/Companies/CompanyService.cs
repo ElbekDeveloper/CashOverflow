@@ -28,7 +28,7 @@ namespace CashOverflow.Services.Foundations.Companies
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<Company> ModifyCompanyAsync(Company company) =>
-            throw new System.NotImplementedException();
+        public async ValueTask<Company> ModifyCompanyAsync(Company company) =>
+            await this.storageBroker.UpdateCompanyAsync(company);
     }
 }
