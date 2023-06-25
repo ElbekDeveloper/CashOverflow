@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using FluentAssertions;
@@ -18,10 +19,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
         public async Task ShouldAddCompanyAsync()
         {
             // given
-            Company randomCompany = CreateRandomCompany();
+            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
+            Company randomCompany = CreateRandomCompany(randomDateTime);
             Company inputCompany = randomCompany;
             Company persistedCompany = inputCompany;
             Company expectedCompany = persistedCompany.DeepClone();
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertCompanyAsync(inputCompany)).
@@ -33,6 +38,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
             // then
             actualCompany.Should().BeEquivalentTo(expectedCompany);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertCompanyAsync(inputCompany), Times.Once);
