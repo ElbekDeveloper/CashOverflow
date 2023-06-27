@@ -160,9 +160,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectCompanyByIdAsync(CompanyId)).ReturnsAsync(storageCompany);
 
-            this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffset()).Returns(randomDateTime);
-
             // when
             ValueTask<Company> modifyCompanyTask =
                 this.companyService.ModifyCompanyAsync(invalidCompany);
@@ -180,9 +177,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedCompanyValidationException))), Times.Once);
-
-            this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

@@ -22,10 +22,19 @@ namespace CashOverflow.Services.Foundations.Companies
                 (Rule:IsInvalid(company.Name), Parameter: nameof(Company.Name)),
                 (Rule:IsInvalid(company.CreatedDate), Parameter: nameof(Company.CreatedDate)));
         }
-        
-        private void ValidateAgainstStorageOnModify(Company inputCompany, Company storageCompany) =>
+
+        private void ValidateAgainstStorageOnModify(Company inputCompany, Company storageCompany)
+        {
             ValidateStorageCompanyExists(storageCompany, inputCompany.Id);
 
+            Validate(
+                (Rule: IsNotSame(
+                    firstDate : inputCompany.CreatedDate,
+                    secondDate: storageCompany.CreatedDate,
+                    secondDateName: nameof(Company.CreatedDate)),
+                    Parameter: nameof(Company.CreatedDate)));
+        }
+        
         private void ValidateStorageCompanyExists(Company maybeCompany, Guid companyId)
         {
             if (maybeCompany is null)
@@ -41,6 +50,15 @@ namespace CashOverflow.Services.Foundations.Companies
                 throw new NullCompanyException();
             }
         }
+        
+        private static dynamic IsNotSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not same as {secondDateName}"
+            };
         
         private static dynamic IsInvalid(DateTimeOffset date) => new
         {

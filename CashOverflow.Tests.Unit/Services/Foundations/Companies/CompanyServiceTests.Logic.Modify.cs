@@ -27,6 +27,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             Company expectedCompany = updatedCompany.DeepClone();
             Guid companyId = inputCompany.Id;
 
+            this.storageBrokerMock.Setup(broker => 
+                broker.SelectCompanyByIdAsync(companyId))
+                    .ReturnsAsync(storageCompany);
+
             this.storageBrokerMock.Setup(broker =>
                 broker.UpdateCompanyAsync(inputCompany))
                     .ReturnsAsync(updatedCompany);
@@ -37,6 +41,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
             // then
             actualCompany.Should().BeEquivalentTo(expectedCompany);
+            
+            this.storageBrokerMock.Verify(broker => 
+                broker.SelectCompanyByIdAsync(companyId), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.UpdateCompanyAsync(inputCompany), Times.Once);
