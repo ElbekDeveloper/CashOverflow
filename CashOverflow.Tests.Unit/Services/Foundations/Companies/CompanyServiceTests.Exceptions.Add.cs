@@ -50,7 +50,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                 broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker => 
-                broker.LogError(It.Is(SameExceptionAs(expectedCompanyDependencyException))), Times.Once);
+                broker.LogCritical(It.Is(SameExceptionAs(expectedCompanyDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
