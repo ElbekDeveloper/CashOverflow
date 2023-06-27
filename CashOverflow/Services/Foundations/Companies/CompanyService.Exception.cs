@@ -6,7 +6,9 @@
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Companies
@@ -36,6 +38,12 @@ namespace CashOverflow.Services.Foundations.Companies
             catch (SqlException sqlException)
             {
                 var failedCompanyStorageException = new FailedCompanyStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedCompanyStorageException);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedCompanyStorageException = new FailedCompanyStorageException(dbUpdateException);
 
                 throw CreateAndLogCriticalDependencyException(failedCompanyStorageException);
             }
