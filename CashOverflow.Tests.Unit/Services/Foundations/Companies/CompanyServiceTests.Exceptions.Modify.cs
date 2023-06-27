@@ -112,11 +112,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             Guid companyId = someCompany.Id;
             var databaseUpdateConcurrencyException = new DbUpdateConcurrencyException();
 
-            var failedCompanyStorageException = 
-                new FailedCompanyStorageException(databaseUpdateConcurrencyException);
+            var lockedCompanyException = 
+                new LockedCompanyException(databaseUpdateConcurrencyException);
 
             var expectedCompanyDependencyException =
-                new CompanyDependencyException(failedCompanyStorageException);
+                new CompanyDependencyException(lockedCompanyException);
 
             this.storageBrokerMock.Setup(broker => 
                     broker.SelectCompanyByIdAsync(companyId)).ThrowsAsync(databaseUpdateConcurrencyException);

@@ -41,6 +41,12 @@ namespace CashOverflow.Services.Foundations.Companies
 
                 throw CreateAndLogCriticalDependencyException(failedCompanyStorageException);
             }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedCompanyException = new LockedCompanyException(dbUpdateConcurrencyException);
+
+                throw CreateAndLogCriticalDependencyException(lockedCompanyException);
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedCompanyStorageException = new FailedCompanyStorageException(dbUpdateException);
