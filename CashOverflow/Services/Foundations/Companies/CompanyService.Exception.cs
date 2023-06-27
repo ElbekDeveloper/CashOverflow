@@ -52,7 +52,7 @@ namespace CashOverflow.Services.Foundations.Companies
         private CompanyDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
             var companyDependencyException = new CompanyDependencyException(exception);
-            this.loggingBroker.LogError(companyDependencyException);
+            this.loggingBroker.LogCritical(companyDependencyException);
 
             return companyDependencyException;
         }
