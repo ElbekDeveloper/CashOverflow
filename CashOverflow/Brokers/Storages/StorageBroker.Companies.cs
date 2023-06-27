@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,9 @@ namespace CashOverflow.Brokers.Storages
 
         public async ValueTask<Company> InsertCompanyAsync(Company company) =>
             await InsertAsync(company);
+
+        public IQueryable<Company> SelectAllCompanies() =>
+            SelectAll<Company>();
 
         public async ValueTask<Company> SelectCompanyByIdAsync(Guid companyId) => 
             await SelectAsync<Company>(companyId);
