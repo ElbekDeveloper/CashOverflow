@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Companies
@@ -32,6 +33,12 @@ namespace CashOverflow.Services.Foundations.Companies
             {
                 throw CreateAndLogValidationException(notFoundCompanyException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedCompanyStorageException = new FailedCompanyStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedCompanyStorageException);
+            }
         }
 
         private CompanyValidationException CreateAndLogValidationException(Xeption exception)
@@ -40,6 +47,14 @@ namespace CashOverflow.Services.Foundations.Companies
             this.loggingBroker.LogError(companyValidationException);
 
             return companyValidationException;
+        }
+
+        private CompanyDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var companyDependencyException = new CompanyDependencyException(exception);
+            this.loggingBroker.LogError(companyDependencyException);
+
+            return companyDependencyException;
         }
     }
 }

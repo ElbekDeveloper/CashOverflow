@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------
+// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
@@ -29,7 +29,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             var failedCompanyStorageException = 
                 new FailedCompanyStorageException(sqlException);
             
-            var expectedCompanyDepdencyException = 
+            var expectedCompanyDependencyException = 
                 new CompanyDependencyException(failedCompanyStorageException);
 
             this.storageBrokerMock.Setup(broker => 
@@ -47,6 +47,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             // then
             this.storageBrokerMock.Verify(broker => 
                 broker.SelectCompanyByIdAsync(companyId), Times.Once);
+            
+            this.loggingBrokerMock.Verify(broker => 
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedCompanyDependencyException))));
             
             this.storageBrokerMock.Verify(broker => 
                 broker.UpdateCompanyAsync(someCompany), Times.Never);
