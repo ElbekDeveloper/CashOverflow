@@ -1,4 +1,4 @@
-// --------------------------------------------------------
+﻿// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
@@ -46,7 +46,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                     modifyCompanyTask.AsTask);
 
             // then
-            actualCompanyDependencyException.Should().BeEquivalentTo(expectedCompanyDependencyException);
+            actualCompanyDependencyException.Should()
+                .BeEquivalentTo(expectedCompanyDependencyException);
             
             this.storageBrokerMock.Verify(broker => 
                 broker.SelectCompanyByIdAsync(companyId), Times.Once);
@@ -66,15 +67,14 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             // given 
             Company randomCompany = CreateRandomCompany();
             Company someCompany = randomCompany;
-            Company storageCompany = someCompany.DeepClone();
             Guid companyId = someCompany.Id;
             var databaseUpdateException = new DbUpdateException();
         
-            var failedStorageCompanyException =
+            var failedCompanyStorageException =
                 new FailedCompanyStorageException(databaseUpdateException);
         
             var expectedCompanyDependencyException = 
-                new CompanyDependencyException(failedStorageCompanyException);
+                new CompanyDependencyException(failedCompanyStorageException);
 
             this.storageBrokerMock.Setup(broker => 
                 broker.SelectCompanyByIdAsync(companyId))
@@ -88,7 +88,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                 await Assert.ThrowsAsync<CompanyDependencyException>(modifyCompanyTask.AsTask);
             
             // then
-            actualCompanyDependencyException.Should().BeEquivalentTo(expectedCompanyDependencyException);
+            actualCompanyDependencyException.Should()
+                .BeEquivalentTo(expectedCompanyDependencyException);
             
             this.storageBrokerMock.Verify(broker => 
                 broker.SelectCompanyByIdAsync(companyId), Times.Once);
