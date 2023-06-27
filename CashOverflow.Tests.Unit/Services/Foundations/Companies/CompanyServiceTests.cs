@@ -11,6 +11,8 @@ using CashOverflow.Services.Foundations.Companies;
 using Moq;
 using System;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
+using Microsoft.Data.SqlClient;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
@@ -43,6 +45,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
         private static int GetRandomNegativeNumber() =>
             -1 * new IntRange(min: 2, max: 10).GetValue();
+        
+        private static SqlException CreateSqlException() => 
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private static Company CreateRandomModifyCompany(DateTimeOffset dates)
         {
