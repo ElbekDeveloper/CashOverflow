@@ -5,11 +5,13 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Companies;
 using CashOverflow.Services.Foundations.Companies;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -59,6 +61,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private static SqlException CreateSqlException() => 
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private static Company CreateRandomCompany() =>
             CreateCompanyFiller(GetRandomDateTimeOffset()).Create();
