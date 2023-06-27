@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------
+// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
@@ -28,7 +28,12 @@ namespace CashOverflow.Services.Foundations.Companies
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<Company> ModifyCompanyAsync(Company company) =>
-            await this.storageBroker.UpdateCompanyAsync(company);
+        public ValueTask<Company> ModifyCompanyAsync(Company company) =>
+            TryCatch(async () =>
+            {
+                ValidateCompanyOnModify(company);
+
+                return await this.storageBroker.UpdateCompanyAsync(company);
+            });
     }
 }
