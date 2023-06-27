@@ -32,6 +32,11 @@ namespace CashOverflow.Services.Foundations.Companies
             TryCatch(async () =>
             {
                 ValidateCompanyOnModify(company);
+                
+                Company maybeCompany =
+                    await this.storageBroker.SelectCompanyByIdAsync(company.Id);
+
+                ValidateAgainstStorageOnModify(inputCompany: company, storageCompany: maybeCompany);
 
                 return await this.storageBroker.UpdateCompanyAsync(company);
             });

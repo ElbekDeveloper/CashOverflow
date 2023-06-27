@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------
+// --------------------------------------------------------
 // Copyright (c) Coalition of Good-Hearted Engineers
 // Developed by CashOverflow Team
 // --------------------------------------------------------
@@ -21,6 +21,17 @@ namespace CashOverflow.Services.Foundations.Companies
                 (Rule:IsInvalid(company.Id), Parameter: nameof(Company.Id)),
                 (Rule:IsInvalid(company.Name), Parameter: nameof(Company.Name)),
                 (Rule:IsInvalid(company.CreatedDate), Parameter: nameof(Company.CreatedDate)));
+        }
+        
+        private void ValidateAgainstStorageOnModify(Company inputCompany, Company storageCompany) =>
+            ValidateStorageCompanyExists(storageCompany, inputCompany.Id);
+
+        private void ValidateStorageCompanyExists(Company maybeCompany, Guid companyId)
+        {
+            if (maybeCompany is null)
+            {
+                throw new NotFoundCompanyException(companyId);
+            }
         }
 
         private void ValidateCompanyNotNull(Company company)

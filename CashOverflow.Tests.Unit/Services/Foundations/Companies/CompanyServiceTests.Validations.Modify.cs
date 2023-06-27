@@ -113,9 +113,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                 broker.SelectCompanyByIdAsync(nonExistCompany.Id))
                     .ReturnsAsync(nullCompany);
 
-            this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffset()).Returns(dateTime);
-
             // when
             ValueTask<Company> modifyCompanyTask =
                 this.companyService.ModifyCompanyAsync(nonExistCompany);
@@ -133,9 +130,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedCompanyValidationException))), Times.Once);
-
-            this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
