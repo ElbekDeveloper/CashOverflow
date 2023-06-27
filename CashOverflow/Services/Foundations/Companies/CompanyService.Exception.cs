@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
+using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Companies
 {
@@ -23,11 +24,15 @@ namespace CashOverflow.Services.Foundations.Companies
             {
                 throw CreateAndLogValidationException(nullCompanyException);
             }
+            catch (InvalidCompanyException invalidCompanyException)
+            {
+                throw CreateAndLogValidationException(invalidCompanyException);
+            }
         }
 
-        private CompanyValidationException CreateAndLogValidationException(NullCompanyException nullCompanyException)
+        private CompanyValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var companyValidationException = new CompanyValidationException(nullCompanyException);
+            var companyValidationException = new CompanyValidationException(exception);
             this.loggingBroker.LogError(companyValidationException);
 
             return companyValidationException;
