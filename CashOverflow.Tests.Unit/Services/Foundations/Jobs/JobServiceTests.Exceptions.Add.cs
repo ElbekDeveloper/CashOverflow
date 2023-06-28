@@ -93,7 +93,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Jobs
             // given
             Job someJob = CreateRandomJob();
             var dbUpdateConcurrencyException = new DbUpdateConcurrencyException();
-
             var lockedJobException = new LockedJobException(dbUpdateConcurrencyException);
 
             var expectedJobDependencyValidationException =
