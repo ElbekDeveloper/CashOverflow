@@ -11,7 +11,7 @@ namespace CashOverflow.Models.Companies.Exceptions
     public class CompanyServiceException : Xeption
     {
         public CompanyServiceException(Exception innerException) 
-            : base(message: "Company service error occurred, please contact support", innerException)
+            : base(message: "Company service error occurred, contact support", innerException)
         { }
     }
 }

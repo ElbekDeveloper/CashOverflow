@@ -11,7 +11,7 @@ namespace CashOverflow.Models.Companies.Exceptions
     public class NotFoundCompanyException : Xeption
     {
         public NotFoundCompanyException(Guid companyId) 
-            : base(message: $"Couldn't find job with id: {companyId}.")
+            : base(message: $"Couldn't find company with id: {companyId}.")
         { }
     }
 }
