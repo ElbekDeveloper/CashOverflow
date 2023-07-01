@@ -10,6 +10,7 @@ using CashOverflow.Models.Companies.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -90,6 +91,45 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedCompanyDependencyValidationException))), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateConcurrencyErrorOccurredAndLogItAsync()
+        {
+            // given
+            Company someCompany = CreateRandomCompany();
+            string someMessage = GetRandomString();
+
+            var dbUpdateConcurrencyException = 
+                new DbUpdateConcurrencyException(someMessage);
+
+            var expectedCompanyDependencyException = 
+                new CompanyDependencyException(dbUpdateConcurrencyException);
+
+            this.dateTimeBrokerMock.Setup(broker => 
+                broker.GetCurrentDateTimeOffset())
+                    .Throws(dbUpdateConcurrencyException);
+
+            // when
+            ValueTask<Company> addCompanyTask = 
+                this.companyService.AddCompanyAsync(someCompany);
+
+            CompanyDependencyException actualCompanyDependencyException =
+                await Assert.ThrowsAsync<CompanyDependencyException>(addCompanyTask.AsTask);
+
+            // then
+            actualCompanyDependencyException.Should().BeEquivalentTo(expectedCompanyDependencyException);
+
+            this.dateTimeBrokerMock.Verify(broker => 
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedCompanyDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
