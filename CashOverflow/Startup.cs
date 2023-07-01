@@ -76,7 +76,7 @@ namespace CashOverflow
             services.AddTransient<IJobService, JobService>();
             services.AddTransient<ISalaryService, SalaryService>();
             services.AddTransient<IReviewService, ReviewService>();
-            services.AddTransient<ICompanyService, sCompanyService>();
+            services.AddTransient<ICompanyService, CompanyService>();
         }
     }
 }
