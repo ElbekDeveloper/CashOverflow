@@ -8,6 +8,7 @@ using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Companies;
+using System.Threading.Tasks;
 
 namespace CashOverflow.Services.Foundations.Companies
 {
@@ -23,16 +24,29 @@ namespace CashOverflow.Services.Foundations.Companies
             IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
-            this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
+            this.loggingBroker = loggingBroker;
         }
 
         public ValueTask<Company> AddCompanyAsync(Company company) =>
         TryCatch(async () =>
         {
-            ValidateCompany(company);
+            ValidateCompanyOnAdd(company);
 
             return await this.storageBroker.InsertCompanyAsync(company);
+        });
+
+        public ValueTask<Company> ModifyCompanyAsync(Company company) =>
+        TryCatch(async () =>
+        {
+            ValidateCompanyOnModify(company);
+                
+            Company maybeCompany =
+                await this.storageBroker.SelectCompanyByIdAsync(company.Id);
+
+            ValidateAgainstStorageOnModify(inputCompany: company, storageCompany: maybeCompany);
+
+            return await this.storageBroker.UpdateCompanyAsync(company);
         });
     }
 }

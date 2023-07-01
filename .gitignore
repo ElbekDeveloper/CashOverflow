@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /CashOverflow/appsettings.Development.json
 /CashOverflow/appsettings.development.json
+.idea/

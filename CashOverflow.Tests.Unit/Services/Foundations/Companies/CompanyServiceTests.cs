@@ -12,6 +12,10 @@ using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Companies;
 using CashOverflow.Services.Foundations.Companies;
+using Moq;
+using System;
+using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -23,6 +27,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
     public partial class CompanyServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly ICompanyService companyService;
@@ -65,15 +70,28 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
         private static string GetRandomString() =>
             new MnemonicString(wordCount: GetRandomNumber()).GetValue();
-
+        
         private static SqlException CreateSqlException() => 
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+
+        private static Company CreateRandomModifyCompany(DateTimeOffset dates)
+        {
+            int randomDaysInPast = GetRandomNegativeNumber();
+            Company randomCompany = CreateRandomCompany(dates);
+
+            randomCompany.CreatedDate = randomCompany.CreatedDate.AddDays(randomDaysInPast);
+
+            return randomCompany;
+        }
 
         private static Company CreateRandomCompany() =>
             CreateCompanyFiller(GetRandomDateTimeOffset()).Create();
 
         private static Company CreateRandomCompany(DateTimeOffset dates) =>
            CreateCompanyFiller(dates).Create();
+
+        private static Company CreateRandomCompany() =>
+            CreateCompanyFiller(GetRandomDateTime()).Create();
 
         private static Filler<Company> CreateCompanyFiller(DateTimeOffset dates)
         {

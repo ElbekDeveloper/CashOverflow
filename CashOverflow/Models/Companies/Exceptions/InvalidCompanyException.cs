@@ -10,7 +10,7 @@ namespace CashOverflow.Models.Companies.Exceptions
     public class InvalidCompanyException : Xeption
     {
         public InvalidCompanyException()
-            : base(message: "Company is invalid")
+            : base(message: "Company is invalid.")
         { }
     }
 }

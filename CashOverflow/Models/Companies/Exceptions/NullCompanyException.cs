@@ -9,8 +9,8 @@ namespace CashOverflow.Models.Companies.Exceptions
 {
     public class NullCompanyException : Xeption
     {
-        public NullCompanyException()
-            : base(message: "Company is null")
+        public NullCompanyException() 
+            : base(message: "Company is null.")
         { }
     }
 }

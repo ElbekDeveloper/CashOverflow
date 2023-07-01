@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using Xeptions;
 
 namespace CashOverflow.Models.Companies.Exceptions
