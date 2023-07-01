@@ -27,7 +27,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
     public partial class CompanyServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
-        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly ICompanyService companyService;
