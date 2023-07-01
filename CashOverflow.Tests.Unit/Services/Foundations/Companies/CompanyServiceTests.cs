@@ -89,9 +89,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
         private static Company CreateRandomCompany(DateTimeOffset dates) =>
            CreateCompanyFiller(dates).Create();
 
-        private static Company CreateRandomCompany() =>
-            CreateCompanyFiller(GetRandomDateTime()).Create();
-
         private static Filler<Company> CreateCompanyFiller(DateTimeOffset dates)
         {
             var filler = new Filler<Company>();
