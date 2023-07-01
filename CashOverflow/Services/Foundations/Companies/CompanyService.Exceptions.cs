@@ -50,7 +50,13 @@ namespace CashOverflow.Services.Foundations.Companies
             {
                 var lockedCompanyException = new LockedCompanyException(dbUpdateConcurrencyException);
                 
-                throw CreateAndLogErrorDependencyException(lockedCompanyException);
+                throw CreateAndLogDependencyException(lockedCompanyException);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedCompanyStorageException = new FailedCompanyStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedCompanyStorageException);
             }
         }
 
@@ -80,7 +86,7 @@ namespace CashOverflow.Services.Foundations.Companies
             return companyDependencyValidationException;
         }
         
-        private CompanyDependencyException CreateAndLogErrorDependencyException(Xeption exception)
+        private CompanyDependencyException CreateAndLogDependencyException(Xeption exception)
         {
             var companyDependencyException = new CompanyDependencyException(exception);
             this.loggingBroker.LogError(companyDependencyException);
