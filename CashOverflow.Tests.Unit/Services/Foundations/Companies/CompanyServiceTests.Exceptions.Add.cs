@@ -19,7 +19,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
     public partial class CompanyServiceTests
     {
         [Fact]
-        public async Task ShouldThrowCriticialDependencyExceptionOnAddIfSqlExceptionOccursAndLogItAsync()
+        public async Task ShouldThrowCriticalDependencyExceptionOnAddIfSqlExceptionOccursAndLogItAsync()
         {
             // given
             Company someCompany = CreateRandomCompany();

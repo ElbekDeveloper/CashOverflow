@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
 using EFxceptions.Models.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace CashOverflow.Services.Foundations.Companies
@@ -37,12 +39,18 @@ namespace CashOverflow.Services.Foundations.Companies
 
                 throw CreateAndLogCriticalDependencyException(failedCompanyStorageException);
             }
-            catch(DuplicateKeyException duplicateKeyException)
+            catch (DuplicateKeyException duplicateKeyException)
             {
                 var alreadyExistsCompanyException =
                     new AlreadyExistsCompanyException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsCompanyException);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedCompanyException = new LockedCompanyException(dbUpdateConcurrencyException);
+                
+                throw CreateAndLogErrorDependencyException(lockedCompanyException);
             }
         }
 
@@ -71,5 +79,14 @@ namespace CashOverflow.Services.Foundations.Companies
 
             return companyDependencyValidationException;
         }
+        
+        private CompanyDependencyException CreateAndLogErrorDependencyException(Xeption exception)
+        {
+            var companyDependencyException = new CompanyDependencyException(exception);
+            this.loggingBroker.LogError(companyDependencyException);
+
+            return companyDependencyException;
+        }
+
     }
 }
