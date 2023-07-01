@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Net.NetworkInformation;
 using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
@@ -61,6 +62,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private static string GetRandomString() =>
+            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
 
         private static SqlException CreateSqlException() => 
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
