@@ -6,6 +6,7 @@
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
+using CashOverflow.Services.Foundations.Companies;
 using CashOverflow.Services.Foundations.Jobs;
 using CashOverflow.Services.Foundations.Languages;
 using CashOverflow.Services.Foundations.Locations;
@@ -75,6 +76,7 @@ namespace CashOverflow
             services.AddTransient<IJobService, JobService>();
             services.AddTransient<ISalaryService, SalaryService>();
             services.AddTransient<IReviewService, ReviewService>();
+            services.AddTransient<ICompanyService, CompanyService>();
         }
     }
 }
