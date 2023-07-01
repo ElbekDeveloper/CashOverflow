@@ -107,8 +107,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             var dbUpdateConcurrencyException = 
                 new DbUpdateConcurrencyException(someMessage);
 
+            var lockedCompanyException = 
+                new LockedCompanyException(dbUpdateConcurrencyException);
+
             var expectedCompanyDependencyException = 
-                new CompanyDependencyException(dbUpdateConcurrencyException);
+                new CompanyDependencyException(lockedCompanyException);
 
             this.dateTimeBrokerMock.Setup(broker => 
                 broker.GetCurrentDateTimeOffset())
