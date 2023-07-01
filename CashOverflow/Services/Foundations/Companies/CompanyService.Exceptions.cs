@@ -58,6 +58,12 @@ namespace CashOverflow.Services.Foundations.Companies
 
                 throw CreateAndLogDependencyException(failedCompanyStorageException);
             }
+            catch(Exception exception)
+            {
+                var failedCompanyServiceException = new FailedCompanyServiceException(exception);
+
+                throw CreateAndLogServiceException(failedCompanyServiceException);
+            }
         }
 
         private CompanyValidationException CreateAndLogValidationException(Xeption exception)
@@ -94,5 +100,12 @@ namespace CashOverflow.Services.Foundations.Companies
             return companyDependencyException;
         }
 
+        private CompanyServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var companyServiceException = new CompanyServiceException(exception);
+            this.loggingBroker.LogError(companyServiceException);
+
+            return companyServiceException;
+        }
     }
 }
