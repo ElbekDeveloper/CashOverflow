@@ -10,17 +10,9 @@ namespace CashOverflow.Models.Companies.Exceptions
 {
     public class FailedCompanyServiceException : Xeption
     {
-<<<<<<< HEAD
         public FailedCompanyServiceException(Exception innerException)
             : base(message: "Failed company service error occurred, contact support.",
                   innerException)
         { }
     }
 }
-=======
-        public FailedCompanyServiceException(Exception innerException) 
-            : base(message: "Failed company service error occurred, contact support.", innerException)
-        { }
-    }
-}
->>>>>>> master

@@ -7,7 +7,6 @@ using Xeptions;
 
 namespace CashOverflow.Models.Companies.Exceptions
 {
-<<<<<<< HEAD
     public class CompanyValidationException : Xeption
     {
         public CompanyValidationException(Xeption innerException)
@@ -15,12 +14,4 @@ namespace CashOverflow.Models.Companies.Exceptions
                   innerException)
         { }
     }
-=======
-    public class CompanyValidationException : Xeption
-    {
-        public CompanyValidationException(Xeption innerException) 
-            : base(message: "Company validation error occured, fix the errors and try again.", innerException) 
-        { }
-    }
->>>>>>> master
 }

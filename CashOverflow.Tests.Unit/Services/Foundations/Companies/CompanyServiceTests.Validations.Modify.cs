@@ -68,7 +68,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
             invalidCompanyException.AddData(
                 key: nameof(Company.CreatedDate),
-                values: "Date is required");
+                values: "Value is required");
 
             var expectedCompanyValidationException =
                 new CompanyValidationException(invalidCompanyException);
