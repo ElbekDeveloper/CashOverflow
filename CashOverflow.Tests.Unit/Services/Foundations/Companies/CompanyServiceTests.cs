@@ -5,17 +5,12 @@
 
 using System;
 using System.Linq.Expressions;
-using System.Net.NetworkInformation;
 using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Companies;
 using CashOverflow.Services.Foundations.Companies;
-using Moq;
-using System;
-using System.Linq.Expressions;
-using System.Runtime.Serialization;
 using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
@@ -69,8 +64,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
         private static string GetRandomString() =>
             new MnemonicString(wordCount: GetRandomNumber()).GetValue();
-        
-        private static SqlException CreateSqlException() => 
+
+        private static SqlException CreateSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private static Company CreateRandomModifyCompany(DateTimeOffset dates)

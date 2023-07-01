@@ -4,7 +4,6 @@
 // --------------------------------------------------------
 
 using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
@@ -23,7 +22,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             Company nullCompany = null;
             var nullCompanyException = new NullCompanyException();
 
-            var expectedCompanyValidationException = 
+            var expectedCompanyValidationException =
                 new CompanyValidationException(nullCompanyException);
 
             // when
@@ -80,7 +79,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                 new CompanyValidationException(invalidCompanyException);
 
             // when
-            ValueTask<Company> addCompanyTask = 
+            ValueTask<Company> addCompanyTask =
                 this.companyService.AddCompanyAsync(invalidCompany);
 
             CompanyValidationException actualCompanyValidationException =
@@ -122,7 +121,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                 key: nameof(Company.CreatedDate),
                 values: "Value is not recent");
 
-            var expectedCompanyValidationException = 
+            var expectedCompanyValidationException =
                 new CompanyValidationException(invalidCompanyException);
 
             this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset())
@@ -146,7 +145,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedCompanyValidationException))), Times.Once);
 
-            this.storageBrokerMock.Verify(broker => 
+            this.storageBrokerMock.Verify(broker =>
                 broker.InsertCompanyAsync(It.IsAny<Company>()), Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();

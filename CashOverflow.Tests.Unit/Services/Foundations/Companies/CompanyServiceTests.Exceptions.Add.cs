@@ -26,10 +26,10 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             Guid companyId = someCompany.Id;
             SqlException sqlException = CreateSqlException();
 
-            FailedCompanyStorageException failedCompanyStorageException = 
+            FailedCompanyStorageException failedCompanyStorageException =
                 new FailedCompanyStorageException(sqlException);
 
-            CompanyDependencyException expectedCompanyDependencyException = 
+            CompanyDependencyException expectedCompanyDependencyException =
                 new CompanyDependencyException(failedCompanyStorageException);
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -49,7 +49,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
 
-            this.loggingBrokerMock.Verify(broker => 
+            this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(expectedCompanyDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
@@ -65,7 +65,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             string someMessage = GetRandomString();
             var duplicateKeyException = new DuplicateKeyException(someMessage);
 
-            var alreadyExistsCompanyException = 
+            var alreadyExistsCompanyException =
                 new AlreadyExistsCompanyException(duplicateKeyException);
 
             var expectedCompanyDependencyValidationException =
@@ -104,21 +104,21 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             Company someCompany = CreateRandomCompany();
             string someMessage = GetRandomString();
 
-            var dbUpdateConcurrencyException = 
+            var dbUpdateConcurrencyException =
                 new DbUpdateConcurrencyException(someMessage);
 
-            var lockedCompanyException = 
+            var lockedCompanyException =
                 new LockedCompanyException(dbUpdateConcurrencyException);
 
-            var expectedCompanyDependencyException = 
+            var expectedCompanyDependencyException =
                 new CompanyDependencyException(lockedCompanyException);
 
-            this.dateTimeBrokerMock.Setup(broker => 
+            this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset())
                     .Throws(dbUpdateConcurrencyException);
 
             // when
-            ValueTask<Company> addCompanyTask = 
+            ValueTask<Company> addCompanyTask =
                 this.companyService.AddCompanyAsync(someCompany);
 
             CompanyDependencyException actualCompanyDependencyException =
@@ -127,7 +127,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             // then
             actualCompanyDependencyException.Should().BeEquivalentTo(expectedCompanyDependencyException);
 
-            this.dateTimeBrokerMock.Verify(broker => 
+            this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -138,7 +138,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
-        
+
         [Fact]
         public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccuredAndLogItAsync()
         {
@@ -146,35 +146,35 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             Company someCompany = CreateRandomCompany();
             string someMessage = GetRandomString();
 
-            var dbUpdateException = 
+            var dbUpdateException =
                 new DbUpdateException(someMessage);
 
-            var failedCompanyStorageException = 
+            var failedCompanyStorageException =
                 new FailedCompanyStorageException(dbUpdateException);
 
             var expectedCompanyDependencyException =
                 new CompanyDependencyException(failedCompanyStorageException);
 
-            this.dateTimeBrokerMock.Setup(broker => 
+            this.dateTimeBrokerMock.Setup(broker =>
                     broker.GetCurrentDateTimeOffset()).Throws(dbUpdateException);
 
             // when
-            ValueTask<Company> addCompanyTask = 
+            ValueTask<Company> addCompanyTask =
                 this.companyService.AddCompanyAsync(someCompany);
 
-            CompanyDependencyException actualCompanyDependencyException = 
+            CompanyDependencyException actualCompanyDependencyException =
                 await Assert.ThrowsAsync<CompanyDependencyException>(addCompanyTask.AsTask);
 
             // then
             actualCompanyDependencyException.Should().BeEquivalentTo(expectedCompanyDependencyException);
-            
-            this.dateTimeBrokerMock.Verify(broker => 
+
+            this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(), Times.Once);
-            
+
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedCompanyDependencyException))), Times.Once);
-            
+
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

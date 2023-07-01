@@ -3,14 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
 using FluentAssertions;
-using Moq;
-using System;
-using System.Threading.Tasks;
-using Xunit;
 using Force.DeepCloner;
+using Moq;
+using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 {
@@ -23,7 +23,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             Company nullCompany = null;
             var nullCompanyException = new NullCompanyException();
 
-            var expectedCompanyValidationException = 
+            var expectedCompanyValidationException =
                 new CompanyValidationException(nullCompanyException);
 
             // when
@@ -70,11 +70,11 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                 key: nameof(Company.CreatedDate),
                 values: "Date is required");
 
-            var expectedCompanyValidationException = 
+            var expectedCompanyValidationException =
                 new CompanyValidationException(invalidCompanyException);
 
             // when
-            ValueTask<Company> modifyCompanyTask = 
+            ValueTask<Company> modifyCompanyTask =
                 this.companyService.ModifyCompanyAsync(invalidCompany);
 
             CompanyValidationException actualCompanyValidationException =
@@ -98,7 +98,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
         {
             // given
             int negativeMinutes = GetRandomNegativeNumber();
-            DateTimeOffset dateTime = GetRandomDateTime();
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
             Company randomCompany = CreateRandomCompany(dateTime);
             Company nonExistCompany = randomCompany;
             nonExistCompany.CreatedDate = dateTime.AddMinutes(negativeMinutes);
@@ -142,7 +142,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             // given
             int randomNumber = GetRandomNegativeNumber();
             int randomMinutes = randomNumber;
-            DateTimeOffset randomDateTime = GetRandomDateTime();
+            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
             Company randomCompany = CreateRandomModifyCompany(randomDateTime);
             Company invalidCompany = randomCompany.DeepClone();
             Company storageCompany = invalidCompany.DeepClone();

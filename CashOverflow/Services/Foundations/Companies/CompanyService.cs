@@ -8,7 +8,6 @@ using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
 using CashOverflow.Brokers.Storages;
 using CashOverflow.Models.Companies;
-using System.Threading.Tasks;
 
 namespace CashOverflow.Services.Foundations.Companies
 {
@@ -40,7 +39,7 @@ namespace CashOverflow.Services.Foundations.Companies
         TryCatch(async () =>
         {
             ValidateCompanyOnModify(company);
-                
+
             Company maybeCompany =
                 await this.storageBroker.SelectCompanyByIdAsync(company.Id);
 
