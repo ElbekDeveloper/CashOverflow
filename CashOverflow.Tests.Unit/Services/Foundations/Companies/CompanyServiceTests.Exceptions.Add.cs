@@ -181,22 +181,39 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
         }
 
         [Fact]
-
         public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccuredAndLogItAsync()
         {
             //given
             Company someCompany = CreateRandomCompany();
-            var ServiceException = new Exception();
-            var failedCompanyException = new FailedCompanyServiceException(ServiceException);
+            var serviceException = new Exception();
+            var failedCompanyException = new FailedCompanyServiceException(serviceException);
 
             var expectedCompanyServiceExceptions =
-                new CompanyServiceException();
+                new CompanyServiceException(failedCompanyException);
 
-
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset()).Throws(serviceException);
 
             //when
+            ValueTask<Company> addCompanyTask = this.companyService.AddCompanyAsync(someCompany);
+
+            CompanyServiceException actualCompanyServiceException =
+                await Assert.ThrowsAsync<CompanyServiceException>(addCompanyTask.AsTask);
 
             //then
+            actualCompanyServiceException.Should().BeEquivalentTo(
+                expectedCompanyServiceExceptions);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedCompanyServiceExceptions))), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
