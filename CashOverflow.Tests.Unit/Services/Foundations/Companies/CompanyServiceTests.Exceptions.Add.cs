@@ -179,5 +179,24 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccuredAndLogItAsync()
+        {
+            //given
+            Company someCompany = CreateRandomCompany();
+            var ServiceException = new Exception();
+            var failedCompanyException = new FailedCompanyServiceException(ServiceException);
+
+            var expectedCompanyServiceExceptions =
+                new CompanyServiceException();
+
+
+
+            //when
+
+            //then
+        }
     }
 }
