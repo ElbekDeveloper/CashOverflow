@@ -191,8 +191,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                     expectedLanguageDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
-            this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
