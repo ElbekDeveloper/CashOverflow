@@ -154,5 +154,45 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccuredAndLogItAsync()
+        {
+            // given
+            Language someLanguage = CreateRandomLanguage();
+            string someMessage = GetRandomString();
+
+            var dbUpdateException = new DbUpdateException(someMessage);
+
+            var failedLanguageStorageException =
+                new FailedLanguageStorageException(dbUpdateException);
+
+            var expectedLanguageDependencyException =
+                new LanguageDependencyException(failedLanguageStorageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                    broker.GetCurrentDateTimeOffset()).Throws(dbUpdateException);
+
+            // when
+            ValueTask<Language> addLanguageTask =
+                this.languageService.AddLanguageAsync(someLanguage);
+
+            LanguageDependencyException actualLanguageDependencyException =
+                await Assert.ThrowsAsync<LanguageDependencyException>(addLanguageTask.AsTask);
+
+            // then
+            actualLanguageDependencyException.Should().BeEquivalentTo(expectedLanguageDependencyException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLanguageDependencyException))), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
