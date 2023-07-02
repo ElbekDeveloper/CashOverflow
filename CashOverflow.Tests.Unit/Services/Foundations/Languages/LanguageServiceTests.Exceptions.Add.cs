@@ -151,8 +151,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
                 broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
-            this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
