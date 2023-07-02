@@ -10,6 +10,10 @@ namespace CashOverflow.Services.Foundations.Companies
 {
     public interface ICompanyService
     {
+        /// <exception cref="Models.Companies.Exceptions.CompanyValidationException"></exception>
+        /// <exception cref="Models.Companies.Exceptions.CompanyDependencyException"></exception>
+        /// <exception cref="Models.Companies.Exceptions.CompanyDependencyValidationException"></exception>
+        /// <exception cref="Models.Companies.Exceptions.CompanyServiceException"></exception>
         ValueTask<Company> AddCompanyAsync(Company company);
         ValueTask<Company> ModifyCompanyAsync(Company company);
     }
