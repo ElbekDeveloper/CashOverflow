@@ -42,17 +42,24 @@ namespace CashOverflow.Services.Foundations.Companies
 
                 throw CreateAndLogCriticalDependencyException(failedCompanyStorageException);
             }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsCompanyException =
+                    new AlreadyExistsCompanyException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsCompanyException);
+            }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 var lockedCompanyException = new LockedCompanyException(dbUpdateConcurrencyException);
 
-                throw CreateAndLogCriticalDependencyException(lockedCompanyException);
+                throw CreateAndLogDependencyException(lockedCompanyException);
             }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedCompanyStorageException = new FailedCompanyStorageException(dbUpdateException);
 
-                throw CreateAndLogCriticalDependencyException(failedCompanyStorageException);
+                throw CreateAndLogDependencyException(failedCompanyStorageException);
             }
             catch (Exception exception)
             {
@@ -77,10 +84,28 @@ namespace CashOverflow.Services.Foundations.Companies
 
             return companyDependencyException;
         }
-        
-        private Exception CreateAndLogServiceException(FailedCompanyServiceException innerException)
+
+        private Exception CreateAndLogDependencyValidationException(Xeption exception)
         {
-            var companyServiceException = new CompanyServiceException(innerException);
+            var companyDependencyValidationException =
+                new CompanyDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(companyDependencyValidationException);
+
+            return companyDependencyValidationException;
+        }
+
+        private CompanyDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var companyDependencyException = new CompanyDependencyException(exception);
+            this.loggingBroker.LogError(companyDependencyException);
+
+            return companyDependencyException;
+        }
+
+        private CompanyServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var companyServiceException = new CompanyServiceException(exception);
             this.loggingBroker.LogError(companyServiceException);
 
             return companyServiceException;

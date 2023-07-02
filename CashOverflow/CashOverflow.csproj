@@ -7,9 +7,13 @@
 
   <ItemGroup>
     <Compile Remove="Brokers\Salaries\**" />
+    <Compile Remove="Models\Companies\NewFolder\**" />
     <Content Remove="Brokers\Salaries\**" />
+    <Content Remove="Models\Companies\NewFolder\**" />
     <EmbeddedResource Remove="Brokers\Salaries\**" />
+    <EmbeddedResource Remove="Models\Companies\NewFolder\**" />
     <None Remove="Brokers\Salaries\**" />
+    <None Remove="Models\Companies\NewFolder\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EFxceptions" Version="0.4.5" />

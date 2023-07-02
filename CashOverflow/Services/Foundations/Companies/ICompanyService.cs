@@ -3,13 +3,14 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using CashOverflow.Models.Companies;
 using System.Threading.Tasks;
+using CashOverflow.Models.Companies;
 
 namespace CashOverflow.Services.Foundations.Companies
 {
     public interface ICompanyService
     {
+        ValueTask<Company> AddCompanyAsync(Company company);
         ValueTask<Company> ModifyCompanyAsync(Company company);
     }
 }

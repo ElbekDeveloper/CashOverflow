@@ -21,7 +21,7 @@ namespace CashOverflow.Brokers.Storages
         public IQueryable<Company> SelectAllCompanies() =>
             SelectAll<Company>();
 
-        public async ValueTask<Company> SelectCompanyByIdAsync(Guid companyId) => 
+        public async ValueTask<Company> SelectCompanyByIdAsync(Guid companyId) =>
             await SelectAsync<Company>(companyId);
 
         public async ValueTask<Company> DeleteCompanyAsync(Company company) =>

@@ -3,15 +3,15 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
-using System;
 using Xeptions;
 
 namespace CashOverflow.Models.Companies.Exceptions
 {
-    public class FailedCompanyStorageException : Xeption
+    public class CompanyDependencyValidationException : Xeption
     {
-        public FailedCompanyStorageException(Exception innerException)
-            : base(message: "Failed company storage error occured, contact support", innerException)
+        public CompanyDependencyValidationException(Xeption innerException)
+            : base(message: "Company dependency validation error occurred, fix the errors and try again.",
+                  innerException)
         { }
     }
 }

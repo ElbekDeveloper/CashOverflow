@@ -8,10 +8,10 @@ using Xeptions;
 
 namespace CashOverflow.Models.Companies.Exceptions
 {
-    public class FailedCompanyStorageException : Xeption
+    public class AlreadyExistsCompanyException : Xeption
     {
-        public FailedCompanyStorageException(Exception innerException)
-            : base(message: "Failed company storage error occured, contact support", innerException)
+        public AlreadyExistsCompanyException(Exception innerException)
+            : base(message: "Company already exists.", innerException)
         { }
     }
 }

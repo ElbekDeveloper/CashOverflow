@@ -3,12 +3,12 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
@@ -19,7 +19,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
         public async Task ShouldModifyCompanyAsync()
         {
             // given
-            DateTimeOffset randomDate = GetRandomDateTime();
+            DateTimeOffset randomDate = GetRandomDateTimeOffset();
             Company randomCompany = CreateRandomModifyCompany(randomDate);
             Company inputCompany = randomCompany;
             Company storageCompany = inputCompany.DeepClone();
@@ -27,7 +27,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             Company expectedCompany = updatedCompany.DeepClone();
             Guid companyId = inputCompany.Id;
 
-            this.storageBrokerMock.Setup(broker => 
+            this.storageBrokerMock.Setup(broker =>
                 broker.SelectCompanyByIdAsync(companyId))
                     .ReturnsAsync(storageCompany);
 
@@ -41,8 +41,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
 
             // then
             actualCompany.Should().BeEquivalentTo(expectedCompany);
-            
-            this.storageBrokerMock.Verify(broker => 
+
+            this.storageBrokerMock.Verify(broker =>
                 broker.SelectCompanyByIdAsync(companyId), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
