@@ -10,6 +10,7 @@ using CashOverflow.Models.Languages.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -109,6 +110,85 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedLanguageServiceException))), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfDbConcurrencyErrorOccursAndLogItAsync()
+        {
+            // given
+            Language someLanguage = CreateRandomLanguage();
+            var dbUpdateConcurrencyException = new DbUpdateConcurrencyException();
+            var lockedLanguageException = new LockedLanguageException(dbUpdateConcurrencyException);
+
+            var expectedLanguageDependencyValidationException =
+                new LanguageDependencyValidationException(lockedLanguageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Throws(dbUpdateConcurrencyException);
+
+            // when
+            ValueTask<Language> addLanguageTask = this.languageService.AddLanguageAsync(someLanguage);
+
+            LanguageDependencyValidationException actualLanguageDependencyValidationException =
+                 await Assert.ThrowsAsync<LanguageDependencyValidationException>(addLanguageTask.AsTask);
+
+            // then
+            actualLanguageDependencyValidationException.Should()
+                .BeEquivalentTo(expectedLanguageDependencyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
+                SameExceptionAs(expectedLanguageDependencyValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLanguageAsync(It.IsAny<Language>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccuredAndLogItAsync()
+        {
+            // given
+            Language someLanguage = CreateRandomLanguage();
+            string someMessage = GetRandomString();
+
+            var dbUpdateException = new DbUpdateException(someMessage);
+
+            var failedLanguageStorageException =
+                new FailedLanguageStorageException(dbUpdateException);
+
+            var expectedLanguageDependencyException =
+                new LanguageDependencyException(failedLanguageStorageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                    broker.GetCurrentDateTimeOffset()).Throws(dbUpdateException);
+
+            // when
+            ValueTask<Language> addLanguageTask =
+                this.languageService.AddLanguageAsync(someLanguage);
+
+            LanguageDependencyException actualLanguageDependencyException =
+                await Assert.ThrowsAsync<LanguageDependencyException>(addLanguageTask.AsTask);
+
+            // then
+            actualLanguageDependencyException.Should().BeEquivalentTo(expectedLanguageDependencyException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLanguageDependencyException))), Times.Once);
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
