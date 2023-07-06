@@ -6,10 +6,8 @@
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
-using CashOverflow.Models.Jobs.Exceptions;
 using CashOverflow.Services.Foundations.Companies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using RESTFulSense.Controllers;
 
 namespace CashOverflow.Controllers
@@ -36,12 +34,12 @@ namespace CashOverflow.Controllers
             {
                 return BadRequest(companyValidationException.InnerException);
             }
-            catch(CompanyDependencyException companyDependencyException)
+            catch (CompanyDependencyException companyDependencyException)
             {
                 return InternalServerError(companyDependencyException.InnerException);
             }
             catch (CompanyDependencyValidationException companyDependencyValidationException)
-                when(companyDependencyValidationException.InnerException is AlreadyExistsCompanyException)
+                when (companyDependencyValidationException.InnerException is AlreadyExistsCompanyException)
             {
                 return Conflict(companyDependencyValidationException.InnerException);
             }
@@ -49,7 +47,7 @@ namespace CashOverflow.Controllers
             {
                 return BadRequest(companyDependencyValidationException.InnerException);
             }
-            catch(CompanyServiceException companyServiceException)
+            catch (CompanyServiceException companyServiceException)
             {
                 return InternalServerError(companyServiceException.InnerException);
             }
@@ -72,18 +70,14 @@ namespace CashOverflow.Controllers
             {
                 return BadRequest(companyValidationException.InnerException);
             }
-
-            catch (CompanyDependencyException companyDependencyException) 
+            catch (CompanyDependencyException companyDependencyException)
             {
                 return InternalServerError(companyDependencyException.InnerException);
             }
-
             catch (CompanyServiceException companyServiceException)
             {
                 return InternalServerError(companyServiceException.InnerException);
             }
-
-
         }
     }
 }
