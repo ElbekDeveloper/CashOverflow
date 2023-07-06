@@ -21,6 +21,9 @@ namespace CashOverflow.Services.Foundations.Languages
         /// <exception cref="Models.Languages.Exceptions.LanguageServiceException"></exception>
         /// <exception cref="Models.Languages.Exceptions.LanguageDependencyException"></exception>
         IQueryable<Language> RetrieveAllLanguages();
+
+        /// <exception cref="Models.Languages.Exceptions.LanguageServiceException"></exception>
+        /// <exception cref="Models.Languages.Exceptions.LanguageDependencyException"></exception>
         ValueTask<Language> RetrieveLanguageByIdAsync(Guid languageId);
         ValueTask<Language> ModifyLanguageAsync(Language language);
         ValueTask<Language> RemoveLanguageByIdAsync(Guid languageId);
