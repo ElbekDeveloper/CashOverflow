@@ -12,6 +12,10 @@ namespace CashOverflow.Services.Foundations.Locations
 {
     public interface ILocationService
     {
+        /// <exception cref="Models.Locations.Exceptions.LocationValidationException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationDependencyValidationException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationDependencyException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationServiceException"></exception>
         ValueTask<Location> AddLocationAsync(Location location);
         IQueryable<Location> RetrieveAllLocations();
         ValueTask<Location> RetrieveLocationByIdAsync(Guid locationId);
