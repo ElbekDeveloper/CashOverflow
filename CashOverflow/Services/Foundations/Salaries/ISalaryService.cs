@@ -16,6 +16,9 @@ namespace CashOverflow.Services.Foundations.Salaries
         /// <exception cref="Models.Locations.Exceptions.LocationDependencyException"></exception>
         /// <exception cref="Models.Locations.Exceptions.LocationServiceException"></exception>
         ValueTask<Salary> AddSalaryAsync(Salary salary);
+
+        /// <exception cref="Models.Locations.Exceptions.LocationDependencyException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationServiceException"></exception>
         IQueryable<Salary> RetrieveAllSalaries();
     }
 }
