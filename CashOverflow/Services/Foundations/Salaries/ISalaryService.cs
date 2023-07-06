@@ -11,6 +11,10 @@ namespace CashOverflow.Services.Foundations.Salaries
 {
     public interface ISalaryService
     {
+        /// <exception cref="Models.Locations.Exceptions.LocationValidationException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationDependencyValidationException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationDependencyException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationServiceException"></exception>
         ValueTask<Salary> AddSalaryAsync(Salary salary);
         IQueryable<Salary> RetrieveAllSalaries();
     }
