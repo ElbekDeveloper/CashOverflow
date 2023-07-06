@@ -31,6 +31,10 @@ namespace CashOverflow.Services.Foundations.Locations
         /// <exception cref="Models.Locations.Exceptions.LocationDependencyException"></exception>
         /// <exception cref="Models.Locations.Exceptions.LocationServiceException"></exception>
         ValueTask<Location> ModifyLocationAsync(Location location);
+
+        /// <exception cref="Models.Locations.Exceptions.LocationDependencyValidationException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationDependencyException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationServiceException"></exception>
         ValueTask<Location> RemoveLocationByIdAsync(Guid locationId);
     }
 }
