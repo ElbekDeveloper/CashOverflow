@@ -21,6 +21,9 @@ namespace CashOverflow.Services.Foundations.Locations
         /// <exception cref="Models.Locations.Exceptions.LocationDependencyException"></exception>
         /// <exception cref="Models.Locations.Exceptions.LocationServiceException"></exception>     
         IQueryable<Location> RetrieveAllLocations();
+
+        /// <exception cref="Models.Locations.Exceptions.LocationDependencyException"></exception>
+        /// <exception cref="Models.Locations.Exceptions.LocationServiceException"></exception>   
         ValueTask<Location> RetrieveLocationByIdAsync(Guid locationId);
         ValueTask<Location> ModifyLocationAsync(Location location);
         ValueTask<Location> RemoveLocationByIdAsync(Guid locationId);
