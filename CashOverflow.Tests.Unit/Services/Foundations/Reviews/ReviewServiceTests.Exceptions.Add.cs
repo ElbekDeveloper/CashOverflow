@@ -19,7 +19,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
     public partial class ReviewServiceTests
     {
         [Fact]
-        public async Task ShoudlThrowCriticalDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync()
+        public async Task ShouldThrowCriticalDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync()
         {
             // given
             Review someReview = CreateRandomReview(GetRandomStarsInRange());
@@ -55,7 +55,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         }
 
         [Fact]
-        public async Task ShouldThrowDependencyValidationExceptionOnAddIfDublicateKeyErrorOccursAndLogItAsync()
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfDuplicateKeyErrorOccursAndLogItAsync()
         {
             // given
             string someMessage = GetRandomString();
