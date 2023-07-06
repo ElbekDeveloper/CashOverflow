@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
+using CashOverflow.Models.Jobs.Exceptions;
 using CashOverflow.Services.Foundations.Companies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
@@ -52,6 +53,37 @@ namespace CashOverflow.Controllers
             {
                 return InternalServerError(companyServiceException.InnerException);
             }
+        }
+        [HttpPut]
+        public async ValueTask<ActionResult<Company>> PutCompanyAsync(Company company)
+        {
+            try
+            {
+                Company modifiedCompany = await this.companyService.ModifyCompanyAsync(company);
+
+                return Ok(modifiedCompany);
+            }
+            catch (CompanyValidationException companyValidationException)
+                  when (companyValidationException.InnerException is NotFoundCompanyException)
+            {
+                return NotFound(companyValidationException.InnerException);
+            }
+            catch (CompanyValidationException companyValidationException)
+            {
+                return BadRequest(companyValidationException.InnerException);
+            }
+
+            catch (CompanyDependencyException companyDependencyException) 
+            {
+                return InternalServerError(companyDependencyException.InnerException);
+            }
+
+            catch (CompanyServiceException companyServiceException)
+            {
+                return InternalServerError(companyServiceException.InnerException);
+            }
+
+
         }
     }
 }
