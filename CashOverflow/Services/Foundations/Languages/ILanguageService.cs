@@ -30,6 +30,10 @@ namespace CashOverflow.Services.Foundations.Languages
         /// <exception cref="Models.Languages.Exceptions.LanguageDependencyException"></exception>
         /// <exception cref="Models.Languages.Exceptions.LanguageDependencyValidationException"></exception>
         ValueTask<Language> ModifyLanguageAsync(Language language);
+
+        /// <exception cref="Models.Languages.Exceptions.LanguageDependencyException"></exception>
+        /// <exception cref="Models.Languages.Exceptions.LanguageDependencyValidationException"></exception>
+        /// <exception cref="Models.Languages.Exceptions.LanguageServiceException"></exception>
         ValueTask<Language> RemoveLanguageByIdAsync(Guid languageId);
     }
 }
