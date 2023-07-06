@@ -156,7 +156,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Languages
         }
 
         [Fact]
-        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccuredAndLogItAsync()
+        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateExceptionOccursAndLogItAsync()
         {
             // given
             Language someLanguage = CreateRandomLanguage();
