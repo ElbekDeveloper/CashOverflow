@@ -23,8 +23,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Salaries
             // given
             Salary someSalary = CreateRandomSalary();
             SqlException sqlException = CreateSqlException();
-            var faildSalaryStorageException = new FailedSalaryStorageException(sqlException);
-            var expectedSalaryDependencyException = new SalaryDependencyException(faildSalaryStorageException);
+            var failedSalaryStorageException = new FailedSalaryStorageException(sqlException);
+            var expectedSalaryDependencyException = new SalaryDependencyException(failedSalaryStorageException);
 
             this.dateTimeBrokerMock.Setup(broker => broker.GetCurrentDateTimeOffset()).Throws(sqlException);
 
