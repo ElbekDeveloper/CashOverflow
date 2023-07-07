@@ -16,7 +16,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
     public partial class CompanyServiceTests
     {
         [Fact]
-        public async Task ShouldRemoveByIdAsync()
+        public async Task ShouldRemoveCompanyByIdAsync()
         {
             // given
             Guid randomCompanyId = Guid.NewGuid();
