@@ -17,7 +17,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
     public partial class CompanyServiceTests
     {
         [Fact]
-        public async Task ShouldThrowDependencyValidationOnRemoveIfDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
+        public async Task ShouldThrowDependencyOnRemoveIfDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
         {
             // given
             Guid someId = Guid.NewGuid();
@@ -26,8 +26,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             var lockedCompanyException = 
                 new LockedCompanyException(databaseUpdateConcurencyException);
 
-            var expectedCompanyDependencyValidationException =
-                new CompanyDependencyValidationException(lockedCompanyException);
+            var expectedCompanyDependencyException =
+                new CompanyDependencyException(lockedCompanyException);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectCompanyByIdAsync(It.IsAny<Guid>()))
@@ -37,20 +37,20 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             ValueTask<Company> removeByIdTask =
                 this.companyService.RemoveCompanyById(someId);
 
-            CompanyDependencyValidationException actualCompanyDependencyValidationException =
-                await Assert.ThrowsAsync<CompanyDependencyValidationException>(
+            CompanyDependencyException actualCompanyDependencyException =
+                await Assert.ThrowsAsync<CompanyDependencyException>(
                     removeByIdTask.AsTask);
 
             // then
-            actualCompanyDependencyValidationException.Should()
-                .BeEquivalentTo(expectedCompanyDependencyValidationException);
+            actualCompanyDependencyException.Should()
+                .BeEquivalentTo(expectedCompanyDependencyException);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectCompanyByIdAsync(It.IsAny<Guid>()), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
-                    expectedCompanyDependencyValidationException))), Times.Once);
+                    expectedCompanyDependencyException))), Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.DeleteCompanyAsync(It.IsAny<Company>()), Times.Never);
