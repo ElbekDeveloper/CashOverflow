@@ -58,7 +58,6 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             // given
             Review invalidReview = new Review()
             {
-                CompanyName = invalidText,
                 Thoughts = invalidText
             };
 
@@ -69,8 +68,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
                 values: "Id is required");
 
             invalidReviewException.AddData(
-                key: nameof(Review.CompanyName),
-                values: "Text is required");
+                key: nameof(Review.CompanyId),
+                values: "Id is required");
 
             invalidReviewException.AddData(
                 key: nameof(Review.Stars),
