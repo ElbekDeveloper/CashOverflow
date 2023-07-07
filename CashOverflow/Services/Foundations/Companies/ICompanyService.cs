@@ -5,7 +5,6 @@
 
 using System;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Sources;
 using CashOverflow.Models.Companies;
 
 namespace CashOverflow.Services.Foundations.Companies
@@ -13,15 +12,20 @@ namespace CashOverflow.Services.Foundations.Companies
     public interface ICompanyService
     {
         /// <exception cref="Models.Companies.Exceptions.CompanyValidationException"></exception>
-        /// <exception cref="Models.Companies.Exceptions.CompanyDependencyException"></exception>
         /// <exception cref="Models.Companies.Exceptions.CompanyDependencyValidationException"></exception>
+        /// <exception cref="Models.Companies.Exceptions.CompanyDependencyException"></exception>
         /// <exception cref="Models.Companies.Exceptions.CompanyServiceException"></exception>
         ValueTask<Company> AddCompanyAsync(Company company);
 
         /// <exception cref="Models.Companies.Exceptions.CompanyValidationException"></exception>
+        /// <exception cref="Models.Companies.Exceptions.CompanyDependencyValidationException"></exception>
         /// <exception cref="Models.Companies.Exceptions.CompanyDependencyException"></exception>
         /// <exception cref="Models.Companies.Exceptions.CompanyServiceException"></exception>
         ValueTask<Company> ModifyCompanyAsync(Company company);
+
+        /// <exception cref="Models.Companies.Exceptions.CompanyDependencyValidationException"></exception>
+        /// <exception cref="Models.Companies.Exceptions.CompanyDependencyException"></exception>
+        /// <exception cref="Models.Companies.Exceptions.CompanyServiceException"></exception>
         ValueTask<Company> RemoveCompanyById(Guid copanyId);
     }
 }
