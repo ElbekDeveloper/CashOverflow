@@ -65,7 +65,7 @@ namespace CashOverflow.Services.Foundations.Companies
             {
                 var failedCompanyServiceException = new FailedCompanyServiceException(exception);
 
-                throw CreateAndLogServiceException(failedCompanyServiceException);
+                throw new Exception();
             }
         }
 
