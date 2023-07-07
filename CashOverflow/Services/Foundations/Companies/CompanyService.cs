@@ -49,11 +49,15 @@ namespace CashOverflow.Services.Foundations.Companies
             return await this.storageBroker.UpdateCompanyAsync(company);
         });
 
-        public async ValueTask<Company> RemoveCompanyById(Guid companyId)
-        {
-            Company maybeCompany = await this.storageBroker.SelectCompanyByIdAsync(companyId);
+        public ValueTask<Company> RemoveCompanyById(Guid companyId) =>
+            TryCatch(async () =>
+            {
+                ValidateCompanyId(companyId);
 
-            return await this.storageBroker.DeleteCompanyAsync(maybeCompany);
-        }
+                Company maybeCompany = 
+                    await this.storageBroker.SelectCompanyByIdAsync(companyId);
+
+                return await this.storageBroker.DeleteCompanyAsync(maybeCompany);
+            });
     }
 }
