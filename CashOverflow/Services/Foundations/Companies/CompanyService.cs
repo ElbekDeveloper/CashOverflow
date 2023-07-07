@@ -57,6 +57,8 @@ namespace CashOverflow.Services.Foundations.Companies
                 Company maybeCompany = 
                     await this.storageBroker.SelectCompanyByIdAsync(companyId);
 
+                ValidateStorageCompanyExists(maybeCompany, companyId);
+
                 return await this.storageBroker.DeleteCompanyAsync(maybeCompany);
             });
     }

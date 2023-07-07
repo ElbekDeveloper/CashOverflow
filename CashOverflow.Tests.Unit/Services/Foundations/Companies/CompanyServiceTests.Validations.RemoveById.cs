@@ -52,5 +52,45 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowNotFoundExceptionOnRemoveIfCompanyIsNotFoundAndLogItAsync()
+        {
+            // given
+            Guid randomCompanyId = Guid.NewGuid();
+            Guid inputCompanyId = randomCompanyId;
+            Company noCompany = null;
+
+            var notFoundComopanyException = 
+                new NotFoundCompanyException(inputCompanyId);
+
+            var expectedCompanyValidationException =
+                new CompanyValidationException(notFoundComopanyException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectCompanyByIdAsync(inputCompanyId)).ReturnsAsync(noCompany);
+
+            // when 
+            ValueTask<Company> removeCompanyByIdTask =
+                this.companyService.RemoveCompanyById(inputCompanyId);
+
+            CompanyValidationException actualCompanyValidationException =
+                await Assert.ThrowsAsync<CompanyValidationException>(
+                    removeCompanyByIdTask.AsTask);
+
+            // then
+            actualCompanyValidationException.Should().BeEquivalentTo(expectedCompanyValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectCompanyByIdAsync(It.IsAny<Guid>()), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedCompanyValidationException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
