@@ -92,7 +92,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
                 broker.SelectCompanyByIdAsync(It.IsAny<Guid>()), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(
+                broker.LogCritical(It.Is(SameExceptionAs(
                     expectedCompanyDependencyException))), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
