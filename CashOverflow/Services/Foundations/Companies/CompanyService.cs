@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
@@ -47,5 +48,18 @@ namespace CashOverflow.Services.Foundations.Companies
 
             return await this.storageBroker.UpdateCompanyAsync(company);
         });
+
+        public ValueTask<Company> RemoveCompanyById(Guid companyId) =>
+            TryCatch(async () =>
+            {
+                ValidateCompanyId(companyId);
+
+                Company maybeCompany = 
+                    await this.storageBroker.SelectCompanyByIdAsync(companyId);
+
+                ValidateStorageCompanyExists(maybeCompany, companyId);
+
+                return await this.storageBroker.DeleteCompanyAsync(maybeCompany);
+            });
     }
 }

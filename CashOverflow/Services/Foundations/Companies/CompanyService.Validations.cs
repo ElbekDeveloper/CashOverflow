@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Data;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
 
@@ -60,6 +61,9 @@ namespace CashOverflow.Services.Foundations.Companies
                 throw new NullCompanyException();
             }
         }
+
+        private static void ValidateCompanyId(Guid companyId) =>
+            Validate((Rule: IsInvalid(companyId), Parameter: nameof(Company.Id)));
 
         private static dynamic IsInvalid(Guid id) => new
         {

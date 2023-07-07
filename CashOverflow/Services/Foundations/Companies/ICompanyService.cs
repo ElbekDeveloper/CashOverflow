@@ -3,7 +3,9 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Sources;
 using CashOverflow.Models.Companies;
 
 namespace CashOverflow.Services.Foundations.Companies
@@ -20,5 +22,6 @@ namespace CashOverflow.Services.Foundations.Companies
         /// <exception cref="Models.Companies.Exceptions.CompanyDependencyException"></exception>
         /// <exception cref="Models.Companies.Exceptions.CompanyServiceException"></exception>
         ValueTask<Company> ModifyCompanyAsync(Company company);
+        ValueTask<Company> RemoveCompanyById(Guid copanyId);
     }
 }
