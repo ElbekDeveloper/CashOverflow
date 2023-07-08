@@ -37,10 +37,8 @@ namespace CashOverflow.Services.Foundations.Companies
             return await this.storageBroker.InsertCompanyAsync(company);
         });
 
-        public IQueryable<Company> RetrieveAllCompanies()
-        {
-            throw new System.NotImplementedException();
-        }
+        public IQueryable<Company> RetrieveAllCompanies() => 
+            this.storageBroker.SelectAllCompanies();
  
         public ValueTask<Company> ModifyCompanyAsync(Company company) =>
         TryCatch(async () =>
