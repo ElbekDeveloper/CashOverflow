@@ -9,6 +9,7 @@ using CashOverflow.Models.Salaries;
 using CashOverflow.Models.Salaries.Exceptions;
 using CashOverflow.Services.Foundations.Salaries;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using RESTFulSense.Controllers;
 
 namespace CashOverflow.Controllers
@@ -52,6 +53,7 @@ namespace CashOverflow.Controllers
 
 
         [HttpGet]
+        [EnableQuery]
         public ActionResult<IQueryable<Salary>> GetAllSalaries()
         {
             try
