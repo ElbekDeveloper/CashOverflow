@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using CashOverflow.Brokers.DateTimes;
@@ -76,6 +77,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             randomCompany.CreatedDate = randomCompany.CreatedDate.AddDays(randomDaysInPast);
 
             return randomCompany;
+        }
+
+        private IQueryable<Company> CreateRandomCompanies()
+        {
+            return CreateCompanyFiller(GetRandomDateTimeOffset())
+                .Create(count: GetRandomNumber()).AsQueryable();
         }
 
         private static Company CreateRandomCompany() =>
