@@ -48,5 +48,41 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public void ShouldThrowServiceExceptionOnRetrieveAllWhenAllServicesErrorOccursAndLogIt()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            var serviceException = new Exception(exceptionMessage);
+            var failedCompanyServiceException = new FailedCompanyServiceException(serviceException);
+
+            var expectedCompanyServiceException =
+                new CompanyServiceException(failedCompanyServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllCompanies()).Throws(serviceException);
+
+            // when
+            Action retrieveAllCompanyAction = () =>
+                this.companyService.RetrieveAllCompanies();
+
+            CompanyServiceException actualCompanyServiceException =
+                Assert.Throws<CompanyServiceException>(retrieveAllCompanyAction);
+
+            // then
+            actualCompanyServiceException.Should().BeEquivalentTo(expectedCompanyServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllCompanies(), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedCompanyServiceException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
