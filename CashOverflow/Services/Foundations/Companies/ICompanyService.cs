@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 
@@ -16,6 +17,10 @@ namespace CashOverflow.Services.Foundations.Companies
         /// <exception cref="Models.Companies.Exceptions.CompanyDependencyException"></exception>
         /// <exception cref="Models.Companies.Exceptions.CompanyServiceException"></exception>
         ValueTask<Company> AddCompanyAsync(Company company);
+
+        /// <exception cref="Models.Companies.Exceptions.CompanyDependencyException"></exception>
+        /// <exception cref="Models.Companies.Exceptions.CompanyServiceException"></exception>
+        IQueryable<Company> RetrieveAllCompanies();
 
         /// <exception cref="Models.Companies.Exceptions.CompanyValidationException"></exception>
         /// <exception cref="Models.Companies.Exceptions.CompanyDependencyValidationException"></exception>

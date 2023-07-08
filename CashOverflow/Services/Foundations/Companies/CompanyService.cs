@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Brokers.DateTimes;
 using CashOverflow.Brokers.Loggings;
@@ -36,6 +37,9 @@ namespace CashOverflow.Services.Foundations.Companies
             return await this.storageBroker.InsertCompanyAsync(company);
         });
 
+        public IQueryable<Company> RetrieveAllCompanies() =>
+            TryCatch(() => this.storageBroker.SelectAllCompanies());
+ 
         public ValueTask<Company> ModifyCompanyAsync(Company company) =>
         TryCatch(async () =>
         {

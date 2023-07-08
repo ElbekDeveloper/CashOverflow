@@ -4,9 +4,12 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
+using CashOverflow.Models.Reviews.Exceptions;
+using CashOverflow.Models.Reviews;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +20,7 @@ namespace CashOverflow.Services.Foundations.Companies
     public partial class CompanyService
     {
         private delegate ValueTask<Company> ReturningCompanyFunction();
+        private delegate IQueryable<Company> ReturningCompaniesFunction();
 
         private async ValueTask<Company> TryCatch(ReturningCompanyFunction returningCompanyFunction)
         {
@@ -62,6 +66,28 @@ namespace CashOverflow.Services.Foundations.Companies
                 throw CreateAndLogDependencyException(failedCompanyStorageException);
             }
             catch (Exception exception)
+            {
+                var failedCompanyServiceException = new FailedCompanyServiceException(exception);
+
+                throw CreateAndLogServiceException(failedCompanyServiceException);
+            }
+        }
+
+        private IQueryable<Company> TryCatch(ReturningCompaniesFunction
+            returningCompaniesFunction)
+        {
+            try
+            {
+                return returningCompaniesFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedCompanyServiceException =
+                    new FailedCompanyServiceException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedCompanyServiceException);
+            }
+            catch(Exception exception)
             {
                 var failedCompanyServiceException = new FailedCompanyServiceException(exception);
 
