@@ -53,8 +53,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Companies
         public void ShouldThrowServiceExceptionOnRetrieveAllWhenAllServicesErrorOccursAndLogIt()
         {
             // given
-            string exceptionMessage = GetRandomString();
-            var serviceException = new Exception(exceptionMessage);
+            var serviceException = new Exception();
             var failedCompanyServiceException = new FailedCompanyServiceException(serviceException);
 
             var expectedCompanyServiceException =
