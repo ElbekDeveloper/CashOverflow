@@ -47,6 +47,13 @@ namespace CashOverflow.Services.Foundations.Reviews
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsReviewException);
             }
+            catch (ForeignKeyConstraintConflictException foreignKeyConstraintConflictException)
+            {
+                var invalidReviewReferenceException = 
+                    new InvalidReviewReferenceException(foreignKeyConstraintConflictException);
+
+                throw CreateAndLogDependencyValidationException(invalidReviewReferenceException);
+            }
             catch (Exception exception)
             {
                 var failedReviewServiceException = new FailedReviewServiceException(exception);

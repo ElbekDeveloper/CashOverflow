@@ -122,7 +122,7 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         }
 
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnAddIfReferenceErrorOccursAndLogItAsync()
+        public async void ShouldThrowValidationExceptionOnAddIfReferenceErrorOccursAndLogItAsync()
         {
             // given
             Review someReview = CreateRandomReview();
