@@ -9,6 +9,7 @@ using CashOverflow.Models.Reviews;
 using CashOverflow.Models.Reviews.Exceptions;
 using CashOverflow.Services.Foundations.Reviews;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using RESTFulSense.Controllers;
 
 namespace CashOverflow.Controllers
@@ -53,6 +54,7 @@ namespace CashOverflow.Controllers
         }
 
         [HttpGet]
+        [EnableQuery]
         public ActionResult<IQueryable<Review>> GetAllReviews()
         {
             try

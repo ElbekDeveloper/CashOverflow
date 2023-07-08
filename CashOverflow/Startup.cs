@@ -14,6 +14,7 @@ using CashOverflow.Services.Foundations.Reviews;
 using CashOverflow.Services.Foundations.Salaries;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,7 +31,9 @@ namespace CashOverflow
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddOData(options =>
+                    options.Select().Filter().OrderBy().Count().Expand());
+
             services.AddDbContext<StorageBroker>();
 
             services.AddSwaggerGen(config =>
