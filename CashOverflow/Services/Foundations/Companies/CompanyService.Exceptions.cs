@@ -87,6 +87,12 @@ namespace CashOverflow.Services.Foundations.Companies
 
                 throw CreateAndLogCriticalDependencyException(failedCompanyServiceException);
             }
+            catch(Exception exception)
+            {
+                var failedCompanyServiceException = new FailedCompanyServiceException(exception);
+
+                throw CreateAndLogServiceException(failedCompanyServiceException);
+            }
         }
 
         private CompanyValidationException CreateAndLogValidationException(Xeption exception)
