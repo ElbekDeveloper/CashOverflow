@@ -126,6 +126,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         {
             // given
             Review someReview = CreateRandomReview();
+            int randomStars = GetRandomStarsInRange();
+            someReview.Stars = randomStars;
             string randomMessage = GetRandomMessage();
             string exceptionMessage = randomMessage;
 
@@ -138,9 +140,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             var expectedReviewDependencyValidationException =
                 new ReviewDependencyValidationException(invalidReviewReferenceException);
 
-            this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffset())
-                    .Throws(foreignKeyConstraintConflictException);
+            this.storageBrokerMock.Setup(broker => broker.InsertReviewAsync(someReview))
+                .Throws(foreignKeyConstraintConflictException);
 
             // when
             ValueTask<Review> addReviewTask =
@@ -154,8 +155,8 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             actualReviewDependencyValidationException.Should().BeEquivalentTo(
                 expectedReviewDependencyValidationException);
 
-            this.dateTimeBrokerMock.Verify(broker => 
-                broker.GetCurrentDateTimeOffset(), Times.Once);
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertReviewAsync(someReview), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
