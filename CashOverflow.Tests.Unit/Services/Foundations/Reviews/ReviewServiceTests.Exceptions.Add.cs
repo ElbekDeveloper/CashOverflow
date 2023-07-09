@@ -4,15 +4,14 @@
 // --------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using CashOverflow.Models.Reviews;
 using CashOverflow.Models.Reviews.Exceptions;
+using EFxceptions.Models.Exceptions;
+using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
-using System.Threading.Tasks;
 using Xunit;
-using FluentAssertions;
-using EFxceptions.Models.Exceptions;
-using Microsoft.EntityFrameworkCore;
 
 namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
 {
@@ -118,6 +117,50 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
             this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(SameExceptionAs(
                 expectedReviewServiceException))), Times.Once);
 
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async void ShouldThrowValidationExceptionOnAddIfReferenceErrorOccursAndLogItAsync()
+        {
+            // given
+            int randomStars = GetRandomStarsInRange();
+            Review someReview = CreateRandomReview(randomStars);
+            string someMessage = GetRandomMessage();
+
+            var foreignKeyConstraintConflictException =
+                new ForeignKeyConstraintConflictException(someMessage);
+
+            var invalidReviewReferenceException =
+                new InvalidReviewReferenceException(foreignKeyConstraintConflictException);
+
+            var expectedReviewDependencyValidationException =
+                new ReviewDependencyValidationException(invalidReviewReferenceException);
+
+            this.storageBrokerMock.Setup(broker => broker.InsertReviewAsync(someReview))
+                .Throws(foreignKeyConstraintConflictException);
+
+            // when
+            ValueTask<Review> addReviewTask =
+                this.reviewService.AddReviewAsync(someReview);
+
+            ReviewDependencyValidationException actualReviewDependencyValidationException =
+                await Assert.ThrowsAsync<ReviewDependencyValidationException>(
+                    addReviewTask.AsTask);
+
+            // then
+            actualReviewDependencyValidationException.Should().BeEquivalentTo(
+                expectedReviewDependencyValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertReviewAsync(someReview), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedReviewDependencyValidationException))), Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
