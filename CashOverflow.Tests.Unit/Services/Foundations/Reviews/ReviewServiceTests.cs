@@ -87,7 +87,9 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         private Filler<Review> CreateReviewFiller(int stars)
         {
             var filler = new Filler<Review>();
-            filler.Setup().OnType<int>().Use(stars);
+            filler.Setup()
+                .OnType<int>().Use(stars)
+                .OnType<DateTimeOffset>().Use(GetRandomDateTimeOffset);
 
             return filler;
         }
