@@ -3,6 +3,7 @@
 // Developed by CashOverflow Team
 // --------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
@@ -75,6 +76,43 @@ namespace CashOverflow.Controllers
                 return InternalServerError(companyDependencyException.InnerException);
             }
             catch (CompanyServiceException companyServiceException)
+            {
+                return InternalServerError(companyServiceException.InnerException);
+            }
+        }
+
+        [HttpDelete]
+        public async ValueTask<ActionResult<Company>> DeleteCompanyByIdAsync(Guid id)
+        {
+            try
+            {
+                Company deletedCompany = await this.companyService.RemoveCompanyById(id);
+
+                return Ok(deletedCompany);
+            }
+            catch(CompanyValidationException companyValidationException)
+                when (companyValidationException.InnerException is NotFoundCompanyException)
+            {
+                return NotFound(companyValidationException.InnerException);
+            }
+            catch(CompanyValidationException companyValidationException)
+            {
+                return BadRequest(companyValidationException.InnerException);
+            }
+            catch(CompanyDependencyValidationException companyDependencyValidationException)
+                when (companyDependencyValidationException.InnerException is LockedCompanyException)
+            {
+                return Locked(companyDependencyValidationException.InnerException);
+            }
+            catch (CompanyDependencyValidationException companyDependencyValidationException)
+            {
+                return BadRequest(companyDependencyValidationException.InnerException);
+            }
+            catch(CompanyDependencyException companyDependencyException)
+            {
+                return InternalServerError(companyDependencyException.InnerException);
+            }
+            catch(CompanyServiceException companyServiceException)
             {
                 return InternalServerError(companyServiceException.InnerException);
             }
