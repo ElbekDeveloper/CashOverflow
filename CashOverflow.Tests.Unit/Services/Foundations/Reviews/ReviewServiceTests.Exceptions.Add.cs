@@ -125,14 +125,12 @@ namespace CashOverflow.Tests.Unit.Services.Foundations.Reviews
         public async void ShouldThrowValidationExceptionOnAddIfReferenceErrorOccursAndLogItAsync()
         {
             // given
-            Review someReview = CreateRandomReview();
             int randomStars = GetRandomStarsInRange();
-            someReview.Stars = randomStars;
-            string randomMessage = GetRandomMessage();
-            string exceptionMessage = randomMessage;
+            Review someReview = CreateRandomReview(randomStars);
+            string someMessage = GetRandomMessage();
 
             var foreignKeyConstraintConflictException =
-                new ForeignKeyConstraintConflictException(exceptionMessage);
+                new ForeignKeyConstraintConflictException(someMessage);
 
             var invalidReviewReferenceException =
                 new InvalidReviewReferenceException(foreignKeyConstraintConflictException);
