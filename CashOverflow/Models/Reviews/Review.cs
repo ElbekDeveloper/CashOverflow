@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System;
+using System.Text.Json.Serialization;
 using CashOverflow.Models.Companies;
 
 namespace CashOverflow.Models.Reviews
@@ -15,6 +16,7 @@ namespace CashOverflow.Models.Reviews
         public string Thoughts { get; set; }
 
         public Guid CompanyId { get; set; }
+        [JsonIgnore]
         public Company Company { get; set; }
     }
 }
