@@ -1,4 +1,4 @@
-name: Build & Test CashOverlow
+name: Build & Test CashOverflow
 on:
   push:
     branches:
@@ -10,16 +10,16 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Checking out
+    - name: Check out
       uses: actions/checkout@v2
-    - name: Installing .NET
+    - name: Setup .Net
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 8.0.100-preview.5.23303.2
         include-prerelease: true
-    - name: Restoring packages
+    - name: Restore
       run: dotnet restore
-    - name: Building project
+    - name: Build
       run: dotnet build --no-restore
-    - name: Running tests
+    - name: Test
       run: dotnet test --no-build --verbosity normal

@@ -4,6 +4,7 @@
 // --------------------------------------------------------
 
 using System.Collections.Generic;
+using System.IO;
 using ADotNet.Clients;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks;
@@ -15,9 +16,11 @@ namespace CashOverflow.Infrastructure.Build
     {
         static void Main(string[] args)
         {
+            var aDotNetClient = new ADotNetClient();
+
             var githubPipeline = new GithubPipeline
             {
-                Name = "Build & Test CashOverlow",
+                Name = "Build & Test CashOverflow",
 
                 OnEvents = new Events
                 {
@@ -32,55 +35,61 @@ namespace CashOverflow.Infrastructure.Build
                     }
                 },
 
-                Jobs = new Jobs
-                {
-                    Build = new BuildJob
-                    {
-                        RunsOn = BuildMachines.WindowsLatest,
+                Jobs = new Dictionary<string, Job>
+      {
+          {
+              "build",
+              new Job
+              {
+                  RunsOn = BuildMachines.WindowsLatest,
 
-                        Steps = new List<GithubTask>
-                        {
-                            new CheckoutTaskV2
-                            {
-                                Name = "Checking out"
-                            },
+                  Steps = new List<GithubTask>
+                  {
+                      new CheckoutTaskV2
+                      {
+                          Name = "Check out"
+                      },
 
-                            new SetupDotNetTaskV1
-                            {
-                                Name= "Installing .NET",
+                      new SetupDotNetTaskV1
+                      {
+                          Name = "Setup .Net",
 
-                                TargetDotNetVersion = new TargetDotNetVersion
-                                {
-                                    DotNetVersion = "8.0.100-preview.5.23303.2", 
-                                    IncludePrerelease = true
-                                }
-                            },
+                          TargetDotNetVersion = new TargetDotNetVersion
+                          {
+                              DotNetVersion = "8.0.100-preview.5.23303.2",
+                              IncludePrerelease = true
+                          }
+                      },
 
-                            new RestoreTask
-                            {
-                                Name = "Restoring packages"
-                            },
+                      new RestoreTask
+                      {
+                          Name = "Restore"
+                      },
 
-                            new DotNetBuildTask
-                            {
-                                Name = "Building project"
-                            },
+                      new DotNetBuildTask
+                      {
+                          Name = "Build"
+                      },
 
-                            new TestTask
-                            {
-                                Name = "Running tests"
-                            }
-                        }
-                    }
-                }
+                      new TestTask
+                      {
+                          Name = "Test"
+                      }
+                  }
+              }
+          }
+      }
             };
 
+            string buildScriptPath = "../../../../.github/workflows/build.yml";
+            string directoryPath = Path.GetDirectoryName(buildScriptPath);
 
-            var adotnetClient = new ADotNetClient();
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
 
-            adotnetClient.SerializeAndWriteToFile(
-                githubPipeline,
-                path: "../../../../.github/workflows/build.yml");
+            aDotNetClient.SerializeAndWriteToFile(githubPipeline, path: buildScriptPath);
         }
     }
 }
