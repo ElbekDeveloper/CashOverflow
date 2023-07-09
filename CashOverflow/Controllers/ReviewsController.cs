@@ -35,7 +35,8 @@ namespace CashOverflow.Controllers
                 return BadRequest(reviewValidationException.InnerException);
             }
             catch (ReviewDependencyValidationException reviewDependencyValidationException)
-                when (reviewDependencyValidationException.InnerException is AlreadyExistsReviewException)
+                when (reviewDependencyValidationException.InnerException 
+                    is AlreadyExistsReviewException or InvalidReviewReferenceException)
             {
                 return Conflict(reviewDependencyValidationException.InnerException);
             }
