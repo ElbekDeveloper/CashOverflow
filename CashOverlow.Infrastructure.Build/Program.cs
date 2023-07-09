@@ -51,7 +51,8 @@ namespace CashOverflow.Infrastructure.Build
 
                                 TargetDotNetVersion = new TargetDotNetVersion
                                 {
-                                    DotNetVersion = "7.0.200"
+                                    DotNetVersion = "8.0.100-preview.5.23303.2", 
+                                    IncludePrerelease = true
                                 }
                             },
 
