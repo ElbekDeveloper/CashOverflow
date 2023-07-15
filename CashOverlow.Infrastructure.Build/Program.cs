@@ -24,11 +24,6 @@ namespace CashOverflow.Infrastructure.Build
 
                 OnEvents = new Events
                 {
-                    Push = new PushEvent
-                    {
-                        Branches = new string[] { "master" }
-                    },
-
                     PullRequest = new PullRequestEvent
                     {
                         Branches = new string[] { "master" }
@@ -56,7 +51,7 @@ namespace CashOverflow.Infrastructure.Build
 
                           TargetDotNetVersion = new TargetDotNetVersion
                           {
-                              DotNetVersion = "8.0.100-preview.5.23303.2",
+                              DotNetVersion = "8.0.100-preview.6.23330.14",
                               IncludePrerelease = true
                           }
                       },
