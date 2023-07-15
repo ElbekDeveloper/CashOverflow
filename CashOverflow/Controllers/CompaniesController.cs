@@ -4,12 +4,16 @@
 // --------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CashOverflow.Models.Companies;
 using CashOverflow.Models.Companies.Exceptions;
+using CashOverflow.Models.Locations.Exceptions;
+using CashOverflow.Models.Locations;
 using CashOverflow.Services.Foundations.Companies;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace CashOverflow.Controllers
 {
@@ -53,6 +57,28 @@ namespace CashOverflow.Controllers
                 return InternalServerError(companyServiceException.InnerException);
             }
         }
+
+        [HttpGet]
+        [EnableQuery]
+        public ActionResult<IQueryable<Company>> GetAllCompanys()
+        {
+            try
+            {
+                IQueryable<Company> allCompanies = this.companyService.RetrieveAllCompanies();
+
+                return Ok(allCompanies);
+            }
+            catch (CompanyDependencyException locationDependencyException)
+            {
+                return InternalServerError(locationDependencyException.InnerException);
+            }
+            catch (CompanyServiceException locationServiceException)
+            {
+                return InternalServerError(locationServiceException.InnerException);
+            }
+        }
+
+
         [HttpPut]
         public async ValueTask<ActionResult<Company>> PutCompanyAsync(Company company)
         {
