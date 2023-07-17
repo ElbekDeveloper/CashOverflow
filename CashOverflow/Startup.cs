@@ -36,6 +36,16 @@ namespace CashOverflow
 
             services.AddDbContext<StorageBroker>();
 
+            services.AddCors(option =>
+            {
+                option.AddPolicy("MyPolicy", config =>
+                {
+                    config.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
             services.AddSwaggerGen(config =>
             {
                 config.SwaggerDoc(
@@ -61,6 +71,7 @@ namespace CashOverflow
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors("MyPolicy");
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
